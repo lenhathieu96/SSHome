@@ -1,12 +1,13 @@
-export const getBlueToothConnection = () => {
+export const setBLConnection = (isConnect) => {
   return {
-    type: 'GET BLUETOOTH CONNECTION',
+    type: 'SET BLUETOOTH CONNECTION',
+    payload: isConnect,
   };
 };
 
-export const setBlueToothConnection = (isConnect) => {
+export const setInternetConnection = (isConnect) => {
   return {
-    type: 'SET BLUETOOTH CONNECTION',
+    type: 'SET INTERNET CONNECTION',
     payload: isConnect,
   };
 };

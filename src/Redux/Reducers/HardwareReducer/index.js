@@ -1,20 +1,26 @@
 const initialState = {
-  bluConnection: false,
-  internetConnection: false,
+  BLConnection: false,
+  WFConnection: false,
 };
 
 const hadwareReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET BLUETOOTH CONNECTION': {
-      state.bluConnection = action.payload.typeConnection;
-      return state.bluConnection;
+      let tempState = {...state};
+      tempState.BLConnection = action.payload;
+      state = tempState;
+      return state;
     }
 
-    case 'GET BLUETOOTH CONNECTION': {
-      return state.bluConnection;
-    }
-    default:
+    case 'SET INTERNET CONNECTION': {
+      let tempState = {...state};
+      tempState.WFConnection = action.payload;
+      state = tempState;
       return state;
+    }
+    default: {
+      return state;
+    }
   }
 };
 

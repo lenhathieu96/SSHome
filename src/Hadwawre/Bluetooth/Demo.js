@@ -33,10 +33,16 @@ export default function Demo() {
     bleManagerEmitter.addListener('BleManagerStopScan', () =>
       setScanning(false),
     );
+    bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
+      console.log(args.state);
+    });
     // BleManager.scan([], 15, true)
     //   .then('start scanning')
     //   .catch((error) => console.log('Error when scanning', error));
-    return bleManagerEmitter.removeListener('BleManagerDiscoverPeripheral');
+    return (
+      bleManagerEmitter.removeListener('BleManagerDiscoverPeripheral'),
+      bleManagerEmitter.removeListener('BleManagerStopScan')
+    );
   }, []);
 
   const checkPermission = () => {

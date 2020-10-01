@@ -1,18 +1,20 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useSelector} from 'react-redux';
 
 import DashBoardScreen from '../../Views/Dashboard/DashboardScreen';
 import RoomDetailScreen from '../../Views/Dashboard/RoomDetailScreen';
 import AddRoomScreen from '../../Views/Dashboard/AddRoomScreen';
 import CameraScreen from '../../Views/Dashboard/CameraScreen';
 
-import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import * as fontSize from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
 
 const DashboardStack = createStackNavigator();
 export default function DashBoardStacks() {
+  const connectionStatus = useSelector((state) => state.hardware);
+
   return (
     <DashboardStack.Navigator initialRouteName="DashboardScr">
       <DashboardStack.Screen
@@ -37,8 +39,11 @@ export default function DashBoardStacks() {
             <Icon.Button
               name="bluetooth-b"
               size={fontSize.huge}
-              color={Color.unactive}
+              color={
+                connectionStatus.BLConnection ? Color.green : Color.unactive
+              }
               backgroundColor="transparent"
+              // disabled={!BLE}
               // onPress={() => navigation.goBack()}
               underlayColor="transparent"
               activeOpacity={0.4}
@@ -50,7 +55,9 @@ export default function DashBoardStacks() {
               name="wifi"
               size={fontSize.huge}
               backgroundColor="transparent"
-              color={Color.unactive}
+              color={
+                connectionStatus.WFConnection ? Color.green : Color.unactive
+              }
               // onPress={() =>
               //   navigation.navigate('cameraScr', {isFromAddNewRoom: false})
               // }

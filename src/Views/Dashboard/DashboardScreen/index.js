@@ -1,9 +1,24 @@
-import React from 'react';
-import {SafeAreaView, View, FlatList} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  NativeModules,
+  NativeEventEmitter,
+} from 'react-native';
+import {useDispatch} from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import BLEManager from 'react-native-ble-manager';
+import NetInfo from '@react-native-community/netinfo';
+
 import Text, {BoldText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {
+  setBLConnection,
+  setInternetConnection,
+} from '../../../Redux/ActionCreators/hardwareActions';
+
 import RoomButton from './RoomButton';
 
 import * as fontSize from '../../../Utils/FontSize';
@@ -32,8 +47,37 @@ const data = [
     deviceQuantity: 8,
   },
 ];
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function Dashboard({navigation}) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    listenConnection();
+  }, []);
+
+  //listener Internet and Bluetooth connection
+  const listenConnection = () => {
+    BLEManager.checkState();
+    bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
+      let status = args.state;
+      switch (status) {
+        case 'off':
+          dispatch(setBLConnection(false));
+          break;
+        case 'on':
+          dispatch(setBLConnection(true));
+          break;
+        default:
+          break;
+      }
+    });
+    NetInfo.addEventListener((state) => {
+      dispatch(setInternetConnection(state.isConnected));
+    });
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* Info Container */}
