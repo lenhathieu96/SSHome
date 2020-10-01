@@ -22,9 +22,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flexGrow: 1,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
     padding: 5,
+    backgroundColor: Color.background,
   },
   roomlist: {
     alignSelf: 'center',

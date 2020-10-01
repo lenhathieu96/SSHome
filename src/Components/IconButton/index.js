@@ -23,7 +23,7 @@ function IconButton(props) {
       disabled={disabled}>
       <Icon
         name={iconName}
-        color={iconColor ? iconColor : color.primary}
+        color={iconColor ? iconColor : 'white'}
         size={iconSize}
       />
     </TouchableOpacity>

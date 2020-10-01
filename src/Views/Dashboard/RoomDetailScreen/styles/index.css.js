@@ -57,12 +57,45 @@ const styles = StyleSheet.create({
     fontSize: fontSize.large,
   },
   bodyContainer: {
-    flex: 0.7,
+    flex: 0.6,
   },
   listDevice: {
-    flex: 1,
+    flex: 0.9,
     justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  footerContainer: {
+    justifyContent: 'space-evenly',
+    backgroundColor: Color.background,
+    flexDirection: 'row',
+    flex: 0.1,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  floatButton: {
+    backgroundColor: 'white',
+    width: 0.25 * windowWidth,
+    height: 0.25 * windowWidth,
+    borderRadius: (0.25 * windowWidth) / 2,
+    marginTop: -40,
+    zIndex: 1,
+    padding: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });
 export default styles;

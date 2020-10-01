@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: fontSize.larger,
     color: 'white',
+    fontFamily: 'MavenPro-Regular',
   },
 });
 export default styles;

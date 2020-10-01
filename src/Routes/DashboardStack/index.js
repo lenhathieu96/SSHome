@@ -1,4 +1,5 @@
 import React from 'react';
+import {Dimensions} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
@@ -12,6 +13,8 @@ import * as fontSize from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
 
 const DashboardStack = createStackNavigator();
+const deviceWidth = Dimensions.get('window').width;
+
 export default function DashBoardStacks() {
   const connectionStatus = useSelector((state) => state.hardware);
 
@@ -25,9 +28,6 @@ export default function DashBoardStacks() {
           title: 'SSHOME',
           headerStyle: {
             backgroundColor: 'transparent',
-            height: 80,
-            elevation: 0,
-            shadowOpacity: 0,
           },
           headerTintColor: Color.primary,
           headerTitleStyle: {
@@ -36,21 +36,6 @@ export default function DashBoardStacks() {
           },
           headerTitleAlign: 'center',
           headerLeft: () => (
-            <Icon.Button
-              name="bluetooth-b"
-              size={fontSize.huge}
-              color={
-                connectionStatus.BLConnection ? Color.green : Color.unactive
-              }
-              backgroundColor="transparent"
-              // disabled={!BLE}
-              // onPress={() => navigation.goBack()}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-              style={{marginLeft: 30}}
-            />
-          ),
-          headerRight: () => (
             <Icon.Button
               name="wifi"
               size={fontSize.huge}
@@ -63,7 +48,22 @@ export default function DashBoardStacks() {
               // }
               underlayColor="transparent"
               activeOpacity={0.4}
-              style={{marginRight: 30}}
+              style={{marginLeft: deviceWidth * 0.1}}
+            />
+          ),
+          headerRight: () => (
+            <Icon.Button
+              name="bluetooth-b"
+              size={fontSize.huge}
+              color={
+                connectionStatus.BLConnection ? Color.green : Color.unactive
+              }
+              backgroundColor="transparent"
+              // disabled={!BLE}
+              // onPress={() => navigation.goBack()}
+              underlayColor="transparent"
+              activeOpacity={0.4}
+              style={{marginRight: deviceWidth * 0.1}}
             />
           ),
         })}
@@ -115,18 +115,7 @@ export default function DashBoardStacks() {
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           title: '',
-          headerTransparent: true,
-          headerLeft: () => (
-            <Icon.Button
-              name="chevron-left"
-              size={fontSize.huge}
-              backgroundColor="transparent"
-              borderRadius={10}
-              onPress={() => navigation.goBack()}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-            />
-          ),
+          headerShown: false,
         })}
       />
     </DashboardStack.Navigator>

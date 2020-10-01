@@ -14,6 +14,8 @@ import bedRoomHeader from '../../../Assets/Images/bedroomHeader.png';
 import kitchenHeader from '../../../Assets/Images/kitchenHeader.png';
 import bathRoomHeader from '../../../Assets/Images/bathroomHeader.png';
 import TextButton from '../../../Components/TextButton';
+import IconButton from '../../../Components/IconButton';
+import Color from '../../../Utils/Color';
 
 const deviceData = [
   {
@@ -118,6 +120,24 @@ export default function RoomDetailScreen({navigation, route}) {
               onChangeDeviceStatus={onChangeDeviceStatus}
             />
           )}
+        />
+      </View>
+      <View style={styles.footerContainer}>
+        <IconButton
+          iconName="sync-alt"
+          iconColor={'black'}
+          iconSize={fontSize.larger}
+        />
+        <IconButton
+          iconName="microphone-alt"
+          iconColor={Color.primary}
+          iconSize={fontSize.biggest}
+          style={styles.floatButton}
+        />
+        <IconButton
+          iconName="plus"
+          iconColor={'black'}
+          iconSize={fontSize.huge}
         />
       </View>
     </RootContainer>

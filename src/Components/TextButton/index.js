@@ -1,6 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import Text from '../Text';
+import {TouchableOpacity, Text} from 'react-native';
 import styles from './styles/index.css';
 
 import PropTypes from 'prop-types';
@@ -21,7 +20,7 @@ function TextButton(props) {
       onPress={onPress}
       disabled={disabled}
       style={[styles.TextButton, style]}>
-      <Text text={text} style={[styles.text, textStyle]} />
+      <Text style={[styles.text, textStyle]}>{text}</Text>
     </TouchableOpacity>
   );
 }

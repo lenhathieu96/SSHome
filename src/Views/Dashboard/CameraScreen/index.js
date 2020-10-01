@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
+import {View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 
-import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 
@@ -26,19 +26,27 @@ export default function CameraScreen({navigation, route}) {
   };
 
   return (
-    <RootContainer safeArea={false}>
+    <RootContainer safeArea={false} style={styles.rootContainer}>
+      <IconButton
+        iconName="chevron-left"
+        iconSize={fontSize.bigger}
+        onPress={() => navigation.goBack()}
+        style={styles.btnBack}
+      />
       <RNCamera
         ref={cameraRef}
         type={RNCamera.Constants.Type.back}
         captureAudio={false}
         style={styles.picture}
       />
-      <IconButton
-        iconName="camera"
-        iconSize={2 * fontSize.biggest}
-        onPress={() => takePicture()}
-        style={styles.btnTakePicture}
-      />
+      <View style={styles.btnTakePictureContainer}>
+        <IconButton
+          iconName="dot-circle"
+          iconSize={1.5 * fontSize.biggest}
+          onPress={() => takePicture()}
+          style={styles.btnTakePicture}
+        />
+      </View>
     </RootContainer>
   );
 }
