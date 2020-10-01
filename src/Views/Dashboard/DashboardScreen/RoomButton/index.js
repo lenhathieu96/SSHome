@@ -11,7 +11,6 @@ import styles from './styles/index.css';
 
 export default function RoomButton({navigation, roomData}) {
   const [roomIcon, setRoomIcon] = useState(livingRoomIcon);
-
   useEffect(() => {
     switch (roomData.roomtypeID) {
       case 0:
@@ -30,6 +29,7 @@ export default function RoomButton({navigation, roomData}) {
         setRoomIcon(livingRoomIcon);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

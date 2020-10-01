@@ -1,10 +1,10 @@
 import {StyleSheet, Dimensions} from 'react-native';
-
 import Color from '../../../../../Utils/Color';
 import * as fontSize from '../../../../../Utils/FontSize';
 
 const windowWidth = Dimensions.get('window').width;
 const containerSize = 0.4 * windowWidth;
+
 
 const styles = StyleSheet.create({
   BtnContainer: {

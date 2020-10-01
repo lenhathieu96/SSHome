@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.background,
     flexDirection: 'row',
     flex: 0.1,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
   },
   floatButton: {
     backgroundColor: 'white',
-    width: 0.25 * windowWidth,
-    height: 0.25 * windowWidth,
-    borderRadius: (0.25 * windowWidth) / 2,
+    width: 0.2 * windowWidth,
+    height: 0.2 * windowWidth,
+    borderRadius: (0.2 * windowWidth) / 2,
     marginTop: -40,
     zIndex: 1,
     padding: 0,

@@ -26,9 +26,7 @@ export default function DashBoardStacks() {
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           title: 'SSHOME',
-          headerStyle: {
-            backgroundColor: 'transparent',
-          },
+          headerTransparent: true,
           headerTintColor: Color.primary,
           headerTitleStyle: {
             fontSize: fontSize.larger,

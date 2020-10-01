@@ -7,6 +7,7 @@ import {
   NativeEventEmitter,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import {useHeaderHeight} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
@@ -52,6 +53,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function Dashboard({navigation}) {
   const dispatch = useDispatch();
+  const headerHeight = useHeaderHeight();
 
   useEffect(() => {
     listenConnection();
@@ -81,7 +83,7 @@ export default function Dashboard({navigation}) {
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* Info Container */}
-      <View style={styles.infoContainer}>
+      <View style={[styles.infoContainer, {marginTop: headerHeight}]}>
         <View styles={styles.weatherContainer}>
           <Icon
             name="cloud-showers-heavy"
