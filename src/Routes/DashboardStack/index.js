@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 
 import DashBoardScreen from '../../Views/Dashboard/DashboardScreen';
-import RoomDetailScreen from '../../Views/Dashboard/RoomDetailScreen';
+import RoomScreen from '../../Views/Dashboard/RoomScreen';
 import AddRoomScreen from '../../Views/Dashboard/AddRoomScreen';
 import CameraScreen from '../../Views/Dashboard/CameraScreen';
 
@@ -68,7 +68,7 @@ export default function DashBoardStacks() {
       />
       <DashboardStack.Screen
         name="roomScr"
-        component={RoomDetailScreen}
+        component={RoomScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,

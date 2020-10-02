@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     zIndex: 0,
     overflow: 'hidden',
     backgroundColor: 'black',
-    borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
+    borderBottomLeftRadius: 40,
   },
   imgBg: {
     flex: 1,
@@ -58,19 +58,23 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 0.6,
-  },
-  listDevice: {
-    flex: 0.9,
     justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  deviceTitle: {
+    fontSize: fontSize.bigger,
+    alignSelf: 'center',
+  },
+  listDevice: {
+    flexGrow: 0.9,
   },
   footerContainer: {
     justifyContent: 'space-evenly',
     backgroundColor: Color.background,
     flexDirection: 'row',
     flex: 0.1,
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -85,7 +89,7 @@ const styles = StyleSheet.create({
     width: 0.2 * windowWidth,
     height: 0.2 * windowWidth,
     borderRadius: (0.2 * windowWidth) / 2,
-    marginTop: -40,
+    marginTop: -((0.2 * windowWidth) / 2),
     zIndex: 1,
     padding: 0,
     shadowColor: '#000',

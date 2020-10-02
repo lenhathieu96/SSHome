@@ -25,6 +25,7 @@ import RoomButton from './RoomButton';
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
+import IconButton from '../../../Components/IconButton';
 
 const data = [
   {
@@ -41,6 +42,26 @@ const data = [
     name: 'Phòng Bếp',
     roomtypeID: 2,
     deviceQuantity: 6,
+  },
+  {
+    name: 'Phòng Tắm',
+    roomtypeID: 3,
+    deviceQuantity: 8,
+  },
+  {
+    name: 'Phòng Tắm',
+    roomtypeID: 3,
+    deviceQuantity: 8,
+  },
+  {
+    name: 'Phòng Tắm',
+    roomtypeID: 3,
+    deviceQuantity: 8,
+  },
+  {
+    name: 'Phòng Tắm',
+    roomtypeID: 3,
+    deviceQuantity: 8,
   },
   {
     name: 'Phòng Tắm',
@@ -81,9 +102,9 @@ export default function Dashboard({navigation}) {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, marginTop: headerHeight}}>
       {/* Info Container */}
-      <View style={[styles.infoContainer, {marginTop: headerHeight}]}>
+      <View style={[styles.headerContainer]}>
         <View styles={styles.weatherContainer}>
           <Icon
             name="cloud-showers-heavy"
@@ -110,7 +131,7 @@ export default function Dashboard({navigation}) {
       </View>
 
       {/* Room List */}
-      <View style={styles.listContainer}>
+      <View style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
         <FlatList
           data={data}
@@ -120,6 +141,16 @@ export default function Dashboard({navigation}) {
           )}
           contentContainerStyle={styles.roomlist}
           numColumns={2}
+        />
+      </View>
+
+      {/* Footer */}
+      <View style={styles.footerContainer}>
+        <IconButton
+          iconName="microphone"
+          iconSize={fontSize.bigger}
+          iconColor={Color.primary}
+          style={styles.btnMic}
         />
         <TextButton
           text="Thêm Phòng"

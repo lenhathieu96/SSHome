@@ -2,18 +2,23 @@ import {StyleSheet, Dimensions} from 'react-native';
 
 import Color from '../../../../../Utils/Color';
 import * as fontSize from '../../../../../Utils/FontSize';
-
-const windowWidth = Dimensions.get('window').width;
-const containerSize = 0.4 * windowWidth;
+const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   btnContainer: {
-    height: 1.2 * containerSize,
-    width: containerSize,
-    backgroundColor: Color.secondary,
+    height: 0.4 * height,
+    width: 0.6 * width,
+    backgroundColor: 'transparent',
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 10,
+    padding: 10,
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: Color.unactive,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   iconContainer: {
     padding: 10,

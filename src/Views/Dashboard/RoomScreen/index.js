@@ -1,9 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View, ImageBackground, FlatList} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  View,
+  ImageBackground,
+  FlatList,
+  Dimensions,
+  Animated,
+  Text,
+} from 'react-native';
 
 import RootContainer from '../../../Components/RootContainer';
-import Text from '../../../Components/Text';
 import {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 
@@ -18,6 +23,7 @@ import IconButton from '../../../Components/IconButton';
 import Color from '../../../Utils/Color';
 
 const deviceData = [
+  {},
   {
     name: 'Đèn 1',
     status: false,
@@ -31,13 +37,28 @@ const deviceData = [
     status: false,
   },
   {
-    name: 'Đèn 4',
-    status: true,
+    name: 'Đèn 3',
+    status: false,
   },
+  {
+    name: 'Đèn 5',
+    status: false,
+  },
+  {
+    name: 'Đèn 4',
+    status: false,
+  },
+  {},
 ];
+
+const {width} = Dimensions.get('window');
+
+const ITEM_SIZE = 0.6 * width;
+const SPACER_SIZE = (width - ITEM_SIZE) / 2;
 
 export default function RoomDetailScreen({navigation, route}) {
   const {roomData, pictureUri} = route.params;
+  const scrollX = useRef(new Animated.Value(0)).current;
 
   const [customHeader, setCustomHeader] = useState(false);
   const [bgHeader, setBgHeader] = useState(livingRoomHeader);
@@ -107,21 +128,61 @@ export default function RoomDetailScreen({navigation, route}) {
         </View>
       </View>
       <View style={styles.bodyContainer}>
-        <FlatList
-          numColumns={2}
+        <BoldText style={styles.deviceTitle}>Danh Sách Thiết Bị</BoldText>
+        <Animated.FlatList
+          style={styles.listDevice}
+          contentContainerStyle={{alignItems: 'center'}}
           data={listDevices}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.listDevice}
-          renderItem={({item, index}) => (
-            <DeviceButton
-              index={index}
-              name={item.name}
-              status={item.status}
-              onChangeDeviceStatus={onChangeDeviceStatus}
-            />
+          snapToInterval={ITEM_SIZE}
+          //speed of scroll, normal is 0.9
+          decelerationRate={0.5}
+          bounces={false}
+          horizontal
+          snapToAlignment="start"
+          showsHorizontalScrollIndicator={false}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: true},
           )}
+          renderItem={({item, index}) => {
+            const inputRange = [
+              (index - 2) * ITEM_SIZE,
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+            ];
+            const translateY = scrollX.interpolate({
+              inputRange,
+              outputRange: [0, -(0.2 * ITEM_SIZE), 0],
+              extrapolate: 'clamp',
+            });
+            const opacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.3, 1, 0.3],
+            });
+            if (!item.name) {
+              return (
+                <View
+                  style={{
+                    width: SPACER_SIZE,
+                  }}
+                />
+              );
+            }
+            return (
+              <DeviceButton
+                opacity={opacity}
+                translateY={translateY}
+                index={index}
+                name={item.name}
+                status={item.status}
+                onChangeDeviceStatus={onChangeDeviceStatus}
+              />
+            );
+          }}
         />
       </View>
+
       <View style={styles.footerContainer}>
         <IconButton
           iconName="sync-alt"
