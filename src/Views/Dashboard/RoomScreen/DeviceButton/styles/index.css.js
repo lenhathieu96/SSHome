@@ -5,7 +5,7 @@ import * as fontSize from '../../../../../Utils/FontSize';
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   btnContainer: {
-    height: 0.4 * height,
+    height: 0.45 * height,
     width: 0.6 * width,
     backgroundColor: 'transparent',
     borderRadius: 20,

@@ -25,45 +25,7 @@ export default function DashBoardStacks() {
         component={DashBoardScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          title: 'SSHOME',
-          headerTransparent: true,
-          headerTintColor: Color.primary,
-          headerTitleStyle: {
-            fontSize: fontSize.larger,
-            fontFamily: 'MavenPro-Bold',
-          },
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <Icon.Button
-              name="wifi"
-              size={fontSize.huge}
-              backgroundColor="transparent"
-              color={
-                connectionStatus.WFConnection ? Color.green : Color.unactive
-              }
-              // onPress={() =>
-              //   navigation.navigate('cameraScr', {isFromAddNewRoom: false})
-              // }
-              underlayColor="transparent"
-              activeOpacity={0.4}
-              style={{marginLeft: deviceWidth * 0.1}}
-            />
-          ),
-          headerRight: () => (
-            <Icon.Button
-              name="bluetooth-b"
-              size={fontSize.huge}
-              color={
-                connectionStatus.BLConnection ? Color.green : Color.unactive
-              }
-              backgroundColor="transparent"
-              // disabled={!BLE}
-              // onPress={() => navigation.goBack()}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-              style={{marginRight: deviceWidth * 0.1}}
-            />
-          ),
+          headerShown: false,
         })}
       />
       <DashboardStack.Screen
@@ -104,7 +66,23 @@ export default function DashBoardStacks() {
         component={AddRoomScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerShown: false,
+          headerTitle: 'Thêm Phòng',
+          headerTitleStyle: {
+            fontSize: fontSize.huge,
+            fontFamily: 'MavenPro-Bold',
+          },
+          headerLeft: () => (
+            <Icon.Button
+              name="chevron-left"
+              size={fontSize.huge}
+              color={Color.primary}
+              backgroundColor="transparent"
+              borderRadius={10}
+              onPress={() => navigation.goBack()}
+              underlayColor="transparent"
+              activeOpacity={0.4}
+            />
+          ),
         })}
       />
       <DashboardStack.Screen

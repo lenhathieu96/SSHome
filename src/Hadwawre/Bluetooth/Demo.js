@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
   Text,
   Platform,
   PermissionsAndroid,
@@ -10,7 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {BoldText} from './src/Components/Text';
+import {BoldText} from '../../Components/Text';
 import BleManager from 'react-native-ble-manager';
 
 const BleManagerModule = NativeModules.BleManager;

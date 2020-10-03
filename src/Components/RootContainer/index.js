@@ -3,7 +3,7 @@ import {View, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
 
 RootContainer.propTypes = {
-  safeArea: PropTypes.bool.isRequired,
+  safeArea: PropTypes.bool,
   style: PropTypes.object,
   children: PropTypes.node,
 };

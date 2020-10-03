@@ -4,6 +4,18 @@ import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  headerTitle: {
+    fontSize: fontSize.huge,
+    color: Color.primary,
+  },
+  //info
+  infoContainer: {
+    flex: 0.1,
+    flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
   },
@@ -19,16 +31,17 @@ const styles = StyleSheet.create({
     fontSize: fontSize.larger,
     marginBottom: 3,
   },
+  //Body
   bodyContainer: {
-    flexGrow: 1,
+    flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 5,
     backgroundColor: Color.background,
   },
   roomlist: {
+    flexGrow: 1,
     alignSelf: 'center',
-    flex: 1,
   },
   listTitle: {
     marginVertical: 10,
@@ -39,16 +52,18 @@ const styles = StyleSheet.create({
   footerContainer: {
     backgroundColor: Color.background,
     flexDirection: 'row',
-    flex: 0.1,
+    height: 72,
     justifyContent: 'space-between',
   },
   btnMic: {
-    flex: 0.3,
+    flex: 0.4,
+    backgroundColor: Color.background,
   },
   btnAddRoom: {
     flex: 0.6,
     margin: 0,
     borderTopRightRadius: 0,
+    borderBottomLeftRadius: 0,
   },
 });
 

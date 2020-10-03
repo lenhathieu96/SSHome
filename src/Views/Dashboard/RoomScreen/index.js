@@ -68,7 +68,6 @@ export default function RoomDetailScreen({navigation, route}) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (pictureUri) {
-        console.log('got picture uri');
         setCustomHeader(true);
         setBgHeader(pictureUri);
         setBtnChangeVisible(true);
@@ -127,11 +126,12 @@ export default function RoomDetailScreen({navigation, route}) {
           <BoldText style={styles.title}>{roomData.name}</BoldText>
         </View>
       </View>
+
       <View style={styles.bodyContainer}>
         <BoldText style={styles.deviceTitle}>Danh Sách Thiết Bị</BoldText>
         <Animated.FlatList
           style={styles.listDevice}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{alignItems: 'flex-end'}}
           data={listDevices}
           keyExtractor={(item, index) => index.toString()}
           snapToInterval={ITEM_SIZE}
@@ -190,7 +190,7 @@ export default function RoomDetailScreen({navigation, route}) {
           iconSize={fontSize.larger}
         />
         <IconButton
-          iconName="microphone-alt"
+          iconName="microphone"
           iconColor={Color.primary}
           iconSize={fontSize.biggest}
           style={styles.floatButton}

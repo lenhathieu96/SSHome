@@ -1,26 +1,28 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
   View,
   FlatList,
+  Alert,
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {useHeaderHeight} from '@react-navigation/stack';
+
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
 
+import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
+import BSBlueToothSearching from './BSBlueTooth';
+import RoomButton from './RoomButton';
 
 import {
   setBLConnection,
   setInternetConnection,
 } from '../../../Redux/ActionCreators/hardwareActions';
-
-import RoomButton from './RoomButton';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
@@ -69,19 +71,28 @@ const data = [
     deviceQuantity: 8,
   },
 ];
+
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function Dashboard({navigation}) {
+  const [nearbyDevices, setNearbyDevices] = useState([]);
+
+  const BSBlueToothRef = useRef();
+
   const dispatch = useDispatch();
-  const headerHeight = useHeaderHeight();
+  const connectionStatus = useSelector((state) => state.hardware);
 
   useEffect(() => {
     listenConnection();
+
+    bleManagerEmitter.addListener('BleManagerStopScan', () =>
+      console.log('scan stopped'),
+    );
   }, []);
 
   //listener Internet and Bluetooth connection
-  const listenConnection = () => {
+  const listenConnection = async () => {
     BLEManager.checkState();
     bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
       let status = args.state;
@@ -96,15 +107,70 @@ export default function Dashboard({navigation}) {
           break;
       }
     });
+
     NetInfo.addEventListener((state) => {
       dispatch(setInternetConnection(state.isConnected));
     });
   };
 
+  const setUpBLConnection = () => {
+    if (connectionStatus.BLConnection) {
+      BSBlueToothRef.current.snapTo(0);
+      bleManagerEmitter.addListener(
+        'BleManagerDiscoverPeripheral',
+        (device) => {
+          let duplicateDevice = nearbyDevices.filter(
+            (item) => item.id === device.id,
+          );
+          if (duplicateDevice.length === 0) {
+            nearbyDevices.push(device);
+            setNearbyDevices([...nearbyDevices]);
+          }
+        },
+      );
+      BLEManager.scan([], 15, true).then(() => {
+        console.log('Scanning...');
+        // setScanning(true);
+      });
+    } else {
+      Alert.alert('Vui Lòng Kiểm Tra Trạng Thái BLuetooth');
+    }
+  };
+
+  const stopSearchingBLDevices = () => {
+    BLEManager.stopScan().then(() => console.log('scan set stopped'));
+    BSBlueToothRef.current.snapTo(1);
+    bleManagerEmitter.removeListener('BleManagerDiscoverPeripheral');
+    setNearbyDevices([]);
+  };
   return (
-    <SafeAreaView style={{flex: 1, marginTop: headerHeight}}>
+    <RootContainer>
+      {/* Header */}
+      <SafeAreaView style={[styles.headerContainer, {height: 80}]}>
+        <Icon
+          name="wifi"
+          size={fontSize.huge}
+          backgroundColor="transparent"
+          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
+          // onPress={() =>
+          //   navigation.navigate('cameraScr', {isFromAddNewRoom: false})
+          // }
+          underlayColor="transparent"
+          activeOpacity={0.4}
+        />
+        <BoldText style={styles.headerTitle}>SSHOME</BoldText>
+        <Icon.Button
+          name="bluetooth-b"
+          size={fontSize.huge}
+          color={connectionStatus.BLConnection ? Color.green : Color.unactive}
+          backgroundColor="transparent"
+          underlayColor="transparent"
+          activeOpacity={0.4}
+          onPress={() => setUpBLConnection()}
+        />
+      </SafeAreaView>
       {/* Info Container */}
-      <View style={[styles.headerContainer]}>
+      <View style={styles.infoContainer}>
         <View styles={styles.weatherContainer}>
           <Icon
             name="cloud-showers-heavy"
@@ -139,7 +205,8 @@ export default function Dashboard({navigation}) {
           renderItem={({item}) => (
             <RoomButton navigation={navigation} roomData={item} />
           )}
-          contentContainerStyle={styles.roomlist}
+          style={styles.roomlist}
+          showsVerticalScrollIndicator={false}
           numColumns={2}
         />
       </View>
@@ -151,6 +218,7 @@ export default function Dashboard({navigation}) {
           iconSize={fontSize.bigger}
           iconColor={Color.primary}
           style={styles.btnMic}
+          onPress={() => console.log('alo')}
         />
         <TextButton
           text="Thêm Phòng"
@@ -158,6 +226,12 @@ export default function Dashboard({navigation}) {
           style={styles.btnAddRoom}
         />
       </View>
-    </SafeAreaView>
+      {/* BSBlueTooth */}
+      <BSBlueToothSearching
+        ref={BSBlueToothRef}
+        listDevice={nearbyDevices}
+        stopSearchingBLDevices={stopSearchingBLDevices}
+      />
+    </RootContainer>
   );
 }

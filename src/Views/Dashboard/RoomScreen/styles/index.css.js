@@ -7,7 +7,6 @@ const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   headerContainer: {
     flex: 0.3,
-    overflow: 'hidden',
   },
   headerBg: {
     flex: 1,
@@ -62,7 +61,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deviceTitle: {
-    fontSize: fontSize.bigger,
+    fontSize: fontSize.larger,
+    color: Color.primary,
     alignSelf: 'center',
   },
   listDevice: {
