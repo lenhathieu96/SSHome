@@ -35,7 +35,7 @@ export default function RoomButton({navigation, roomData}) {
   return (
     <TouchableOpacity
       style={styles.BtnContainer}
-      onPress={() => navigation.navigate('roomScr', {roomData})}>
+      onPress={() => navigation.navigate('Room', {roomData})}>
       <Image source={roomIcon} />
       <BoldText>{roomData.name}</BoldText>
       <Text> {roomData.deviceQuantity} thiết bị </Text>

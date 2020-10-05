@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, ImageBackground} from 'react-native';
+import {View, ImageBackground, KeyboardAvoidingView} from 'react-native';
 import {TextInput} from 'react-native-paper';
+import {useHeaderHeight} from '@react-navigation/stack';
+import {RadioButton} from 'react-native-paper';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
-import RadioButton from '../../../Components/RadioButton';
-import RootContainer from '../../../Components/RootContainer';
 
 import livingRoomHeader from '../../../Assets/Images/livingRoomHeader.png';
 import bedRoomHeader from '../../../Assets/Images/bedroomHeader.png';
@@ -18,25 +18,25 @@ import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
 export default function AddRoomScreen({navigation, route}) {
+  const headerHeight = useHeaderHeight();
+
   const [roomName, setRoomName] = useState();
   const [roomType, setRoomType] = useState(1);
   const [customPicture, setCustomPicture] = useState(false);
   const [currentPicture, setCurrentPicture] = useState(livingRoomHeader);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (route.params) {
-        const {pictureUri} = route.params;
-        if (pictureUri) {
-          setCurrentPicture(pictureUri);
-          setCustomPicture(true);
-        }
-      }
-    });
-    return unsubscribe;
-  }, []);
+    setDefaultPicture();
+    if (route.params?.pictureUri) {
+      setCustomPicture(true);
+      setCurrentPicture(route.params.pictureUri);
+    }
+  }, [route.params?.pictureUri]);
 
-  const setDefaultPicture = () => {
+  const setDefaultPicture = (roomType) => {
+    if (roomType) {
+      setRoomType(roomType);
+    }
     setCustomPicture(false);
     switch (roomType) {
       case 1:
@@ -58,8 +58,15 @@ export default function AddRoomScreen({navigation, route}) {
   };
 
   return (
-    <RootContainer>
+    <KeyboardAvoidingView
+      style={{
+        marginTop: headerHeight,
+        flex: 1,
+        backgroundColor: Color.background,
+      }}>
       <TextInput
+        value={roomName}
+        onChangeText={(text) => setRoomName(text)}
         label="Tên Phòng"
         mode="outlined"
         style={[styles.formController, {flex: 0.1}]}
@@ -72,46 +79,30 @@ export default function AddRoomScreen({navigation, route}) {
       />
       <View style={[styles.formController, {flex: 0.3}]}>
         <Text>Chọn loại phòng</Text>
-        <View style={styles.RadioButtonsContainer}>
-          <RadioButton
-            title={'Phòng Khách'}
-            value={1}
-            option={roomType}
-            onChange={() => {
-              setRoomType(1);
-              setCurrentPicture(livingRoomHeader);
-            }}
-          />
-          <RadioButton
-            title={'Phòng Ngủ'}
-            value={2}
-            option={roomType}
-            onChange={() => {
-              setRoomType(2);
-              setCurrentPicture(bedRoomHeader);
-            }}
-          />
-        </View>
-        <View style={styles.RadioButtonsContainer}>
-          <RadioButton
-            title={'Phòng Bếp'}
-            value={3}
-            option={roomType}
-            onChange={() => {
-              setRoomType(3);
-              setCurrentPicture(kitchenHeader);
-            }}
-          />
-          <RadioButton
-            title={'Phòng Tắm'}
-            option={roomType}
-            value={4}
-            onChange={() => {
-              setRoomType(4);
-              setCurrentPicture(bathRoomHeader);
-            }}
-          />
-        </View>
+        <RadioButton.Group
+          value={roomType}
+          onValueChange={(value) => setDefaultPicture(value)}>
+          <View style={styles.radioBtnRowContainer}>
+            <View style={styles.radioBtnContainer}>
+              <RadioButton.Android value={1} />
+              <Text>Phòng Khách</Text>
+            </View>
+            <View style={styles.radioBtnContainer}>
+              <RadioButton.Android value={2} />
+              <Text>Phòng Ngủ</Text>
+            </View>
+          </View>
+          <View style={styles.radioBtnRowContainer}>
+            <View style={styles.radioBtnContainer}>
+              <RadioButton.Android value={3} />
+              <Text>Phòng Bếp</Text>
+            </View>
+            <View style={styles.radioBtnContainer}>
+              <RadioButton.Android value={4} />
+              <Text>Phòng Tắm</Text>
+            </View>
+          </View>
+        </RadioButton.Group>
       </View>
 
       <View style={[styles.formController, {flex: 0.6}]}>
@@ -128,17 +119,18 @@ export default function AddRoomScreen({navigation, route}) {
             iconColor={Color.primary}
             iconSize={fontSize.biggest}
             onPress={() =>
-              navigation.navigate('cameraScr', {isFromAddNewRoom: true})
+              navigation.navigate('Camera', {isFromAddNewRoom: true})
             }
           />
-          <RadioButton
-            title={'Chọn ảnh mặc định'}
-            value={false}
-            option={customPicture}
-            customStyle={{alignSelf: 'flex-start'}}
-            onChange={() => setDefaultPicture()}
+        </View>
+        <View style={styles.radioBtnContainer}>
+          <RadioButton.Android
+            value={customPicture}
+            status={!customPicture ? 'checked' : 'unchecked'}
+            onPress={() => setDefaultPicture()}
             disabled={!customPicture}
           />
+          <Text>Chọn ảnh mặc định</Text>
         </View>
       </View>
 
@@ -147,6 +139,6 @@ export default function AddRoomScreen({navigation, route}) {
         style={styles.btnAddRoom}
         onPress={() => console.log('create Room')}
       />
-    </RootContainer>
+    </KeyboardAvoidingView>
   );
 }

@@ -11,7 +11,7 @@ import styles from './styles/index.css';
 export default function CameraScreen({navigation, route}) {
   const cameraRef = useRef();
 
-  const {isFromAddNewRoom} = route.params;
+  const {isFromAddNewRoom, setMyPicture} = route.params;
 
   const takePicture = async () => {
     const options = {
@@ -20,9 +20,11 @@ export default function CameraScreen({navigation, route}) {
       fixOrientation: true,
     };
     const picture = await cameraRef.current.takePictureAsync(options);
-    navigation.navigate(isFromAddNewRoom ? 'addroomScr' : 'roomScr', {
-      pictureUri: picture.uri,
-    });
+    if (picture.uri) {
+      navigation.navigate(isFromAddNewRoom ? 'addroomScr' : 'roomScr', {
+        pictureUri: picture.uri,
+      });
+    }
   };
 
   return (

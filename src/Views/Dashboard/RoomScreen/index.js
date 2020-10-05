@@ -66,33 +66,30 @@ export default function RoomDetailScreen({navigation, route}) {
   const [listDevices, setListDevices] = useState(deviceData);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (pictureUri) {
-        setCustomHeader(true);
-        setBgHeader(pictureUri);
-        setBtnChangeVisible(true);
-      } else {
-        switch (roomData.roomtypeID) {
-          case 0:
-            setBgHeader(livingRoomHeader);
-            break;
-          case 1:
-            setBgHeader(bedRoomHeader);
-            break;
-          case 2:
-            setBgHeader(kitchenHeader);
-            break;
-          case 3:
-            setBgHeader(bathRoomHeader);
-            break;
-          default:
-            setBgHeader(livingRoomHeader);
-            break;
-        }
+    if (route.params?.pictureUri) {
+      setCustomHeader(true);
+      setBgHeader(route.params.pictureUri);
+      setBtnChangeVisible(true);
+    } else {
+      switch (roomData.roomtypeID) {
+        case 0:
+          setBgHeader(livingRoomHeader);
+          break;
+        case 1:
+          setBgHeader(bedRoomHeader);
+          break;
+        case 2:
+          setBgHeader(kitchenHeader);
+          break;
+        case 3:
+          setBgHeader(bathRoomHeader);
+          break;
+        default:
+          setBgHeader(livingRoomHeader);
+          break;
       }
-    });
-    return unsubscribe;
-  }, [navigation, pictureUri, roomData.roomtypeID]);
+    }
+  }, [route.params?.pictureUri, roomData.roomtypeID]);
 
   //control device
   const onChangeDeviceStatus = (index, status) => {

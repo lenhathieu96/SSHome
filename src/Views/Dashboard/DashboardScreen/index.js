@@ -85,10 +85,6 @@ export default function Dashboard({navigation}) {
 
   useEffect(() => {
     listenConnection();
-
-    bleManagerEmitter.addListener('BleManagerStopScan', () =>
-      console.log('scan stopped'),
-    );
   }, []);
 
   //listener Internet and Bluetooth connection
@@ -116,6 +112,9 @@ export default function Dashboard({navigation}) {
   const setUpBLConnection = () => {
     if (connectionStatus.BLConnection) {
       BSBlueToothRef.current.snapTo(0);
+      bleManagerEmitter.addListener('BleManagerStopScan', () =>
+        console.log('scan stopped'),
+      );
       bleManagerEmitter.addListener(
         'BleManagerDiscoverPeripheral',
         (device) => {
@@ -208,22 +207,6 @@ export default function Dashboard({navigation}) {
           style={styles.roomlist}
           showsVerticalScrollIndicator={false}
           numColumns={2}
-        />
-      </View>
-
-      {/* Footer */}
-      <View style={styles.footerContainer}>
-        <IconButton
-          iconName="microphone"
-          iconSize={fontSize.bigger}
-          iconColor={Color.primary}
-          style={styles.btnMic}
-          onPress={() => console.log('alo')}
-        />
-        <TextButton
-          text="Thêm Phòng"
-          onPress={() => navigation.navigate('addroomScr')}
-          style={styles.btnAddRoom}
         />
       </View>
       {/* BSBlueTooth */}

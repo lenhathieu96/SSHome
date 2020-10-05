@@ -3,24 +3,33 @@ import Color from '../../../../Utils/Color';
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   formController: {
-    margin: 10,
+    marginHorizontal: 10,
+    justifyContent: 'center',
   },
-  RadioButtonsContainer: {
+
+  radioBtnRowContainer: {
     flexDirection: 'row',
     padding: 10,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
+  radioBtnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
   imageContainer: {
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   picture: {
-    borderRadius: 20,
+    borderRadius: 30,
     width: 0.95 * width,
     height: (0.95 * width * 3) / 4,
     zIndex: 0,
     backgroundColor: 'black',
+    opacity: 0.7,
     overflow: 'hidden',
   },
   btnCamera: {

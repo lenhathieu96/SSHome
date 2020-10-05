@@ -16,12 +16,10 @@ const DashboardStack = createStackNavigator();
 const deviceWidth = Dimensions.get('window').width;
 
 export default function DashBoardStacks() {
-  const connectionStatus = useSelector((state) => state.hardware);
-
   return (
-    <DashboardStack.Navigator initialRouteName="DashboardScr">
+    <DashboardStack.Navigator initialRouteName="Dashboard">
       <DashboardStack.Screen
-        name="DashboardScr"
+        name="Dashboard"
         component={DashBoardScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
@@ -29,7 +27,7 @@ export default function DashBoardStacks() {
         })}
       />
       <DashboardStack.Screen
-        name="roomScr"
+        name="Room"
         component={RoomScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
@@ -53,7 +51,7 @@ export default function DashBoardStacks() {
               backgroundColor="transparent"
               borderRadius={10}
               onPress={() =>
-                navigation.navigate('cameraScr', {isFromAddNewRoom: false})
+                navigation.navigate('Camera', {isFromAddNewRoom: false})
               }
               underlayColor="transparent"
               activeOpacity={0.4}
@@ -62,31 +60,7 @@ export default function DashBoardStacks() {
         })}
       />
       <DashboardStack.Screen
-        name="addroomScr"
-        component={AddRoomScreen}
-        options={({navigation}) => ({
-          ...TransitionPresets.SlideFromRightIOS,
-          headerTitle: 'Thêm Phòng',
-          headerTitleStyle: {
-            fontSize: fontSize.huge,
-            fontFamily: 'MavenPro-Bold',
-          },
-          headerLeft: () => (
-            <Icon.Button
-              name="chevron-left"
-              size={fontSize.huge}
-              color={Color.primary}
-              backgroundColor="transparent"
-              borderRadius={10}
-              onPress={() => navigation.goBack()}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-            />
-          ),
-        })}
-      />
-      <DashboardStack.Screen
-        name="cameraScr"
+        name="Camera"
         component={CameraScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,

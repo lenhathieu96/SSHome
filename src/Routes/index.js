@@ -2,8 +2,9 @@ import React, {useEffect, useContext} from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
-import DashboardStack from './DashboardStack';
-import LoginScreen from '../Views/LoginScreen';
+import LoginStack from '../Views/Login/IntroScreen';
+import MasterStack from './MasterStack';
+import MemberStack from './MemberStack';
 
 // import {AuthContext} from '../Contexts/AuthContext';
 
@@ -25,7 +26,7 @@ export default function MainRoute() {
   //   }, []);
 
   return (
-    <AuthStack.Navigator initialRouteName="DashboardStack">
+    <AuthStack.Navigator initialRouteName="LoginScreen">
       {/*  {!context.isLogin ? ( */}
       <AuthStack.Screen
         name="LoginScreen"
@@ -34,8 +35,13 @@ export default function MainRoute() {
       />
       {/*   ) : ( */}
       <AuthStack.Screen
-        name="DashboardStack"
-        component={DashboardStack}
+        name="MemberStack"
+        component={MemberStack}
+        options={{headerShown: false, ...TransitionPresets.SlideFromRightIOS}}
+      />
+      <AuthStack.Screen
+        name="MasterStack"
+        component={MasterStack}
         options={{headerShown: false, ...TransitionPresets.SlideFromRightIOS}}
       />
       {/* )} */}
