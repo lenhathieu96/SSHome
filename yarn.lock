@@ -1203,6 +1203,14 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-9.2.7.tgz#c60fa434f8ab604d8b528bf17cbeae39d139b052"
   integrity sha512-U5ilY0lvz8SorKzhlevpN6fVH79fOdzugEkhGcInYZpp2RpEkrelKlgSzbzdsJo10cZD3mDefGvhjTpLnCT3AA==
 
+"@react-navigation/bottom-tabs@^5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.9.1.tgz#68d50e301d06f97f83a785f5acdf2c50e9600053"
+  integrity sha512-bTzMTjqsb6Q64INZ5qeCzky29KmzDIBbYgMsy5x5vXEIxgKUFmE2aOTzFvR9UxoKz/Zn8ek8WSFi975qvHaarg==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@react-navigation/core@^5.12.4":
   version "5.12.4"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.12.4.tgz#1bd0c81d098895c8ffe49f8624fae60c9abc5684"
