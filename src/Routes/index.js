@@ -1,8 +1,8 @@
-import React, {useEffect, useContext} from 'react';
+import React from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
-import LoginStack from '../Views/Login/IntroScreen';
+import LoginStack from './LoginStack';
 import MasterStack from './MasterStack';
 import MemberStack from './MemberStack';
 
@@ -26,11 +26,11 @@ export default function MainRoute() {
   //   }, []);
 
   return (
-    <AuthStack.Navigator initialRouteName="LoginScreen">
+    <AuthStack.Navigator initialRouteName="LoginStack">
       {/*  {!context.isLogin ? ( */}
       <AuthStack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
+        name="LoginStack"
+        component={LoginStack}
         options={{headerShown: false, ...TransitionPresets.SlideFromRightIOS}}
       />
       {/*   ) : ( */}

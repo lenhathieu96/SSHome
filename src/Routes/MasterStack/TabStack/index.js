@@ -37,8 +37,6 @@ export default function TabStack() {
         },
       })}
       tabBarOptions={{
-        inactiveBackgroundColor: Color.background,
-        activeBackgroundColor: Color.background,
         showLabel: false,
         activeTintColor: Color.primary,
         inactiveTintColor: 'gray',

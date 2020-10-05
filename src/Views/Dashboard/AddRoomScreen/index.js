@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, ImageBackground, KeyboardAvoidingView} from 'react-native';
+import {
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  SafeAreaView,
+} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {RadioButton} from 'react-native-paper';
@@ -16,6 +21,7 @@ import bathRoomHeader from '../../../Assets/Images/bathroomHeader.png';
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
+import RootContainer from '../../../Components/RootContainer';
 
 export default function AddRoomScreen({navigation, route}) {
   const headerHeight = useHeaderHeight();
@@ -58,87 +64,88 @@ export default function AddRoomScreen({navigation, route}) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{
-        marginTop: headerHeight,
-        flex: 1,
-        backgroundColor: Color.background,
-      }}>
-      <TextInput
-        value={roomName}
-        onChangeText={(text) => setRoomName(text)}
-        label="Tên Phòng"
-        mode="outlined"
-        style={[styles.formController, {flex: 0.1}]}
-        selectionColor={Color.primary}
-        underlineColor={Color.primary}
-        theme={{
-          colors: {primary: Color.primary, underlineColor: 'transparent'},
-        }}
-        onChange={(text) => setRoomName(text)}
-      />
-      <View style={[styles.formController, {flex: 0.3}]}>
-        <Text>Chọn loại phòng</Text>
-        <RadioButton.Group
-          value={roomType}
-          onValueChange={(value) => setDefaultPicture(value)}>
-          <View style={styles.radioBtnRowContainer}>
-            <View style={styles.radioBtnContainer}>
-              <RadioButton.Android value={1} />
-              <Text>Phòng Khách</Text>
+    <RootContainer safeArea={true}>
+      <KeyboardAvoidingView
+        style={{
+          marginTop: headerHeight,
+          flex: 1,
+        }}>
+        <TextInput
+          value={roomName}
+          onChangeText={(text) => setRoomName(text)}
+          label="Tên Phòng"
+          mode="outlined"
+          style={[styles.formController, {flex: 0.1}]}
+          selectionColor={Color.primary}
+          underlineColor={Color.primary}
+          theme={{
+            colors: {primary: Color.primary, underlineColor: 'transparent'},
+          }}
+          onChange={(text) => setRoomName(text)}
+        />
+        <View style={[styles.formController, {flex: 0.3}]}>
+          <Text>Chọn loại phòng</Text>
+          <RadioButton.Group
+            value={roomType}
+            onValueChange={(value) => setDefaultPicture(value)}>
+            <View style={styles.radioBtnRowContainer}>
+              <View style={styles.radioBtnContainer}>
+                <RadioButton.Android value={1} />
+                <Text>Phòng Khách</Text>
+              </View>
+              <View style={styles.radioBtnContainer}>
+                <RadioButton.Android value={2} />
+                <Text>Phòng Ngủ</Text>
+              </View>
             </View>
-            <View style={styles.radioBtnContainer}>
-              <RadioButton.Android value={2} />
-              <Text>Phòng Ngủ</Text>
+            <View style={styles.radioBtnRowContainer}>
+              <View style={styles.radioBtnContainer}>
+                <RadioButton.Android value={3} />
+                <Text>Phòng Bếp</Text>
+              </View>
+              <View style={styles.radioBtnContainer}>
+                <RadioButton.Android value={4} />
+                <Text>Phòng Tắm</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.radioBtnRowContainer}>
-            <View style={styles.radioBtnContainer}>
-              <RadioButton.Android value={3} />
-              <Text>Phòng Bếp</Text>
-            </View>
-            <View style={styles.radioBtnContainer}>
-              <RadioButton.Android value={4} />
-              <Text>Phòng Tắm</Text>
-            </View>
-          </View>
-        </RadioButton.Group>
-      </View>
-
-      <View style={[styles.formController, {flex: 0.6}]}>
-        <Text>Hình ảnh Phòng</Text>
-        <View style={styles.imageContainer}>
-          <ImageBackground
-            source={customPicture ? {uri: currentPicture} : currentPicture}
-            style={[styles.picture, {backgroundColor: 'black'}]}
-            resizeMode="stretch"
-          />
-          <IconButton
-            style={styles.btnCamera}
-            iconName="camera"
-            iconColor={Color.primary}
-            iconSize={fontSize.biggest}
-            onPress={() =>
-              navigation.navigate('Camera', {isFromAddNewRoom: true})
-            }
-          />
+          </RadioButton.Group>
         </View>
-        <View style={styles.radioBtnContainer}>
-          <RadioButton.Android
-            value={customPicture}
-            status={!customPicture ? 'checked' : 'unchecked'}
-            onPress={() => setDefaultPicture()}
-            disabled={!customPicture}
-          />
-          <Text>Chọn ảnh mặc định</Text>
-        </View>
-      </View>
 
-      <TextButton
-        text="Tạo Phòng"
-        style={styles.btnAddRoom}
-        onPress={() => console.log('create Room')}
-      />
-    </KeyboardAvoidingView>
+        <View style={[styles.formController, {flex: 0.6}]}>
+          <Text>Hình ảnh Phòng</Text>
+          <View style={styles.imageContainer}>
+            <ImageBackground
+              source={customPicture ? {uri: currentPicture} : currentPicture}
+              style={[styles.picture, {backgroundColor: 'black'}]}
+              resizeMode="stretch"
+            />
+            <IconButton
+              style={styles.btnCamera}
+              iconName="camera"
+              iconColor={Color.primary}
+              iconSize={fontSize.biggest}
+              onPress={() =>
+                navigation.navigate('Camera', {isFromAddNewRoom: true})
+              }
+            />
+          </View>
+          <View style={styles.radioBtnContainer}>
+            <RadioButton.Android
+              value={customPicture}
+              status={!customPicture ? 'checked' : 'unchecked'}
+              onPress={() => setDefaultPicture()}
+              disabled={!customPicture}
+            />
+            <Text>Chọn ảnh mặc định</Text>
+          </View>
+        </View>
+
+        <TextButton
+          text="Tạo Phòng"
+          style={styles.btnAddRoom}
+          onPress={() => console.log('create Room')}
+        />
+      </KeyboardAvoidingView>
+    </RootContainer>
   );
 }
