@@ -76,8 +76,6 @@ export default function AddRoomScreen({navigation, route}) {
           label="Tên Phòng"
           mode="outlined"
           style={[styles.formController, {flex: 0.1}]}
-          selectionColor={Color.primary}
-          underlineColor={Color.primary}
           theme={{
             colors: {primary: Color.primary, underlineColor: 'transparent'},
           }}

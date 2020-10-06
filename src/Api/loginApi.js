@@ -28,7 +28,20 @@ export const handleMasterLogin = (email, password) => {
 
 export const handleMemberLogin = async (phoneNumber) => {
   const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-  console.log(confirmation);
+  return confirmation ? confirmation : null;
+};
+
+export const confirmOTP = async (confirmation, OTPCode) => {
+  console.log(confirmation, 'devH confirm');
+  console.log(OTPCode, 'devH OTP');
+  try {
+    const res = await confirmation.confirm(OTPCode);
+    if (res) {
+      console.log('login success', res);
+    }
+  } catch (error) {
+    console.log('OTP Auth Err', error);
+  }
 };
 
 export const handleLogout = () => {

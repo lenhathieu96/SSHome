@@ -12,7 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
-
+import auth from '@react-native-firebase/auth';
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -147,7 +147,7 @@ export default function Dashboard({navigation}) {
       {/* Header */}
       <SafeAreaView style={[styles.headerContainer, {height: 80}]}>
         <Icon
-          name="wifi"
+          name="bars"
           size={fontSize.huge}
           backgroundColor="transparent"
           color={connectionStatus.WFConnection ? Color.green : Color.unactive}
@@ -157,9 +157,31 @@ export default function Dashboard({navigation}) {
           underlayColor="transparent"
           activeOpacity={0.4}
         />
+        <Icon
+          name="sign-out-alt"
+          size={fontSize.huge}
+          backgroundColor="transparent"
+          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
+          onPress={() =>
+            auth()
+              .signOut()
+              .then(() => console.log('User signed out!'))
+          }
+          underlayColor="transparent"
+          activeOpacity={0.4}
+        />
         <BoldText style={styles.headerTitle}>SSHOME</BoldText>
         <Icon.Button
           name="bluetooth-b"
+          size={fontSize.huge}
+          color={connectionStatus.BLConnection ? Color.green : Color.unactive}
+          backgroundColor="transparent"
+          underlayColor="transparent"
+          activeOpacity={0.4}
+          onPress={() => setUpBLConnection()}
+        />
+        <Icon.Button
+          name="wifi"
           size={fontSize.huge}
           color={connectionStatus.BLConnection ? Color.green : Color.unactive}
           backgroundColor="transparent"
