@@ -8,6 +8,7 @@ import {setLoginStatus} from '../Redux/ActionCreators/userActions';
 import LoginStack from './LoginStack';
 import MasterStack from './MasterStack';
 import MemberStack from './MemberStack';
+import DashBoardStack from './DashboardStack';
 
 // import {AuthContext} from '../Contexts/AuthContext';
 
@@ -23,31 +24,21 @@ export default function MainRoute() {
   }, []);
 
   function onAuthStateChanged(user) {
+    console.log(user);
     dispatch(setLoginStatus(user ? true : false));
   }
 
   return (
     <AuthStack.Navigator initialRouteName="LoginStack">
       {userStatus.isLogin ? (
-        userStatus.isAdmin ? (
-          <AuthStack.Screen
-            name="MasterStack"
-            component={MasterStack}
-            options={{
-              headerShown: false,
-              ...TransitionPresets.SlideFromRightIOS,
-            }}
-          />
-        ) : (
-          <AuthStack.Screen
-            name="MemberStack"
-            component={MemberStack}
-            options={{
-              headerShown: false,
-              ...TransitionPresets.SlideFromRightIOS,
-            }}
-          />
-        )
+        <AuthStack.Screen
+          name="DashBoardStack"
+          component={DashBoardStack}
+          options={{
+            headerShown: false,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       ) : (
         <AuthStack.Screen
           name="LoginStack"

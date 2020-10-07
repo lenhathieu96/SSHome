@@ -6,14 +6,17 @@ const initialState = {
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET LOGIN STATUS':
-      let tempState = {...state};
-      tempState.isLogin = action.payload;
-      state = tempState;
+      let login = {...state};
+      login.isLogin = action.payload;
+      state = login;
       return state;
 
     case 'SET USER ROLE':
-      state = action.payload;
+      let role = {...state};
+      role.isMaster = action.payload;
+      state = role;
       return state;
+
     default:
       return state;
   }

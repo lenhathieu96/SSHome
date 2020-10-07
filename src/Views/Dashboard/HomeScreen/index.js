@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
-import TextButton from '../../../Components/TextButton';
 import BSBlueToothSearching from './BSBlueTooth';
 import RoomButton from './RoomButton';
 
@@ -27,7 +26,6 @@ import {
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
-import IconButton from '../../../Components/IconButton';
 
 const data = [
   {
@@ -75,7 +73,7 @@ const data = [
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-export default function Dashboard({navigation}) {
+export default function HomeScreen({navigation}) {
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
   const BSBlueToothRef = useRef();
@@ -146,44 +144,22 @@ export default function Dashboard({navigation}) {
     <RootContainer>
       {/* Header */}
       <SafeAreaView style={[styles.headerContainer, {height: 80}]}>
-        <Icon
-          name="bars"
-          size={fontSize.huge}
+        <Icon.Button
+          name="bar-chart-2"
+          style={[styles.headerButton, {transform: [{rotate: '90deg'}]}]}
+          size={fontSize.bigger}
           backgroundColor="transparent"
-          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
-          // onPress={() =>
-          //   navigation.navigate('cameraScr', {isFromAddNewRoom: false})
-          // }
-          underlayColor="transparent"
-          activeOpacity={0.4}
-        />
-        <Icon
-          name="sign-out-alt"
-          size={fontSize.huge}
-          backgroundColor="transparent"
-          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
-          onPress={() =>
-            auth()
-              .signOut()
-              .then(() => console.log('User signed out!'))
-          }
+          color={connectionStatus.WFConnection ? Color.primary : Color.unactive}
+          onPress={() => navigation.openDrawer()}
           underlayColor="transparent"
           activeOpacity={0.4}
         />
         <BoldText style={styles.headerTitle}>SSHOME</BoldText>
         <Icon.Button
-          name="bluetooth-b"
-          size={fontSize.huge}
-          color={connectionStatus.BLConnection ? Color.green : Color.unactive}
-          backgroundColor="transparent"
-          underlayColor="transparent"
-          activeOpacity={0.4}
-          onPress={() => setUpBLConnection()}
-        />
-        <Icon.Button
           name="wifi"
-          size={fontSize.huge}
-          color={connectionStatus.BLConnection ? Color.green : Color.unactive}
+          style={styles.headerButton}
+          size={fontSize.bigger}
+          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
           backgroundColor="transparent"
           underlayColor="transparent"
           activeOpacity={0.4}
@@ -194,7 +170,7 @@ export default function Dashboard({navigation}) {
       <View style={styles.infoContainer}>
         <View styles={styles.weatherContainer}>
           <Icon
-            name="cloud-showers-heavy"
+            name="cloud-drizzle"
             size={fontSize.bigger}
             color={Color.primary}
             style={{alignSelf: 'center'}}

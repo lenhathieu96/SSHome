@@ -1,15 +1,18 @@
 import React from 'react';
 import {ImageBackground, View} from 'react-native';
-
+import {useDispatch} from 'react-redux';
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
 import {BoldText} from '../../../Components/Text';
+
+import {setUserRole} from '../../../Redux/ActionCreators/userActions';
 
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
 import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
 
 export default function LoginScreen({navigation}) {
+  const dispatch = useDispatch();
   return (
     <ImageBackground source={IntroBackground} style={{flex: 1}}>
       <RootContainer safeArea={true}>
@@ -22,13 +25,19 @@ export default function LoginScreen({navigation}) {
           <TextButton
             style={styles.btn}
             text="Master Login"
-            onPress={() => navigation.navigate('master')}
+            onPress={() => {
+              dispatch(setUserRole(true));
+              navigation.navigate('master');
+            }}
           />
           <TextButton
             style={styles.btnMember}
             text="Member Login"
             textStyle={{color: Color.primary}}
-            onPress={() => navigation.navigate('member')}
+            onPress={() => {
+              dispatch(setUserRole(false));
+              navigation.navigate('member');
+            }}
           />
         </View>
       </RootContainer>

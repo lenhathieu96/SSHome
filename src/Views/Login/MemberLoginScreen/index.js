@@ -22,10 +22,8 @@ export default function MemberLoginScreen({navigation}) {
   }, []);
 
   return (
-    <RootContainer
-      safeArea={true}
-      style={[styles.rootContainer, {marginTop: headerHeight}]}>
-      <View style={{flex: 0.3}}>
+    <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
+      <View style={{flex: 0.25}}>
         <Text>Chỗ này để logo</Text>
       </View>
       <View style={styles.body}>

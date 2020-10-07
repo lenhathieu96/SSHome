@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 import Color from '../../../../Utils/Color';
+
 const styles = StyleSheet.create({
   input: {
-    flex: 0.12,
-    textAlign: 'center',
+    flex: 0.3,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
@@ -18,11 +18,6 @@ const styles = StyleSheet.create({
     elevation: 6,
     fontWeight: 'bold',
     padding: 0,
-  },
-
-  inputController: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
   },
   body: {
     marginHorizontal: 10,

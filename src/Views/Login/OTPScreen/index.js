@@ -55,7 +55,7 @@ export default function MemberLoginScreen({navigation, route}) {
 
   return (
     <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
-      <View style={{flex: 0.3}}>
+      <View style={{flex: 0.25}}>
         <Text>Chỗ này để logo</Text>
         <Text>{OTP}</Text>
       </View>

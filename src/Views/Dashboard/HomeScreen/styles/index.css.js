@@ -4,13 +4,20 @@ import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     alignItems: 'center',
     marginVertical: 5,
   },
   headerTitle: {
     fontSize: fontSize.huge,
     color: Color.primary,
+    flex: 0.6,
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  headerButton: {
+    flex: 0.3,
+    alignSelf: 'center',
   },
   //info
   infoContainer: {

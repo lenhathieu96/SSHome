@@ -20,10 +20,11 @@ export const handleSignUp = (email, password) => {
 };
 
 export const handleMasterLogin = (email, password) => {
-  auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => console.log('loginSuccess'))
-    .catch((err) => console.log(err));
+ 
+  // auth()
+  //   .signInWithEmailAndPassword(email, password)
+  //   .then(() => console.log('loginSuccess'))
+  //   .catch((err) => console.log(err));
 };
 
 export const handleMemberLogin = async (phoneNumber) => {

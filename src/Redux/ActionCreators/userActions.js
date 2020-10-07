@@ -5,12 +5,9 @@ export const setLoginStatus = (status) => {
   };
 };
 
-export const setUserRole = (isMaster, isLogin) => {
+export const setUserRole = (isMaster) => {
   return {
     type: 'SET USER ROLE',
-    payload: {
-      isMaster,
-      isLogin,
-    },
+    payload: isMaster,
   };
 };
