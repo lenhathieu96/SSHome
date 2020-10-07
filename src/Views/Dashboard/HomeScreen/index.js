@@ -7,12 +7,12 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
-
+import {useHeaderHeight} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
-import auth from '@react-native-firebase/auth';
+
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import BSBlueToothSearching from './BSBlueTooth';
@@ -74,6 +74,7 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function HomeScreen({navigation}) {
+  const headerHeight = useHeaderHeight();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
   const BSBlueToothRef = useRef();
@@ -142,33 +143,9 @@ export default function HomeScreen({navigation}) {
   };
   return (
     <RootContainer>
-      {/* Header */}
-      <SafeAreaView style={[styles.headerContainer, {height: 80}]}>
-        <Icon.Button
-          name="bar-chart-2"
-          style={[styles.headerButton, {transform: [{rotate: '90deg'}]}]}
-          size={fontSize.bigger}
-          backgroundColor="transparent"
-          color={connectionStatus.WFConnection ? Color.primary : Color.unactive}
-          onPress={() => navigation.openDrawer()}
-          underlayColor="transparent"
-          activeOpacity={0.4}
-        />
-        <BoldText style={styles.headerTitle}>SSHOME</BoldText>
-        <Icon.Button
-          name="wifi"
-          style={styles.headerButton}
-          size={fontSize.bigger}
-          color={connectionStatus.WFConnection ? Color.green : Color.unactive}
-          backgroundColor="transparent"
-          underlayColor="transparent"
-          activeOpacity={0.4}
-          onPress={() => setUpBLConnection()}
-        />
-      </SafeAreaView>
       {/* Info Container */}
-      <View style={styles.infoContainer}>
-        <View styles={styles.weatherContainer}>
+      <View style={[styles.infoContainer, {marginTop: headerHeight}]}>
+        <View style={styles.weatherContainer}>
           <Icon
             name="cloud-drizzle"
             size={fontSize.bigger}
@@ -177,14 +154,14 @@ export default function HomeScreen({navigation}) {
           />
           <Text> Mưa</Text>
         </View>
-        <View styles={styles.weatherContainer}>
+        <View style={styles.weatherContainer}>
           <View style={styles.txtWeatherContainer}>
             <BoldText style={styles.txtWeather}>{32}</BoldText>
             <Text>°C</Text>
           </View>
           <Text> Ngoài Trời</Text>
         </View>
-        <View styles={styles.weatherContainer}>
+        <View style={styles.weatherContainer}>
           <View style={styles.txtWeatherContainer}>
             <BoldText style={styles.txtWeather}>{26}</BoldText>
             <Text>°C</Text>

@@ -1,4 +1,5 @@
 import React from 'react';
+import {View, Image} from 'react-native';
 import {
   createDrawerNavigator,
   DrawerItemList,
@@ -6,14 +7,15 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 
-import {BoldText} from '../../Components/Text';
+import Text, {BoldText} from '../../Components/Text';
 import Icon from 'react-native-vector-icons/Feather';
-
-import * as fontSize from '../../Utils/FontSize';
-import Color from '../../Utils/Color';
-
 import HomeStack from './HomeStack';
 import AddRoomScreen from '../../Views/Dashboard/AddRoomScreen';
+
+import styles from './styles/index.css';
+import * as fontSize from '../../Utils/FontSize';
+import Color from '../../Utils/Color';
+import flagVn from '../../Assets/Images/vietnam.png';
 
 const DashboardDrawer = createDrawerNavigator();
 
@@ -23,47 +25,68 @@ export default function DashboardStack() {
       drawerContent={(props) => {
         return (
           <DrawerContentScrollView {...props}>
-            <DrawerItemList {...props} />
-            <DrawerItem
-              label="Đăng Xuất"
-              labelStyle={{fontFamily: 'MavenPro-Regular', fontWeight: 'bold'}}
-              icon={({focused, color, size}) => (
-                <Icon color={color} size={size} name="log-out" />
-              )}
-            />
-            <DrawerItem
-              label="Chế Độ Bluetooth"
-              labelStyle={{
-                fontFamily: 'MavenPro-Regular',
-                fontWeight: 'bold',
-                color: 'black',
-              }}
-              icon={({focused}) => (
-                <Icon
-                  color={focused ? 'red' : 'black'}
-                  size={fontSize.bigger}
-                  name="bluetooth"
-                />
-              )}
-            />
+            {/* Header */}
+            <View style={styles.drawerHeaderContainer}>
+              <Image source={flagVn} style={styles.avatar} />
+              <View style={styles.userInfoContainer}>
+                <BoldText style={styles.userName}>LeeNhaHie</BoldText>
+                <Text style={styles.userInfo}>(+84) 0329599586</Text>
+                <Text style={styles.userInfo}>Chủ Nhà</Text>
+              </View>
+            </View>
+            {/* Body */}
+            <View style={styles.drawerBodyContainer}>
+              <DrawerItemList {...props} />
+              <DrawerItem
+                label="Chế Độ Bluetooth"
+                labelStyle={styles.label}
+                icon={({focused}) => (
+                  <Icon
+                    color={'black'}
+                    size={fontSize.bigger}
+                    name="bluetooth"
+                  />
+                )}
+              />
+              <DrawerItem
+                label="Trợ Giúp"
+                labelStyle={styles.label}
+                icon={({focused}) => (
+                  <Icon
+                    color={'black'}
+                    size={fontSize.bigger}
+                    name="help-circle"
+                  />
+                )}
+              />
+            </View>
+            {/* Footer */}
+            <View style={styles.drawerFooterContainer}>
+              <DrawerItem
+                label="Đăng Xuất"
+                labelStyle={[styles.label, {color: Color.red}]}
+                icon={({focused, color, size}) => (
+                  <Icon
+                    color={Color.red}
+                    size={fontSize.bigger}
+                    name="log-out"
+                  />
+                )}
+              />
+              <Text style={styles.txtVersion}>SSHome v1.0.1</Text>
+            </View>
           </DrawerContentScrollView>
         );
       }}
-      drawerContentOptions={{
-        activeTintColor: 'white',
-        itemStyle: {borderBottomWidth: 1, borderColor: '#e8e8e8'},
-      }}>
+      drawerContentOptions={{activeTintColor: Color.primary}}>
+      {/* Screens */}
       <DashboardDrawer.Screen
         name="Home"
         component={HomeStack}
         options={{
           drawerLabel: () => <BoldText>Trang Chủ</BoldText>,
           drawerIcon: ({focused}) => (
-            <Icon
-              color={focused ? 'red' : 'black'}
-              size={fontSize.bigger}
-              name="home"
-            />
+            <Icon color={'black'} size={fontSize.bigger} name="home" />
           ),
         }}
       />
@@ -73,7 +96,7 @@ export default function DashboardStack() {
         options={{
           drawerLabel: () => <BoldText>Thêm Phòng</BoldText>,
           drawerIcon: ({focused, color, size}) => (
-            <Icon color={color} size={size} name="plus" />
+            <Icon color={'black'} size={fontSize.bigger} name="plus" />
           ),
         }}
       />
@@ -83,7 +106,7 @@ export default function DashboardStack() {
         options={{
           drawerLabel: () => <BoldText>Thành Viên</BoldText>,
           drawerIcon: ({focused, color, size}) => (
-            <Icon color={color} size={size} name="users" />
+            <Icon color={'black'} size={fontSize.bigger} name="users" />
           ),
         }}
       />

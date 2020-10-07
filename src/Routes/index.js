@@ -6,8 +6,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../Redux/ActionCreators/userActions';
 
 import LoginStack from './LoginStack';
-import MasterStack from './MasterStack';
-import MemberStack from './MemberStack';
 import DashBoardStack from './DashboardStack';
 
 // import {AuthContext} from '../Contexts/AuthContext';

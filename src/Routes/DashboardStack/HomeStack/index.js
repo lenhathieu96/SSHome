@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
@@ -8,6 +9,7 @@ import RoomScreen from '../../../Views/Dashboard/RoomScreen';
 import CameraScreen from '../../../Views/Dashboard/CameraScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
+import Color from '../../../Utils/Color';
 
 const HomeStacks = createStackNavigator();
 
@@ -17,7 +19,41 @@ export default function HomeStack() {
       <HomeStacks.Screen
         name="Home"
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={({navigation}) => ({
+          ...TransitionPresets.SlideFromRightIOS,
+          headerTransparent: true,
+          headerTitle: 'SSHOME',
+          headerTitleStyle:{
+            color: Color.primary,
+            fontSize: fontSize.huge,
+            alignSelf: 'center',
+            fontFamily:'MavenPro-Bold',
+          },
+          headerLeft: () => (
+            <Icon.Button
+              name="bar-chart-2"
+              style={{transform:[{rotate:'90deg'}]}}
+              color= {Color.primary}
+              size={fontSize.bigger}
+              backgroundColor="transparent"
+              borderRadius={10}
+              onPress={() => navigation.openDrawer()}
+              underlayColor="transparent"
+              activeOpacity={0.4}
+            />
+          ),
+          headerRight: () => (
+            <Icon.Button
+              name="wifi"
+              color={Color.primary}
+              size={fontSize.bigger}
+              backgroundColor="transparent"
+              borderRadius={10}
+              underlayColor="transparent"
+              activeOpacity={0.4}
+            />
+          ),
+        })}
       />
       <HomeStacks.Screen
         name="Room"
@@ -29,7 +65,7 @@ export default function HomeStack() {
           headerLeft: () => (
             <Icon.Button
               name="chevron-left"
-              size={fontSize.huge}
+              size={fontSize.bigger}
               backgroundColor="transparent"
               borderRadius={10}
               onPress={() => navigation.goBack()}
@@ -40,7 +76,7 @@ export default function HomeStack() {
           headerRight: () => (
             <Icon.Button
               name="camera"
-              size={fontSize.huge}
+              size={fontSize.bigger}
               backgroundColor="transparent"
               borderRadius={10}
               onPress={() =>

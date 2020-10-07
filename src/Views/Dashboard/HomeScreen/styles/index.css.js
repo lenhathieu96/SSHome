@@ -2,33 +2,16 @@ import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  headerTitle: {
-    fontSize: fontSize.huge,
-    color: Color.primary,
-    flex: 0.6,
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  headerButton: {
-    flex: 0.3,
-    alignSelf: 'center',
-  },
   //info
   infoContainer: {
     flex: 0.1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   weatherContainer: {
+    flex: 0.3,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   txtWeatherContainer: {
     flexDirection: 'row',

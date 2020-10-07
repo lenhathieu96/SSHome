@@ -25,6 +25,7 @@
 		BAA10146C8294EB0BEB35E88 /* MavenPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2556D001710473193DC374E /* MavenPro-Regular.ttf */; };
 		BBB336A0FCB84B3DB31AAB1B /* MavenPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A640F69C8EAD41FD93E887B7 /* MavenPro-Black.ttf */; };
 		BE2D9EB29F271F9696ACE18F /* libPods-SSHome-SSHomeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1BF19BD3C6A74CCD079346 /* libPods-SSHome-SSHomeTests.a */; };
+		E8D1303B252DEBB9001CA636 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E8D1303A252DEBB9001CA636 /* GoogleService-Info.plist */; };
 		EF14E921ECED4030BD293470 /* MavenPro-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B5C4D8B73E8458F9301DAC8 /* MavenPro-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		D7AA49071F53D1ABEB1254B1 /* libPods-SSHome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SSHome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB855E1751D422ABCE4756D /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		DD674BA7D3CB47B4A3B4702B /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		E8D1303A252DEBB9001CA636 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ECD2230F4DDB82C4F0B86BCC /* Pods-SSHome-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SSHome-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SSHome-tvOSTests/Pods-SSHome-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		ECD7DA50184D8288728DE593 /* libPods-SSHome-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SSHome-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -202,6 +204,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				E8D1303A252DEBB9001CA636 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* SSHome */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SSHomeTests */,
@@ -400,6 +403,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				E8D1303B252DEBB9001CA636 /* GoogleService-Info.plist in Resources */,
 				BBB336A0FCB84B3DB31AAB1B /* MavenPro-Black.ttf in Resources */,
 				40E21C4D12E440A3B997FC4E /* MavenPro-Bold.ttf in Resources */,
 				EF14E921ECED4030BD293470 /* MavenPro-ExtraBold.ttf in Resources */,
@@ -814,7 +818,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.LeeNhaHie.SSHome;
 				PRODUCT_NAME = SSHome;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -836,7 +840,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.LeeNhaHie.SSHome;
 				PRODUCT_NAME = SSHome;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
