@@ -10,7 +10,7 @@ import {
 import Text, {BoldText} from '../../Components/Text';
 import Icon from 'react-native-vector-icons/Feather';
 import HomeStack from './HomeStack';
-import AddRoomScreen from '../../Views/Dashboard/AddRoomScreen';
+import AddRoomStack from './';
 
 import styles from './styles/index.css';
 import * as fontSize from '../../Utils/FontSize';
@@ -92,7 +92,7 @@ export default function DashboardStack() {
       />
       <DashboardDrawer.Screen
         name="addRoom"
-        component={AddRoomScreen}
+        component={AddRoomStack}
         options={{
           drawerLabel: () => <BoldText>Thêm Phòng</BoldText>,
           drawerIcon: ({focused, color, size}) => (
@@ -102,7 +102,7 @@ export default function DashboardStack() {
       />
       <DashboardDrawer.Screen
         name="Users"
-        component={AddRoomScreen}
+        component={AddRoomStack}
         options={{
           drawerLabel: () => <BoldText>Thành Viên</BoldText>,
           drawerIcon: ({focused, color, size}) => (

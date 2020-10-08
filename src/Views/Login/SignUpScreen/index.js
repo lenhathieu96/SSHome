@@ -14,7 +14,7 @@ import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 import appLogo from '../../../Assets/Images/appLogo.png';
 
-export default function MasterLoginScreen() {
+export default function SignUpScreen() {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const inputRef = useRef();
@@ -36,6 +36,16 @@ export default function MasterLoginScreen() {
           value={phoneNumber}
           onChangeText={(text) => setPhoneNUmber(text)}
           label="Email"
+          mode="outlined"
+          style={[styles.formController, {flex: 0.1}]}
+          theme={{
+            colors: {primary: Color.primary, underlineColor: 'transparent'},
+          }}
+        />
+        <TextInput
+          value={phoneNumber}
+          onChangeText={(text) => setPhoneNUmber(text)}
+          label="Mật Khẩu"
           mode="outlined"
           style={[styles.formController, {flex: 0.1}]}
           theme={{
