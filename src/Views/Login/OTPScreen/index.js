@@ -34,6 +34,7 @@ export default function MemberLoginScreen({navigation, route}) {
 
   useEffect(function () {
     OTPInputs[0].current.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const focusNext = (index, value) => {

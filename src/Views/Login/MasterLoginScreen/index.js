@@ -14,7 +14,7 @@ import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 import appLogo from '../../../Assets/Images/appLogo.png';
 
-export default function MasterLoginScreen() {
+export default function MasterLoginScreen({navigation}) {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const inputRef = useRef();
@@ -59,10 +59,8 @@ export default function MasterLoginScreen() {
         onPress={() => {
           // const confirmation = await handleMemberLogin(`+84${phoneNumber}`);
           // if (confirmation) {
-          // navigation.navigate('otp', {confirmation});
-          // }
           dispatch(setLoginStatus(true));
-
+          // }
           // navigation.navigate('otp', {confirmation: 'ayyo'});
         }}
       />

@@ -4,23 +4,23 @@ import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
-import AddRoomScreen from '../../../Views/Dashboard/AddRoomScreen';
+import PersonalScreen from '../../../Views/Dashboard/PersonalScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 
-const AddRoomStacks = createStackNavigator();
+const PersonalStacks = createStackNavigator();
 
-export default function AddRoomStack() {
+export default function PersonalStack() {
   return (
-    <AddRoomStacks.Navigator>
-    <AddRoomStacks.Screen
-    name="addRoom"
-    component={AddRoomScreen}
+    <PersonalStacks.Navigator initialRouteName="Personal">
+    <PersonalStacks.Screen
+    name="Personal"
+    component={PersonalScreen}
     options={({navigation}) => ({
       ...TransitionPresets.SlideFromRightIOS,
       headerTransparent: true,
-      headerTitle: 'Thêm Phòng',
+      headerTitle: 'Thông Tin Cá Nhân',
       headerTitleStyle:{
         color: Color.primary,
         fontSize: fontSize.huge,
@@ -41,6 +41,6 @@ export default function AddRoomStack() {
       ),
     })}
   />
-    </AddRoomStacks.Navigator>
+    </PersonalStacks.Navigator>
   );
 }

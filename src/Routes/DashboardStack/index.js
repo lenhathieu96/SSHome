@@ -6,11 +6,15 @@ import {
   DrawerItem,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/Feather';
+import {useDispatch} from 'react-redux';
 
 import Text, {BoldText} from '../../Components/Text';
-import Icon from 'react-native-vector-icons/Feather';
+import {setLoginStatus} from '../../Redux/ActionCreators/userActions';
+
 import HomeStack from './HomeStack';
-import AddRoomStack from './';
+import AddRoomStack from './AddRoomStack';
+import PersonalStack from './PersonalStack';
 
 import styles from './styles/index.css';
 import * as fontSize from '../../Utils/FontSize';
@@ -20,6 +24,7 @@ import flagVn from '../../Assets/Images/vietnam.png';
 const DashboardDrawer = createDrawerNavigator();
 
 export default function DashboardStack() {
+  const dispatch = useDispatch();
   return (
     <DashboardDrawer.Navigator
       drawerContent={(props) => {
@@ -72,6 +77,7 @@ export default function DashboardStack() {
                     name="log-out"
                   />
                 )}
+                onPress={() => dispatch(setLoginStatus(false))}
               />
               <Text style={styles.txtVersion}>SSHome v1.0.1</Text>
             </View>
@@ -81,7 +87,7 @@ export default function DashboardStack() {
       drawerContentOptions={{activeTintColor: Color.primary}}>
       {/* Screens */}
       <DashboardDrawer.Screen
-        name="Home"
+        name="home"
         component={HomeStack}
         options={{
           drawerLabel: () => <BoldText>Trang Chủ</BoldText>,
@@ -101,12 +107,22 @@ export default function DashboardStack() {
         }}
       />
       <DashboardDrawer.Screen
-        name="Users"
+        name="users"
         component={AddRoomStack}
         options={{
           drawerLabel: () => <BoldText>Thành Viên</BoldText>,
           drawerIcon: ({focused, color, size}) => (
             <Icon color={'black'} size={fontSize.bigger} name="users" />
+          ),
+        }}
+      />
+      <DashboardDrawer.Screen
+        name="personal"
+        component={PersonalStack}
+        options={{
+          drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
+          drawerIcon: ({focused}) => (
+            <Icon color={'black'} size={fontSize.bigger} name="info" />
           ),
         }}
       />
