@@ -99,7 +99,7 @@ export default function LoginStacks() {
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
-          headerTitle: 'Đăng Nhập Thành Viên',
+          headerTitle: 'Đăng Ký',
           headerTitleStyle: {
             color: Color.primary,
           },

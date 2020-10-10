@@ -7,7 +7,7 @@ import Text, {BoldText} from '../../../Components/Text';
 
 import {setUserRole} from '../../../Redux/ActionCreators/userActions';
 
-import appLogo from '../../../Assets/Images/appLogo.png'
+import appLogo from '../../../Assets/Images/appLogo.png';
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
 import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
@@ -39,8 +39,10 @@ export default function LoginScreen({navigation}) {
               navigation.navigate('member');
             }}
           />
-          <TouchableOpacity>
-            <Text style={{alignSelf: 'center', color: 'black'}}>Đăng Ký Chủ Nhà</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+            <Text style={{alignSelf: 'center', color: 'black'}}>
+              Đăng Ký Chủ Nhà
+            </Text>
           </TouchableOpacity>
         </View>
       </RootContainer>
