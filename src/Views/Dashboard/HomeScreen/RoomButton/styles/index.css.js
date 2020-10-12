@@ -2,20 +2,22 @@ import {StyleSheet, Dimensions} from 'react-native';
 import Color from '../../../../../Utils/Color';
 import * as fontSize from '../../../../../Utils/FontSize';
 
-const windowWidth = Dimensions.get('window').width;
-const containerSize = 0.4 * windowWidth;
-
-
+const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   BtnContainer: {
-    padding: 5,
-    borderRadius: 20,
-    width: containerSize,
-    height: containerSize,
+    padding: 10,
+    backgroundColor: 'transparent',
+    height: 0.55 * height,
+    width: 0.7 * width,
+  },
+
+  contentContainer: {
+    padding: 10,
+    flex: 1,
+    borderRadius: 50,
     backgroundColor: 'white',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -23,8 +25,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 6,
+  },
+  btnGetIn: {
+    width: 0.15 * width,
+    height: 0.15 * width,
+    alignSelf: 'flex-end',
+    borderRadius: 50,
+    backgroundColor: Color.primary,
   },
 });
 

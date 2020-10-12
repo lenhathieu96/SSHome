@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {Image, Animated, View} from 'react-native';
+
 import Text, {BoldText} from '../../../../Components/Text';
+import IconButton from '../../../../Components/IconButton';
 
 import livingRoomIcon from '../../../../Assets/Images/livingroom.png';
 import bedRoomIcon from '../../../../Assets/Images/bedroom.png';
 import bathRoomIcon from '../../../../Assets/Images/bathroom.png';
 import kitchenIcon from '../../../../Assets/Images/kitchen.png';
 
+import Color from '../../../../Utils/Color';
+import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
-export default function RoomButton({navigation, roomData}) {
+export default function RoomButton(props) {
+  const {navigation, roomData, opacity, translateY} = props;
   const [roomIcon, setRoomIcon] = useState(livingRoomIcon);
   useEffect(() => {
     switch (roomData.roomtypeID) {
@@ -33,12 +38,20 @@ export default function RoomButton({navigation, roomData}) {
   }, []);
 
   return (
-    <TouchableOpacity
-      style={styles.BtnContainer}
-      onPress={() => navigation.navigate('Room', {roomData})}>
-      <Image source={roomIcon} />
-      <BoldText>{roomData.name}</BoldText>
-      <Text> {roomData.deviceQuantity} thiết bị </Text>
-    </TouchableOpacity>
+    <Animated.View
+      style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
+      <View style={styles.contentContainer}>
+        <Image source={roomIcon} />
+        <BoldText>{roomData.name}</BoldText>
+        <Text> {roomData.deviceQuantity} thiết bị </Text>
+        <IconButton
+          style={styles.btnGetIn}
+          iconName="door-open"
+          iconColor="white"
+          iconSize={fontSize.biggest}
+          onPress={() => navigation.navigate('Room', {roomData})}
+        />
+      </View>
+    </Animated.View>
   );
 }

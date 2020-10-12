@@ -1,6 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
+
+const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   //info
   infoContainer: {
@@ -23,37 +26,37 @@ const styles = StyleSheet.create({
   },
   //Body
   bodyContainer: {
+    backgroundColor: Color.secondary,
     flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 5,
-    backgroundColor: Color.background,
-  },
-  roomlist: {
-    flexGrow: 1,
-    alignSelf: 'center',
   },
   listTitle: {
-    marginVertical: 10,
     color: Color.primary,
-    fontSize: fontSize.larger,
+    fontSize: fontSize.huge,
     alignSelf: 'center',
+    marginTop: 10,
+    flex: 0.1,
   },
-  footerContainer: {
-    backgroundColor: Color.background,
-    flexDirection: 'row',
-    height: 72,
-    justifyContent: 'space-between',
+  roomlist: {
+    flex: 0.9,
   },
-  btnMic: {
-    flex: 0.4,
-    backgroundColor: Color.background,
-  },
-  btnAddRoom: {
-    flex: 0.6,
-    margin: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 0,
+  floatButton: {
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    width: 0.2 * width,
+    height: 0.2 * width,
+    borderRadius: (0.2 * width) / 2,
+    padding: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });
 
