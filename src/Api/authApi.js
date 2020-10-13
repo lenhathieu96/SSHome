@@ -1,8 +1,14 @@
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-export const handleSignUp = (email, password) => {
-  auth()
-    .createUserWithEmailAndPassword(email, password)
+
+
+export const handleSignUp = async (signupForm) => {
+  console.log(signupForm)
+  const userID = await firestore().collection('Users').doc(signupForm.customerID).get()
+  if(userID.data()){
+    auth()
+    .createUserWithEmailAndPassword(signupForm.email, signupForm.password)
     .then(() => {
       console.log('User account created & signed in!');
     })
@@ -14,9 +20,10 @@ export const handleSignUp = (email, password) => {
       if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
       }
-
       console.error(error);
     });
+  }
+  
 };
 
 export const handleMasterLogin = (email, password) => {

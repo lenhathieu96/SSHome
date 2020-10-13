@@ -59,7 +59,7 @@ export default function MemberLoginScreen({navigation}) {
           // if (confirmation) {
           // navigation.navigate('otp', {confirmation});
           // }
-          navigation.navigate('otp', {confirmation: 'ayyo'});
+          navigation.navigate('qrcode');
         }}
       />
     </RootContainer>

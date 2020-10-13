@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MavenPro-Bold',
     fontSize: fontSize.normal,
     color: 'black',
+    fontWeight: 'bold',
   },
   drawerBodyContainer: {
     height: 0.7 * height,

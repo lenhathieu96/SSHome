@@ -2,7 +2,6 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import PropTypes from 'prop-types';
-import color from '../../Utils/Color';
 
 import styles from './styles/index.css';
 

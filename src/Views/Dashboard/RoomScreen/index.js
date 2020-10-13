@@ -1,12 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {
-  View,
-  ImageBackground,
-  FlatList,
-  Dimensions,
-  Animated,
-  Text,
-} from 'react-native';
+import {View, ImageBackground, Dimensions, Animated} from 'react-native';
 
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
