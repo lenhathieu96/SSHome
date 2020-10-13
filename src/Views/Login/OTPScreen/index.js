@@ -7,7 +7,7 @@ import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
 
-import {confirmOTP} from '../../../Api/loginApi';
+import {confirmOTP} from '../../../Api/authApi';
 
 import styles from './styles/index.css';
 

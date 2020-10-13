@@ -1,5 +1,5 @@
 import React from 'react';
-import {ImageBackground, View} from 'react-native';
+import {ImageBackground, View, Image} from 'react-native';
 import {useDispatch} from 'react-redux';
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
@@ -7,6 +7,7 @@ import {BoldText} from '../../../Components/Text';
 
 import {setUserRole} from '../../../Redux/ActionCreators/userActions';
 
+import appLogo from '../../../Assets/Images/logoApp.png'
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
 import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
@@ -17,8 +18,7 @@ export default function LoginScreen({navigation}) {
     <ImageBackground source={IntroBackground} style={{flex: 1}}>
       <RootContainer safeArea={true}>
         <View style={styles.headerContainer}>
-          <BoldText style={{fontSize: 32}}>App Logo</BoldText>
-          <BoldText style={{fontSize: 32}}>App Title</BoldText>
+          <Image source={appLogo}/>
         </View>
 
         <View style={styles.btnContainer}>

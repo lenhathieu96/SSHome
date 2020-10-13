@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View, Image} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
@@ -11,6 +11,7 @@ import RootContainer from '../../../Components/RootContainer';
 
 import {setLoginStatus} from '../../../Redux/ActionCreators/userActions'
 
+import logoApp from '../../../Assets/Images/logoApp.png'
 import styles from './styles/index.css';
 
 export default function MasterLoginScreen() {
@@ -18,7 +19,9 @@ export default function MasterLoginScreen() {
   const headerHeight = useHeaderHeight();
   const inputRef = useRef();
 
-  const [phoneNumber, setPhoneNUmber] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState()
+  const [error, setError] = useState()
 
   useEffect(() => {
     inputRef.current.focus();
@@ -27,7 +30,7 @@ export default function MasterLoginScreen() {
   return (
     <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
       <View style={{flex: 0.25}}>
-        <Text>Chỗ này để logo</Text>
+        <Image source ={logoApp} style={{alignSelf: 'center'}}/>
       </View>
       <View style={styles.body}>
         <TextInput
@@ -40,8 +43,8 @@ export default function MasterLoginScreen() {
           style={styles.input}
           ref={inputRef}
           autoFocus={true}
-          value={phoneNumber}
-          onChangeText={(text) => setPhoneNUmber(text)}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           theme={{
@@ -54,21 +57,16 @@ export default function MasterLoginScreen() {
           style={styles.input}
           ref={inputRef}
           autoFocus={true}
-          value={phoneNumber}
-          onChangeText={(text) => setPhoneNUmber(text)}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
+        <Text style={styles.txtError}>{error}</Text>
       </View>
       <TextButton
         style={styles.btnLogin}
         text="Đăng Nhập"
         onPress={() => {
-          // const confirmation = await handleMemberLogin(`+84${phoneNumber}`);
-          // if (confirmation) {
-          // navigation.navigate('otp', {confirmation});
-          // }
-          dispatch(setLoginStatus(true));
-
-          // navigation.navigate('otp', {confirmation: 'ayyo'});
+          console.log('ayyo')
         }}
       />
     </RootContainer>

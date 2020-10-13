@@ -22,7 +22,6 @@ export default function MainRoute() {
   }, []);
 
   function onAuthStateChanged(user) {
-    console.log(user);
     dispatch(setLoginStatus(user ? true : false));
   }
 

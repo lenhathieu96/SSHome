@@ -28,6 +28,9 @@ export default function LoginStacks() {
           headerTitle: 'Đăng Nhập Chủ Nhà',
           headerTitleStyle: {
             color: Color.primary,
+            fontSize: fontSize.huge,
+            fontFamily:'MavenPro-Bold',
+            marginRight: 10,
           },
           headerLeft: () => (
             <Icon.Button
@@ -52,6 +55,9 @@ export default function LoginStacks() {
           headerTitle: 'Đăng Nhập Thành Viên',
           headerTitleStyle: {
             color: Color.primary,
+            fontSize: fontSize.huge,
+            fontFamily:'MavenPro-Bold',
+            marginRight: 20,
           },
           headerLeft: () => (
             <Icon.Button
@@ -76,6 +82,9 @@ export default function LoginStacks() {
           headerTitle: 'Xác Thực OTP',
           headerTitleStyle: {
             color: Color.primary,
+            fontSize: fontSize.huge,
+            fontFamily:'MavenPro-Bold',
+            marginLeft: 20
           },
           headerLeft: () => (
             <Icon.Button
