@@ -7,9 +7,10 @@ import styles from './styles/index.css';
 
 IconButton.propTypes = {
   iconName: PropTypes.string.isRequired,
+  iconColor: PropTypes.string,
+  iconSize: PropTypes.number,
   onPress: PropTypes.func.isRequired,
   style: PropTypes.object,
-  iconColor: PropTypes.string,
   disabled: PropTypes.bool,
 };
 

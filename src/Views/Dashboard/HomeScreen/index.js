@@ -7,8 +7,10 @@ import {
   NativeEventEmitter,
   Dimensions,
   Animated,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native';
-
+import Svg, {Circle, Path} from 'react-native-svg';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -18,6 +20,7 @@ import NetInfo from '@react-native-community/netinfo';
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
+
 import BSBlueToothSearching from './BSBlueTooth';
 import RoomButton from './RoomButton';
 
@@ -29,9 +32,9 @@ import {
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
+import {color} from 'react-native-reanimated';
 
 const data = [
-  {},
   {
     name: 'Phòng Khách',
     roomtypeID: 0,
@@ -58,19 +61,17 @@ const data = [
     roomtypeID: 3,
     deviceQuantity: 8,
   },
-  {},
 ];
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+const pathX = '357';
+const pathY = '675';
+const pathA = '689';
+const pathB = '706';
+
 export default function HomeScreen({navigation}) {
-  const {width} = Dimensions.get('window');
-
-  const ITEM_SIZE = 0.7 * width;
-  const SPACER_SIZE = (width - ITEM_SIZE) / 2;
-  const scrollX = useRef(new Animated.Value(0)).current;
-
   const headerHeight = useHeaderHeight();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
@@ -168,66 +169,29 @@ export default function HomeScreen({navigation}) {
       </View>
 
       {/* Room List */}
-      <SafeAreaView style={styles.bodyContainer}>
+      <View style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        <Animated.FlatList
-          style={styles.roomlist}
-          contentContainerStyle={{alignItems: 'flex-end'}}
+        <FlatList
           data={data}
+          contentContainerStyle={{alignItems: 'flex-start', justifyContent: 'flex-start'}}
           keyExtractor={(item, index) => index.toString()}
-          snapToInterval={ITEM_SIZE}
-          //speed of scroll, normal is 0.9
-          decelerationRate={0.5}
-          bounces={false}
-          horizontal
-          snapToAlignment="start"
-          showsHorizontalScrollIndicator={false}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: true},
+          renderItem={({item}) => (
+            <RoomButton navigation={navigation} roomData={item} />
           )}
-          renderItem={({item, index}) => {
-            const inputRange = [
-              (index - 2) * ITEM_SIZE,
-              (index - 1) * ITEM_SIZE,
-              index * ITEM_SIZE,
-            ];
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [0, -(0.2 * ITEM_SIZE), 0],
-              extrapolate: 'clamp',
-            });
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.3, 1, 0.3],
-            });
-            if (!item.name) {
-              return (
-                <View
-                  style={{
-                    width: SPACER_SIZE,
-                  }}
-                />
-              );
-            }
-            return (
-              <RoomButton
-                navigation={navigation}
-                roomData={item}
-                opacity={opacity}
-                translateY={translateY}
-              />
-            );
-          }}
+          style={styles.roomlist}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
         />
+      </View>
+      <View style={styles.floatBtnContainer}>
         <IconButton
           iconName="microphone"
-          iconColor={Color.primary}
           iconSize={fontSize.biggest}
-          style={styles.floatButton}
+          iconColor={Color.primary}
+          style={styles.btnMic}
         />
-      </SafeAreaView>
-
+      </View>
+      <View style={styles.footer} />
       {/* BSBlueTooth */}
       <BSBlueToothSearching
         ref={BSBlueToothRef}

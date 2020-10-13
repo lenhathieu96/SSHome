@@ -5,10 +5,14 @@ import * as fontSize from '../../../../../Utils/FontSize';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   BtnContainer: {
+    margin: 15,
     padding: 10,
-    backgroundColor: 'transparent',
-    height: 0.55 * height,
-    width: 0.7 * width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    width: 0.4 * width,
+    height: 0.4 * width,
   },
 
   contentContainer: {
