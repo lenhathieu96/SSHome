@@ -1,6 +1,8 @@
 const initialState = {
   isMaster: false,
   isLogin: false,
+  homeID: '',
+  userID: ''
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -16,6 +18,13 @@ const UserReducer = (state = initialState, action) => {
       role.isMaster = action.payload;
       state = role;
       return state;
+
+    case 'SET USER ID':
+      let user = {...state};
+      user.userID = action.payload;
+      state = user;
+      return state;
+    
 
     default:
       return state;

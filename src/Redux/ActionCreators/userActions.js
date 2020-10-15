@@ -11,3 +11,11 @@ export const setUserRole = (isMaster) => {
     payload: isMaster,
   };
 };
+
+export const setUserID = (userID) => {
+  return {
+    type: 'SET USER ID',
+    payload: userID,
+  };
+};
+

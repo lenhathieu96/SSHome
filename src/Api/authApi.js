@@ -1,33 +1,41 @@
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
-
+import database from '@react-native-firebase/database'
+import {setUserID} from '../Redux/ActionCreators/userActions'
+import {useDispatch} from 'react-redux'
 
 export const handleSignUp = async (signupForm) => {
-  console.log(signupForm)
-  const userID = await firestore().collection('Users').doc(signupForm.customerID).get()
-  if(userID.data()){
-    auth()
-    .createUserWithEmailAndPassword(signupForm.email, signupForm.password)
-    .then(() => {
-      console.log('User account created & signed in!');
+  const dispatch = useDispatch()
+  const userDBRef = database().ref(`MasterUser/${signupForm.homeID}`)
+  const homeID = await userDBRef.once('value')
+  if(homeID.val()){
+    auth().createUserWithEmailAndPassword(signupForm.email, signupForm.password).then( async () => {
+      let userData ={
+        id: auth().currentUser.uid,
+        name: signupForm.name,
+        email: signupForm.email,
+        phone: signupForm.phone,
+        password: signupForm.password
+      }
+      await userDBRef.update(userData)
+      dispatch(setUserID(auth().currentUser.uid))
     })
     .catch((error) => {
       if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
+        return('Email đã tồn tại')
       }
 
       if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
+        return ('Email không hợp lệ')
       }
-      console.error(error);
-    });
+        console.log(error)
+        return('Không thể tạo tài khoản')
+      });
+  }else{
+    return('Mã khách hàng không tồn tại')
   }
-  
 };
 
 export const handleMasterLogin = (email, password) => {
- 
   auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => console.log('loginSuccess'))

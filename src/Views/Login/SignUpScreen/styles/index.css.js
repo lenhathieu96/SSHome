@@ -17,8 +17,14 @@ const styles = StyleSheet.create({
     fontFamily: 'MavenPro-Regular',
   },
   txtError: {
-    marginTop: 10,
+    marginTop: 5,
     color: Color.red,
+  },
+
+  txtSignupError:{
+    marginTop: 5,
+    color: Color.red,
+    textAlign: 'center',
   },
   btnSignUp: {
     marginTop: 20,

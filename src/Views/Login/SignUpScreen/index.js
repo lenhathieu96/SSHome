@@ -23,11 +23,12 @@ import styles from './styles/index.css';
 export default function SignUpScreen({navigation, route}) {
   const headerHeight = useHeaderHeight();
 
-  const customerIDInputRef = useRef();
+  const homeIDInputRef = useRef();
 
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
-  const [customerID, setCustomerID] = useState('');
+  const [homeID, sethomeID] = useState('');
+  const [signupError, setSignupError] = useState('')
 
   const initialValues = {
     name: 'leenhahie',
@@ -35,7 +36,7 @@ export default function SignUpScreen({navigation, route}) {
     email: 'lenhathieu96@gmail.com',
     password: 'Nhathieu96',
     confirmPassword: 'Nhathieu96',
-    customerID: 'ynxuvT4h0GBs2vr6IiOP',
+    homeID: 'fe2dd6be-e5bb-48b1-983e-77553cc0b612',
   };
 
   const validateSchema = Yup.object().shape({
@@ -50,13 +51,20 @@ export default function SignUpScreen({navigation, route}) {
     confirmPassword: Yup.string()
       .required('Xác Nhận Mật khẩu không được để trống')
       .oneOf([Yup.ref('password'), null], 'Xác nhận mật khẩu không chính xác'),
-    customerID: Yup.string().required('Mã Khách hàng không được để trống'),
+    homeID: Yup.string().required('Mã Khách hàng không được để trống'),
   });
+
+  const onSignup = async (values) =>{
+    const result = await handleSignUp(values)
+    if(result){
+      setSignupError(`Đăng ký không thành công, ${result} !`)
+    } 
+  }
 
   useEffect(() => {
     if (route.params?.qrcode) {
-      setCustomerID(route.params.qrcode);
-      customerIDInputRef.current.focus();
+      sethomeID(route.params.qrcode);
+      homeIDInputRef.current.focus();
     }
   }, [route.params?.qrcode]);
 
@@ -67,7 +75,7 @@ export default function SignUpScreen({navigation, route}) {
           validationSchema={validateSchema}
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={(values) => handleSignUp(values)}>
+          onSubmit={(values) => onSignup(values)}>
           {({handleChange, handleSubmit, values, errors, setFieldValue}) => {
             return (
               <View style={styles.formContainer}>
@@ -174,11 +182,11 @@ export default function SignUpScreen({navigation, route}) {
                   />
                   <Text style={styles.txtError}>{errors.confirmPassword}</Text>
                 </View>
-                {/* CustomerID */}
+                {/* homeID */}
                 <View style={styles.inputContainer}>
                   <TextInput
-                    ref={customerIDInputRef}
-                    value={customerID}
+                    ref={homeIDInputRef}
+                    value={homeID}
                     label="Mã Khách Hàng"
                     style={styles.input}
                     theme={{
@@ -197,15 +205,17 @@ export default function SignUpScreen({navigation, route}) {
                         }}
                       />
                     }
-                    onChangeText={handleChange('customerID')}
+                    onChangeText={handleChange('homeID')}
                     onFocus={() => {
-                      if (customerID && customerID !== '') {
-                        setFieldValue('customerID', customerID);
+                      if (homeID && homeID !== '') {
+                        setFieldValue('homeID', homeID);
                       }
                     }}
                   />
-                  <Text style={styles.txtError}>{errors.customerID}</Text>
+                  <Text style={styles.txtError}>{errors.homeID}</Text>
                 </View>
+                
+                <Text style={styles.txtSignupError}>{signupError}</Text>
 
                 <TextButton
                   style={styles.btnSignUp}
