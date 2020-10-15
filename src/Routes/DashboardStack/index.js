@@ -107,22 +107,12 @@ export default function DashboardStack() {
         }}
       />
       <DashboardDrawer.Screen
-        name="users"
-        component={AddRoomStack}
-        options={{
-          drawerLabel: () => <BoldText>Thành Viên</BoldText>,
-          drawerIcon: ({focused, color, size}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="users" />
-          ),
-        }}
-      />
-      <DashboardDrawer.Screen
         name="personal"
         component={PersonalStack}
         options={{
           drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
           drawerIcon: ({focused}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="info" />
+            <Icon color={'black'} size={fontSize.bigger} name="user" />
           ),
         }}
       />

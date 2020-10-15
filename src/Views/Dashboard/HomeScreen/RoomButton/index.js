@@ -38,10 +38,20 @@ export default function RoomButton(props) {
   }, []);
 
   return (
-    <View style={styles.BtnContainer}>
-      <Image source={roomIcon} />
-      <BoldText>{roomData.name}</BoldText>
-      <Text> {roomData.deviceQuantity} thiết bị </Text>
-    </View>
+    <Animated.View
+      style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
+      <View style={styles.contentContainer}>
+        <Image source={roomIcon} />
+        <BoldText>{roomData.name}</BoldText>
+        <Text> {roomData.deviceQuantity} thiết bị </Text>
+        <IconButton
+          style={styles.btnGetIn}
+          iconName="door-open"
+          iconColor="white"
+          iconSize={fontSize.biggest}
+          onPress={() => navigation.navigate('Room', {roomData})}
+        />
+      </View>
+    </Animated.View>
   );
 }
