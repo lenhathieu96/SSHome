@@ -5,8 +5,8 @@ import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   formContainer: {
     padding: 5,
-    flex: 1,
-    justifyContent: 'space-evenly',
+    flexGrow: 1,
+    justifyContent: 'space-around',
   },
   inputContainer: {
     flex: 0.2,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btnSignUp: {
-    marginTop: 20,
+    marginTop: 30,
   },
 });
 

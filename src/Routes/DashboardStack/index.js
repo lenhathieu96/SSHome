@@ -7,10 +7,9 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Feather';
-import {useDispatch} from 'react-redux';
 
+import {handleLogout} from '../../Api/userAPI'
 import Text, {BoldText} from '../../Components/Text';
-import {setLoginStatus} from '../../Redux/ActionCreators/userActions';
 
 import HomeStack from './HomeStack';
 import AddRoomStack from './AddRoomStack';
@@ -24,7 +23,6 @@ import flagVn from '../../Assets/Images/vietnam.png';
 const DashboardDrawer = createDrawerNavigator();
 
 export default function DashboardStack() {
-  const dispatch = useDispatch();
   return (
     <DashboardDrawer.Navigator
       drawerContent={(props) => {
@@ -77,7 +75,7 @@ export default function DashboardStack() {
                     name="log-out"
                   />
                 )}
-                onPress={() => dispatch(setLoginStatus(false))}
+                onPress={() => handleLogout()}
               />
               <Text style={styles.txtVersion}>SSHome v1.0.1</Text>
             </View>

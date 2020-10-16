@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ImageBackground, View, Image, TouchableOpacity} from 'react-native';
-import {useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage'
+
+
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
 import Text, {BoldText} from '../../../Components/Text';
-
-import {setUserRole} from '../../../Redux/ActionCreators/userActions';
 
 import appLogo from '../../../Assets/Images/appLogo.png';
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
@@ -13,7 +13,14 @@ import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
 
 export default function LoginScreen({navigation}) {
-  const dispatch = useDispatch();
+  useEffect(()=>{
+    clearStorage();
+  },[])
+
+  const clearStorage = async()=>{
+    await AsyncStorage.clear();
+  }
+
   return (
     <ImageBackground source={IntroBackground} style={{flex: 1}}>
       <RootContainer safeArea={true}>
@@ -25,8 +32,8 @@ export default function LoginScreen({navigation}) {
           <TextButton
             style={styles.btn}
             text="Chủ Nhà"
-            onPress={() => {
-              dispatch(setUserRole(true));
+            onPress={async() => {
+              await AsyncStorage.setItem('isMaster', true)
               navigation.navigate('master');
             }}
           />
@@ -34,8 +41,8 @@ export default function LoginScreen({navigation}) {
             style={styles.btnMember}
             text="Thành Viên"
             textStyle={{color: Color.primary}}
-            onPress={() => {
-              dispatch(setUserRole(false));
+            onPress={async() => {
+              await AsyncStorage.setItem('isMaster', false)
               navigation.navigate('member');
             }}
           />

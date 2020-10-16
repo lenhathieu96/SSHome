@@ -8,11 +8,11 @@ import {
   Dimensions,
   Animated,
 } from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
-import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
+import {useHeaderHeight} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
@@ -29,7 +29,7 @@ import {
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
-import {color} from 'react-native-reanimated';
+
 
 const data = [
   {},
@@ -76,8 +76,6 @@ export default function HomeScreen({navigation}) {
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
   const BSBlueToothRef = useRef();
-
-  const dispatch = useDispatch();
   const connectionStatus = useSelector((state) => state.hardware);
 
   useEffect(() => {
@@ -179,7 +177,7 @@ export default function HomeScreen({navigation}) {
           keyExtractor={(item, index) => index.toString()}
           snapToInterval={ITEM_SIZE}
           //speed of scroll, normal is 0.9
-          decelerationRate={0.5}
+          // decelerationRate={1}
           bounces={false}
           horizontal
           snapToAlignment="start"
@@ -227,6 +225,7 @@ export default function HomeScreen({navigation}) {
           iconColor={Color.primary}
           iconSize={fontSize.biggest}
           style={styles.floatButton}
+          onPress={()=>console.log('ayyyo')}
         />
       </SafeAreaView>
       {/* BSBlueTooth */}

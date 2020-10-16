@@ -2,26 +2,32 @@ import React, {useRef, useEffect, useState} from 'react';
 import {View, Image} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
+
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
+import {handleMasterLogin} from '../../../Api/userAPI'
 
-import {setLoginStatus} from '../../../Redux/ActionCreators/userActions';
 
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 import appLogo from '../../../Assets/Images/appLogo.png';
 
 export default function MasterLoginScreen({navigation}) {
-  const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const inputRef = useRef();
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState()
-  const [error, setError] = useState()
+  const [email, setEmail] = useState('lenhathieu96@gmail.com');
+  const [password, setPassword] = useState('Nhathieu96')
+  const [loginError, setloginError] = useState('')
+
+  const onLogin= async () =>{
+    const result = await handleMasterLogin(email, password)
+    if(result){
+      setloginError(`Đăng nhập không thành công, ${result} !`)
+    }
+  }
 
   useEffect(() => {
     inputRef.current.focus();
@@ -33,6 +39,7 @@ export default function MasterLoginScreen({navigation}) {
         <Image source={appLogo} style={{alignSelf: 'center'}} />
       </View>
       <View style={styles.body}>
+      
         <TextInput
           ref={inputRef}
           value={email}
@@ -54,17 +61,13 @@ export default function MasterLoginScreen({navigation}) {
             colors: {primary: Color.primary, underlineColor: 'transparent'},
           }}
         />
-        <Text style={styles.txtError}>{error}</Text>
+        <Text style={styles.txtloginError}>{loginError}</Text>  
       </View>
       <TextButton
         style={styles.btnLogin}
         text="Đăng Nhập"
         onPress={() => {
-          // const confirmation = await handleMemberLogin(`+84${phoneNumber}`);
-          // if (confirmation) {
-          dispatch(setLoginStatus(true));
-          // }
-          // navigation.navigate('otp', {confirmation: 'ayyo'});
+          onLogin()
         }}
       />
     </RootContainer>

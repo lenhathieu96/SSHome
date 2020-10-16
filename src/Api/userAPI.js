@@ -1,14 +1,13 @@
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database'
-import {setUserID} from '../Redux/ActionCreators/userActions'
-import {useDispatch} from 'react-redux'
+import firestore from '@react-native-firebase/firestore'
+
 
 export const handleSignUp = async (signupForm) => {
-  const dispatch = useDispatch()
-  const userDBRef = database().ref(`MasterUser/${signupForm.homeID}`)
-  const homeID = await userDBRef.once('value')
-  if(homeID.val()){
-    auth().createUserWithEmailAndPassword(signupForm.email, signupForm.password).then( async () => {
+  const userDBRef = firestore().collection('Master_User')
+  const homeID = await userDBRef.doc(signupForm.homeID).get()
+  if(homeID.data()){
+    try{
+      await auth().createUserWithEmailAndPassword(signupForm.email, signupForm.password)
       let userData ={
         id: auth().currentUser.uid,
         name: signupForm.name,
@@ -16,10 +15,9 @@ export const handleSignUp = async (signupForm) => {
         phone: signupForm.phone,
         password: signupForm.password
       }
-      await userDBRef.update(userData)
-      dispatch(setUserID(auth().currentUser.uid))
-    })
-    .catch((error) => {
+      await userDBRef.doc(signupForm.homeID).set(userData)
+    }
+    catch(error){
       if (error.code === 'auth/email-already-in-use') {
         return('Email đã tồn tại')
       }
@@ -29,17 +27,21 @@ export const handleSignUp = async (signupForm) => {
       }
         console.log(error)
         return('Không thể tạo tài khoản')
-      });
+    }
   }else{
     return('Mã khách hàng không tồn tại')
   }
+  
 };
 
-export const handleMasterLogin = (email, password) => {
-  auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => console.log('loginSuccess'))
-    .catch((err) => console.log(err));
+export const handleMasterLogin = async (email, password) => {
+  const userData = await firestore().collection('Master_User').where('email', '==', email).get()
+  if(userData.docs.length > 0){
+    await auth().signInWithEmailAndPassword(email, password).then(()=>console.log('Login Success')).catch(error=>{console.log(error); return ''})
+  }else{
+    return ('Tài Khoản Không Tồn Tại')
+  }
+ 
 };
 
 export const handleMemberLogin = async (phoneNumber) => {
@@ -48,8 +50,6 @@ export const handleMemberLogin = async (phoneNumber) => {
 };
 
 export const confirmOTP = async (confirmation, OTPCode) => {
-  console.log(confirmation, 'devH confirm');
-  console.log(OTPCode, 'devH OTP');
   try {
     const res = await confirmation.confirm(OTPCode);
     if (res) {
@@ -60,8 +60,20 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   }
 };
 
+export const getMasterProfile = async(userID) =>{
+  const userData = await firestore().collection('Master_User').where('id', '==', userID).get()
+  if(userData.docs.length > 0){
+    console.log(userData.docs)
+  }
+}
+
+export const getMemberProfile = async (phone) => {
+  console.log(phone)
+}
+
 export const handleLogout = () => {
   auth()
     .signOut()
     .then(() => true);
 };
+

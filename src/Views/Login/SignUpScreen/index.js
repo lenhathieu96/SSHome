@@ -11,7 +11,7 @@ import {Formik} from 'formik';
 import {TextInput} from 'react-native-paper';
 import * as Yup from 'yup';
 
-import {handleSignUp} from '../../../Api/authApi'
+import {handleSignUp} from '../../../Api/userAPI'
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -36,7 +36,7 @@ export default function SignUpScreen({navigation, route}) {
     email: 'lenhathieu96@gmail.com',
     password: 'Nhathieu96',
     confirmPassword: 'Nhathieu96',
-    homeID: 'fe2dd6be-e5bb-48b1-983e-77553cc0b612',
+    homeID: 'EjAcqoniSmyL2Iu4wkjR',
   };
 
   const validateSchema = Yup.object().shape({
@@ -214,14 +214,14 @@ export default function SignUpScreen({navigation, route}) {
                   />
                   <Text style={styles.txtError}>{errors.homeID}</Text>
                 </View>
-                
-                <Text style={styles.txtSignupError}>{signupError}</Text>
-
-                <TextButton
-                  style={styles.btnSignUp}
-                  text="Đăng Ký"
-                  onPress={handleSubmit}
-                />
+                <View style={styles.inputContainer}>
+                  <Text style={styles.txtSignupError}>{signupError}</Text>  
+                  <TextButton
+                    style={styles.btnSignUp}
+                    text="Đăng Ký"
+                    onPress={handleSubmit}
+                  />
+                </View>
               </View>
             );
           }}

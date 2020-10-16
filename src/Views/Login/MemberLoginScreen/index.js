@@ -6,7 +6,7 @@ import {TextInput} from 'react-native-paper';
 import Text, {BoldText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
-import {handleMemberLogin} from '../../../Api/authApi';
+import {handleMemberLogin} from '../../../Api/userAPI';
 
 import VNFlag from '../../../Assets/Images/vietnam.png';
 import styles from './styles/index.css';
