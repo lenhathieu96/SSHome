@@ -31,7 +31,7 @@ export default function LoginStacks() {
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
-            fontFamily:'MavenPro-Bold',
+            fontFamily: 'MavenPro-Bold',
             marginRight: 10,
           },
           headerLeft: () => (
@@ -58,7 +58,7 @@ export default function LoginStacks() {
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
-            fontFamily:'MavenPro-Bold',
+            fontFamily: 'MavenPro-Bold',
             marginRight: 20,
           },
           headerLeft: () => (
@@ -85,8 +85,8 @@ export default function LoginStacks() {
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
-            fontFamily:'MavenPro-Bold',
-            marginLeft: 20
+            fontFamily: 'MavenPro-Bold',
+            marginLeft: 20,
           },
           headerLeft: () => (
             <Icon.Button

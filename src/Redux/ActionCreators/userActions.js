@@ -5,10 +5,9 @@ export const setLoginStatus = (status) => {
   };
 };
 
-export const setUserID = (userProfile, homeID) => {
+export const setUserProfile = (userProfile) => {
   return {
     type: 'SET USER PROFILE',
-    payload: userID,
+    payload: userProfile,
   };
 };
-

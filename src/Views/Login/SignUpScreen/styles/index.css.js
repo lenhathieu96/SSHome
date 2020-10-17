@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     color: Color.red,
   },
 
-  txtSignupError:{
+  txtSignupError: {
     marginTop: 5,
     color: Color.red,
     textAlign: 'center',

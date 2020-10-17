@@ -3,12 +3,10 @@ import {View, Image} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
 
-
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
-import {handleMasterLogin} from '../../../Api/userAPI'
-
+import {handleMasterLogin} from '../../../Api/userAPI';
 
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
@@ -19,15 +17,15 @@ export default function MasterLoginScreen({navigation}) {
   const inputRef = useRef();
 
   const [email, setEmail] = useState('lenhathieu96@gmail.com');
-  const [password, setPassword] = useState('Nhathieu96')
-  const [loginError, setloginError] = useState('')
+  const [password, setPassword] = useState('Nhathieu96');
+  const [loginError, setloginError] = useState('');
 
-  const onLogin= async () =>{
-    const result = await handleMasterLogin(email, password)
-    if(result){
-      setloginError(`Đăng nhập không thành công, ${result} !`)
+  const onLogin = async () => {
+    const result = await handleMasterLogin(email, password);
+    if (result) {
+      setloginError(`Đăng nhập không thành công, ${result} !`);
     }
-  }
+  };
 
   useEffect(() => {
     inputRef.current.focus();
@@ -39,7 +37,6 @@ export default function MasterLoginScreen({navigation}) {
         <Image source={appLogo} style={{alignSelf: 'center'}} />
       </View>
       <View style={styles.body}>
-      
         <TextInput
           ref={inputRef}
           value={email}
@@ -61,13 +58,13 @@ export default function MasterLoginScreen({navigation}) {
             colors: {primary: Color.primary, underlineColor: 'transparent'},
           }}
         />
-        <Text style={styles.txtloginError}>{loginError}</Text>  
+        <Text style={styles.txtloginError}>{loginError}</Text>
       </View>
       <TextButton
         style={styles.btnLogin}
         text="Đăng Nhập"
         onPress={() => {
-          onLogin()
+          onLogin();
         }}
       />
     </RootContainer>

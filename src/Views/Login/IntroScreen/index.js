@@ -1,7 +1,5 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {ImageBackground, View, Image, TouchableOpacity} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage'
-
 
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
@@ -13,14 +11,6 @@ import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
 
 export default function LoginScreen({navigation}) {
-  useEffect(()=>{
-    clearStorage();
-  },[])
-
-  const clearStorage = async()=>{
-    await AsyncStorage.clear();
-  }
-
   return (
     <ImageBackground source={IntroBackground} style={{flex: 1}}>
       <RootContainer safeArea={true}>
@@ -32,19 +22,13 @@ export default function LoginScreen({navigation}) {
           <TextButton
             style={styles.btn}
             text="Chủ Nhà"
-            onPress={async() => {
-              await AsyncStorage.setItem('isMaster', true)
-              navigation.navigate('master');
-            }}
+            onPress={() => navigation.navigate('master')}
           />
           <TextButton
             style={styles.btnMember}
             text="Thành Viên"
             textStyle={{color: Color.primary}}
-            onPress={async() => {
-              await AsyncStorage.setItem('isMaster', false)
-              navigation.navigate('member');
-            }}
+            onPress={async () => navigation.navigate('member')}
           />
           <TouchableOpacity onPress={() => navigation.navigate('signup')}>
             <Text style={{alignSelf: 'center', color: 'black'}}>

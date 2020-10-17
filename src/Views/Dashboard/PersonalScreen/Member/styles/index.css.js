@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 0.3 * width,
     height: 0.5 * width,
-    backgroundColor: Color.background,
+    backgroundColor: Color.red,
     marginHorizontal: 5,
     justifyContent: 'space-between',
   },
@@ -19,14 +19,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   phoneContainer: {
+    justifyContent: 'center',
     padding: 10,
     alignItems: 'center',
     textAlign: 'center',
     flex: 0.3,
     backgroundColor: Color.secondary,
-    alignSelf: 'flex-end',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    alignSelf: 'center',
   },
 });
 

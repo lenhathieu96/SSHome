@@ -6,6 +6,7 @@ const Color = {
   green: '#53CF8F',
   red: '#F83F38',
   borderHighLight: '#e8e8e8',
+  blue: '#3260a8',
 };
 
 export default Color;

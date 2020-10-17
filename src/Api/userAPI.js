@@ -1,52 +1,98 @@
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
-
-export const handleSignUp = async (signupForm) => {
-  const userDBRef = firestore().collection('Master_User')
-  const homeID = await userDBRef.doc(signupForm.homeID).get()
-  if(homeID.data()){
-    try{
-      await auth().createUserWithEmailAndPassword(signupForm.email, signupForm.password)
-      let userData ={
+export const handleMasterSignUp = async (signupForm) => {
+  const userDBRef = firestore().collection('Home');
+  const homeID = await userDBRef.doc(signupForm.homeID).get();
+  if (homeID.data()) {
+    try {
+      await AsyncStorage.setItem('userRole', 'Master');
+      await auth().createUserWithEmailAndPassword(
+        signupForm.email,
+        signupForm.password,
+      );
+      let userData = {
         id: auth().currentUser.uid,
         name: signupForm.name,
         email: signupForm.email,
         phone: signupForm.phone,
-        password: signupForm.password
-      }
-      await userDBRef.doc(signupForm.homeID).set(userData)
-    }
-    catch(error){
+        password: signupForm.password,
+      };
+      await userDBRef.doc(signupForm.homeID).set(userData);
+    } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        return('Email đã tồn tại')
+        return 'Email đã tồn tại';
       }
 
       if (error.code === 'auth/invalid-email') {
-        return ('Email không hợp lệ')
+        return 'Email không hợp lệ';
       }
-        console.log(error)
-        return('Không thể tạo tài khoản')
+      console.log(error);
+      return 'Không thể tạo tài khoản';
     }
-  }else{
-    return('Mã khách hàng không tồn tại')
+  } else {
+    return 'Mã khách hàng không tồn tại';
   }
-  
 };
 
 export const handleMasterLogin = async (email, password) => {
-  const userData = await firestore().collection('Master_User').where('email', '==', email).get()
-  if(userData.docs.length > 0){
-    await auth().signInWithEmailAndPassword(email, password).then(()=>console.log('Login Success')).catch(error=>{console.log(error); return ''})
-  }else{
-    return ('Tài Khoản Không Tồn Tại')
+  const userData = await firestore()
+    .collection('Home')
+    .where('email', '==', email)
+    .get();
+  if (userData.docs.length > 0) {
+    try {
+      await AsyncStorage.setItem('userRole', 'Master');
+      await auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
+  } else {
+    return 'Tài Khoản Không Tồn Tại';
   }
- 
 };
 
-export const handleMemberLogin = async (phoneNumber) => {
-  const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-  return confirmation ? confirmation : null;
+export const hanldeMemberSignUp = async (homeID, signupForm) => {
+  try {
+    await firestore()
+      .collection('Home')
+      .doc(homeID)
+      .collection('Member')
+      .add(signupForm);
+    console.log('add Member Success');
+  } catch (error) {
+    console.log('error while create new member: ', error);
+    return '';
+  }
+};
+
+export const handleMemberLogin = async (phoneNumber, homeID) => {
+  const User = await firestore()
+    .collection('Home')
+    .doc(homeID)
+    .collection('Member')
+    .where('phone', '==', phoneNumber)
+    .get();
+  if (User.docs.length > 0) {
+    try {
+      await AsyncStorage.setItem('userRole', 'Member');
+      await AsyncStorage.setItem('homeID', homeID);
+      const confirmation = await auth().signInWithPhoneNumber(
+        `+84${phoneNumber}`,
+      );
+      return {success: confirmation ? confirmation : null};
+    } catch (error) {
+      if (error.code === 'auth/invalid-phone-number') {
+        return 'Số điện thoại không hợp lệ';
+      }
+      console.log(error);
+      return 'Không thể tạo tài khoản';
+    }
+  } else {
+    return {error: 'Tài Khoản Không Tồn Tại'};
+  }
 };
 
 export const confirmOTP = async (confirmation, OTPCode) => {
@@ -60,20 +106,45 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   }
 };
 
-export const getMasterProfile = async(userID) =>{
-  const userData = await firestore().collection('Master_User').where('id', '==', userID).get()
-  if(userData.docs.length > 0){
-    console.log(userData.docs)
+export const getMasterProfile = async (userID) => {
+  const User = await firestore()
+    .collection('Home')
+    .where('id', '==', userID)
+    .get();
+  if (User.docs.length > 0) {
+    const UserData = User.docs[0];
+    await AsyncStorage.setItem('homeID', UserData.id);
+    return {
+      name: UserData.data().name,
+      phone: UserData.data().phone,
+      email: UserData.data().email,
+    };
   }
-}
+};
 
-export const getMemberProfile = async (phone) => {
-  console.log(phone)
-}
+export const getMemberProfile = async (phone, homeID) => {
+  firestore()
+    .collection('Home')
+    .doc(homeID)
+    .collection('Member')
+    .where('phone', '==', phone)
+    .onSnapshot((document) => {
+      const UserData = document.docs[0];
+      if (UserData) {
+        return {
+          name: UserData.data().name,
+          phone: UserData.data().phone,
+          email: UserData.data().email,
+        };
+      } else {
+        handleLogout();
+      }
+    });
+};
 
 export const handleLogout = () => {
+  AsyncStorage.removeItem('userRole');
   auth()
     .signOut()
     .then(() => true);
 };
-

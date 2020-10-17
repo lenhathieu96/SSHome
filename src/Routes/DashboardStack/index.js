@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Image} from 'react-native';
 import {
   createDrawerNavigator,
@@ -6,9 +6,11 @@ import {
   DrawerItem,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import {handleLogout} from '../../Api/userAPI'
+import {handleLogout} from '../../Api/userAPI';
 import Text, {BoldText} from '../../Components/Text';
 
 import HomeStack from './HomeStack';
@@ -23,6 +25,17 @@ import flagVn from '../../Assets/Images/vietnam.png';
 const DashboardDrawer = createDrawerNavigator();
 
 export default function DashboardStack() {
+  const UserProfile = useSelector((state) => state.user);
+  const [userRole, setUserRole] = useState();
+
+  useEffect(() => {
+    getUserRole();
+  }, []);
+
+  const getUserRole = async () => {
+    setUserRole(await AsyncStorage.getItem('userRole'));
+  };
+
   return (
     <DashboardDrawer.Navigator
       drawerContent={(props) => {
@@ -32,9 +45,11 @@ export default function DashboardStack() {
             <View style={styles.drawerHeaderContainer}>
               <Image source={flagVn} style={styles.avatar} />
               <View style={styles.userInfoContainer}>
-                <BoldText style={styles.userName}>LeeNhaHie</BoldText>
-                <Text style={styles.userInfo}>(+84) 0329599586</Text>
-                <Text style={styles.userInfo}>Chủ Nhà</Text>
+                <BoldText style={styles.userName}>{UserProfile.name}</BoldText>
+                <Text style={styles.userInfo}>(+84) {UserProfile.phone}</Text>
+                <Text style={styles.userInfo}>
+                  {userRole === 'Master' ? 'Chủ Nhà' : 'Thành Viên'}
+                </Text>
               </View>
             </View>
             {/* Body */}
@@ -75,7 +90,9 @@ export default function DashboardStack() {
                     name="log-out"
                   />
                 )}
-                onPress={() => handleLogout()}
+                onPress={() => {
+                  handleLogout();
+                }}
               />
               <Text style={styles.txtVersion}>SSHome v1.0.1</Text>
             </View>

@@ -1,17 +1,11 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  View,
-  ScrollView,
-} from 'react-native';
+import {KeyboardAvoidingView, View, ScrollView} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {Formik} from 'formik';
 import {TextInput} from 'react-native-paper';
 import * as Yup from 'yup';
 
-import {handleSignUp} from '../../../Api/userAPI'
+import {handleMasterSignUp} from '../../../Api/userAPI';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -28,7 +22,7 @@ export default function SignUpScreen({navigation, route}) {
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
   const [homeID, sethomeID] = useState('');
-  const [signupError, setSignupError] = useState('')
+  const [signupError, setSignupError] = useState('');
 
   const initialValues = {
     name: 'leenhahie',
@@ -54,12 +48,12 @@ export default function SignUpScreen({navigation, route}) {
     homeID: Yup.string().required('Mã Khách hàng không được để trống'),
   });
 
-  const onSignup = async (values) =>{
-    const result = await handleSignUp(values)
-    if(result){
-      setSignupError(`Đăng ký không thành công, ${result} !`)
-    } 
-  }
+  const onSignup = async (values) => {
+    const result = await handleMasterSignUp(values);
+    if (result) {
+      setSignupError(`Đăng ký không thành công, ${result} !`);
+    }
+  };
 
   useEffect(() => {
     if (route.params?.qrcode) {
@@ -201,7 +195,9 @@ export default function SignUpScreen({navigation, route}) {
                         name="qrcode"
                         color={Color.primary}
                         onPress={() => {
-                          navigation.navigate('qrcode');
+                          navigation.navigate('qrcode', {
+                            isFromMasterSignUp: true,
+                          });
                         }}
                       />
                     }
@@ -215,7 +211,7 @@ export default function SignUpScreen({navigation, route}) {
                   <Text style={styles.txtError}>{errors.homeID}</Text>
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.txtSignupError}>{signupError}</Text>  
+                  <Text style={styles.txtSignupError}>{signupError}</Text>
                   <TextButton
                     style={styles.btnSignUp}
                     text="Đăng Ký"

@@ -44,8 +44,18 @@ const styles = StyleSheet.create({
     flex: 0.3,
     justifyContent: 'space-evenly',
   },
+  txtInfo: {
+    textAlign: 'center',
+    color: Color.blue,
+    marginVertical: 10,
+  },
+  txtError: {
+    marginVertical: 10,
+    color: Color.red,
+    textAlign: 'center',
+  },
   btnLogin: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
 });
 

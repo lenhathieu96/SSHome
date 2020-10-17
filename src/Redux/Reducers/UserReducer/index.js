@@ -1,22 +1,22 @@
 const initialState = {
   isLogin: false,
-  homeID: '',
-  userID: '',
   name: '',
   phone: '',
-  email: ''
+  email: '',
 };
 
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET LOGIN STATUS':
-      return {...state, isLogin: action.payload}; 
+      return {...state, isLogin: action.payload};
 
-    // case 'SET USER PROFILE':
-    //   let user = {...state};
-
-    //   return {...state, };
-    
+    case 'SET USER PROFILE':
+      return {
+        ...state,
+        name: action.payload.name,
+        phone: action.payload.phone,
+        email: action.payload.email,
+      };
 
     default:
       return state;

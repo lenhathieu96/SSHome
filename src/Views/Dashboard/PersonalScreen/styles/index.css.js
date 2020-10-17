@@ -9,9 +9,42 @@ const styles = StyleSheet.create({
 
   memberListContainer: {
     flex: 0.4,
+    position: 'relative',
   },
   memberList: {
-    alignSelf: 'center',
+    position: 'relative',
+  },
+  btnAddContainer: {
+    backgroundColor: '#ffffff',
+    position: 'absolute',
+    zIndex: 1,
+    borderTopRightRadius: 16,
+    borderBottomRightRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#cccccc',
+  },
+  imageContainer: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  text: {
+    textAlign: 'center',
+  },
+  cta_container: {
+    position: 'relative',
+  },
+  icon_container: {
+    width: 32,
+    height: 32,
+    borderRadius: 32,
+    backgroundColor: '#3578E5',
+    position: 'absolute',
+    borderWidth: 3,
+    borderColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: fontSize.large,

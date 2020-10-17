@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
@@ -21,6 +21,7 @@ import IconButton from '../../../Components/IconButton';
 import BSBlueToothSearching from './BSBlueTooth';
 import RoomButton from './RoomButton';
 
+import {hanldeMemberSignUp} from '../../../Api/userAPI';
 import {
   setBLConnection,
   setInternetConnection,
@@ -29,7 +30,6 @@ import {
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
-
 
 const data = [
   {},
@@ -72,6 +72,7 @@ export default function HomeScreen({navigation}) {
   const SPACER_SIZE = (width - ITEM_SIZE) / 2;
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
@@ -225,7 +226,14 @@ export default function HomeScreen({navigation}) {
           iconColor={Color.primary}
           iconSize={fontSize.biggest}
           style={styles.floatButton}
-          onPress={()=>console.log('ayyyo')}
+          onPress={() => {
+            let signupForm = {
+              name: 'leeChongwei',
+              phone: '+8432652065851',
+              availableRoom: ['121', '123', '41231'],
+            };
+            hanldeMemberSignUp('EjAcqoniSmyL2Iu4wkjR', signupForm);
+          }}
         />
       </SafeAreaView>
       {/* BSBlueTooth */}
