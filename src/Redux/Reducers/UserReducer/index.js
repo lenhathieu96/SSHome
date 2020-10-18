@@ -14,7 +14,7 @@ const UserReducer = (state = initialState, action) => {
       return {
         ...state,
         name: action.payload.name,
-        phone: action.payload.phone,
+        phone: action.payload.phone.slice(3),
         email: action.payload.email,
       };
 

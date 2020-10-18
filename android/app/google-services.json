@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "592930724722-kamnjs6j3v4vt7fsea57uqqf04gk2m08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sshome",
+            "certificate_hash": "b70416bf49e447dce0f9e4c8e9e1f10072c5838e"
+          }
+        },
+        {
           "client_id": "592930724722-ak01gnp124ctioah5o9j2at82upq9shk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "592930724722-rm7cu1ioavfa0jgh9b2r6t6uc6n5g0m4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "592930724722-9lnuckgqbf2smrmb0ji2gj6bjk69gmkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.LeeNhaHie.SSHome"
+              }
             }
           ]
         }

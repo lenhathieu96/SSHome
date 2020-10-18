@@ -73,7 +73,7 @@ export const handleMemberLogin = async (phoneNumber, homeID) => {
     .collection('Home')
     .doc(homeID)
     .collection('Member')
-    .where('phone', '==', phoneNumber)
+    .where('phone', '==', `+84${phoneNumber}`)
     .get();
   if (User.docs.length > 0) {
     try {
@@ -85,10 +85,13 @@ export const handleMemberLogin = async (phoneNumber, homeID) => {
       return {success: confirmation ? confirmation : null};
     } catch (error) {
       if (error.code === 'auth/invalid-phone-number') {
-        return 'Số điện thoại không hợp lệ';
+        return {error: 'Số điện thoại không hợp lệ'};
+      }
+      if (error.code === 'auth/too-many-requests') {
+        return {error: 'Quá số lần quy định'};
       }
       console.log(error);
-      return 'Không thể tạo tài khoản';
+      return {error: ''};
     }
   } else {
     return {error: 'Tài Khoản Không Tồn Tại'};

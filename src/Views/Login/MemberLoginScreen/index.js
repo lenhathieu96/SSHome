@@ -96,11 +96,11 @@ export default function MemberLoginScreen({navigation, route}) {
             if (result.error) {
               setloginError(`Đăng nhập không thành công, ${result.error} !`);
             } else {
-              if (result.success !== null) {
-                let User = {name: '', phone: phoneNumber, email: ''};
-                dispatch(setUserProfile(User));
-                navigation.navigate('otp', {confirmation: result.success});
-              }
+              // if (result.success !== null) {
+              //   let User = {name: '', phone: phoneNumber, email: ''};
+              //   dispatch(setUserProfile(User));
+              //   navigation.navigate('otp', {confirmation: result.success});
+              // }
             }
           }}
         />
