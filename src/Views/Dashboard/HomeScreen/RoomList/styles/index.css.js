@@ -1,9 +1,12 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import Color from '../../../../../Utils/Color';
-import * as fontSize from '../../../../../Utils/FontSize';
 
 const {width, height} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
+  roomlist: {
+    flex: 0.9,
+  },
   BtnContainer: {
     padding: 10,
     backgroundColor: 'transparent',

@@ -43,7 +43,7 @@ export default function MasterLoginScreen({navigation}) {
           onChangeText={(text) => setEmail(text)}
           label="Email"
           mode="outlined"
-          style={[styles.formController, {flex: 0.1}]}
+          style={styles.input}
           theme={{
             colors: {primary: Color.primary, underlineColor: 'transparent'},
           }}
@@ -53,7 +53,7 @@ export default function MasterLoginScreen({navigation}) {
           onChangeText={(text) => setPassword(text)}
           label="Mật Khẩu"
           mode="outlined"
-          style={[styles.formController, {flex: 0.1}]}
+          style={styles.input}
           theme={{
             colors: {primary: Color.primary, underlineColor: 'transparent'},
           }}

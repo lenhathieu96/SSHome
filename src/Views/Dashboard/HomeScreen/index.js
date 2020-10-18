@@ -1,27 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
-  View,
   Alert,
   NativeModules,
   NativeEventEmitter,
-  Dimensions,
-  Animated,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
-import {useHeaderHeight} from '@react-navigation/stack';
+import AsyncStorage from '@react-native-community/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
+import {getMasterProfile, handleLogout} from '../../../Api/userAPI';
+
 import RootContainer from '../../../Components/RootContainer';
-import Text, {BoldText} from '../../../Components/Text';
+import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
 
+import Header from './Header';
+import RoomList from './RoomList';
 import BSBlueToothSearching from './BSBlueTooth';
-import RoomButton from './RoomButton';
 
-import {hanldeMemberSignUp} from '../../../Api/userAPI';
 import {
   setBLConnection,
   setInternetConnection,
@@ -31,49 +32,11 @@ import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
-const data = [
-  {},
-  {
-    name: 'Phòng Khách',
-    roomtypeID: 0,
-    deviceQuantity: 4,
-  },
-  {
-    name: 'Phòng Ngủ',
-    roomtypeID: 1,
-    deviceQuantity: 5,
-  },
-  {
-    name: 'Phòng Bếp',
-    roomtypeID: 2,
-    deviceQuantity: 6,
-  },
-  {
-    name: 'Phòng Tắm',
-    roomtypeID: 3,
-    deviceQuantity: 8,
-  },
-
-  {
-    name: 'Phòng Tắm',
-    roomtypeID: 3,
-    deviceQuantity: 8,
-  },
-  {},
-];
-
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function HomeScreen({navigation}) {
-  const {width} = Dimensions.get('window');
-
-  const ITEM_SIZE = 0.7 * width;
-  const SPACER_SIZE = (width - ITEM_SIZE) / 2;
-  const scrollX = useRef(new Animated.Value(0)).current;
-
   const dispatch = useDispatch();
-  const headerHeight = useHeaderHeight();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
   const BSBlueToothRef = useRef();
@@ -81,9 +44,41 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     listenConnection();
+    GetUserProflie();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  async function GetUserProflie() {
+    const currentUser = auth().currentUser;
+    const userRole = await AsyncStorage.getItem('userRole');
+    //Master role
+    if (userRole === 'Master') {
+      const MasterUser = await getMasterProfile(currentUser.uid);
+      dispatch(setUserProfile(MasterUser));
+    }
+    //Member role
+    else if (userRole === 'Member') {
+      const homeID = await AsyncStorage.getItem('homeID');
+      firestore()
+        .collection('Home')
+        .doc(homeID)
+        .collection('Member')
+        .where('phone', '==', auth().currentUser.phoneNumber)
+        .onSnapshot((document) => {
+          const UserData = document.docs[0];
+          if (UserData) {
+            let MemberUser = {
+              name: UserData.data().name,
+              phone: UserData.data().phone,
+              email: UserData.data().email,
+            };
+            dispatch(setUserProfile(MemberUser));
+          } else {
+            handleLogout();
+          }
+        });
+    }
+  }
   //listener Internet and Bluetooth connection
   const listenConnection = async () => {
     BLEManager.checkState();
@@ -142,85 +137,11 @@ export default function HomeScreen({navigation}) {
   return (
     <RootContainer>
       {/* Info Container */}
-      <View style={[styles.infoContainer, {marginTop: headerHeight}]}>
-        <View style={styles.weatherContainer}>
-          <Icon
-            name="cloud-drizzle"
-            size={fontSize.bigger}
-            color={Color.primary}
-            style={{alignSelf: 'center'}}
-          />
-          <Text> Mưa</Text>
-        </View>
-        <View style={styles.weatherContainer}>
-          <View style={styles.txtWeatherContainer}>
-            <BoldText style={styles.txtWeather}>{32}</BoldText>
-            <Text>°C</Text>
-          </View>
-          <Text> Ngoài Trời</Text>
-        </View>
-        <View style={styles.weatherContainer}>
-          <View style={styles.txtWeatherContainer}>
-            <BoldText style={styles.txtWeather}>{26}</BoldText>
-            <Text>°C</Text>
-          </View>
-          <Text> Trong Nhà</Text>
-        </View>
-      </View>
-
+      <Header />
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        <Animated.FlatList
-          style={styles.roomlist}
-          contentContainerStyle={{alignItems: 'flex-end'}}
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          snapToInterval={ITEM_SIZE}
-          //speed of scroll, normal is 0.9
-          // decelerationRate={1}
-          bounces={false}
-          horizontal
-          snapToAlignment="start"
-          showsHorizontalScrollIndicator={false}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: true},
-          )}
-          renderItem={({item, index}) => {
-            const inputRange = [
-              (index - 2) * ITEM_SIZE,
-              (index - 1) * ITEM_SIZE,
-              index * ITEM_SIZE,
-            ];
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [0, -(0.2 * ITEM_SIZE), 0],
-              extrapolate: 'clamp',
-            });
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.3, 1, 0.3],
-            });
-            if (!item.name) {
-              return (
-                <View
-                  style={{
-                    width: SPACER_SIZE,
-                  }}
-                />
-              );
-            }
-            return (
-              <RoomButton
-                navigation={navigation}
-                roomData={item}
-                opacity={opacity}
-                translateY={translateY}
-              />
-            );
-          }}
-        />
+        <RoomList navigation={navigation} />
         <IconButton
           iconName="microphone"
           iconColor={Color.primary}
@@ -232,7 +153,6 @@ export default function HomeScreen({navigation}) {
               phone: '+8432652065851',
               availableRoom: ['121', '123', '41231'],
             };
-            hanldeMemberSignUp('EjAcqoniSmyL2Iu4wkjR', signupForm);
           }}
         />
       </SafeAreaView>

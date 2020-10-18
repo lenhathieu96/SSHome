@@ -111,26 +111,30 @@ export default function DashboardStack() {
           ),
         }}
       />
-      <DashboardDrawer.Screen
-        name="addRoom"
-        component={AddRoomStack}
-        options={{
-          drawerLabel: () => <BoldText>Thêm Phòng</BoldText>,
-          drawerIcon: ({focused, color, size}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="plus" />
-          ),
-        }}
-      />
-      <DashboardDrawer.Screen
-        name="personal"
-        component={PersonalStack}
-        options={{
-          drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
-          drawerIcon: ({focused}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="user" />
-          ),
-        }}
-      />
+      {userRole === 'Master' ? (
+        <DashboardDrawer.Screen
+          name="addRoom"
+          component={AddRoomStack}
+          options={{
+            drawerLabel: () => <BoldText>Thêm Phòng</BoldText>,
+            drawerIcon: ({focused, color, size}) => (
+              <Icon color={'black'} size={fontSize.bigger} name="plus" />
+            ),
+          }}
+        />
+      ) : null}
+      {userRole === 'Master' ? (
+        <DashboardDrawer.Screen
+          name="personal"
+          component={PersonalStack}
+          options={{
+            drawerLabel: () => <BoldText>Thành Viên</BoldText>,
+            drawerIcon: ({focused}) => (
+              <Icon color={'black'} size={fontSize.bigger} name="users" />
+            ),
+          }}
+        />
+      ) : null}
     </DashboardDrawer.Navigator>
   );
 }
