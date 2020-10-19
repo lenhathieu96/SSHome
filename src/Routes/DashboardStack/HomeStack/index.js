@@ -4,16 +4,20 @@ import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
+import {useSelector} from 'react-redux';
+
 import HomeScreen from '../../../Views/Dashboard/HomeScreen';
 import RoomScreen from '../../../Views/Dashboard/RoomScreen';
 import CameraScreen from '../../../Views/Dashboard/CameraScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
+import { Form } from 'formik';
 
 const HomeStacks = createStackNavigator();
 
 export default function HomeStack() {
+  const BLController = useSelector((state)=>state.hardware.BLController);
   return (
     <HomeStacks.Navigator>
       <HomeStacks.Screen
@@ -44,7 +48,7 @@ export default function HomeStack() {
           ),
           headerRight: () => (
             <Icon.Button
-              name="wifi"
+              name={BLController ? 'bluetooth' : 'wifi'}
               color={Color.primary}
               size={fontSize.bigger}
               backgroundColor="transparent"

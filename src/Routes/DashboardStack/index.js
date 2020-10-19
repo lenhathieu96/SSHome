@@ -6,11 +6,13 @@ import {
   DrawerItem,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {handleLogout} from '../../Api/userAPI';
+import {setController} from '../../Redux/ActionCreators/hardwareActions';
+
 import Text, {BoldText} from '../../Components/Text';
 
 import HomeStack from './HomeStack';
@@ -25,7 +27,10 @@ import flagVn from '../../Assets/Images/vietnam.png';
 const DashboardDrawer = createDrawerNavigator();
 
 export default function DashboardStack() {
+  const dispatch = useDispatch();
   const UserProfile = useSelector((state) => state.user);
+  const BlController = useSelector((state) => state.hardware.BLController);
+
   const [userRole, setUserRole] = useState();
 
   useEffect(() => {
@@ -33,7 +38,8 @@ export default function DashboardStack() {
   }, []);
 
   const getUserRole = async () => {
-    setUserRole(await AsyncStorage.getItem('userRole'));
+    const userRoleStorage = await AsyncStorage.getItem('userRole');
+    setUserRole(userRoleStorage);
   };
 
   return (
@@ -56,7 +62,7 @@ export default function DashboardStack() {
             <View style={styles.drawerBodyContainer}>
               <DrawerItemList {...props} />
               <DrawerItem
-                label="Chế Độ Bluetooth"
+                label={BlController ? 'Chế độ Wifi' : 'Chế độ BlueTooth'}
                 labelStyle={styles.label}
                 icon={({focused}) => (
                   <Icon
@@ -65,6 +71,7 @@ export default function DashboardStack() {
                     name="bluetooth"
                   />
                 )}
+                onPress={() => dispatch(setController())}
               />
               <DrawerItem
                 label="Trợ Giúp"

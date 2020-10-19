@@ -11,3 +11,9 @@ export const setInternetConnection = (isConnect) => {
     payload: isConnect,
   };
 };
+
+export const setController = () => {
+  return {
+    type: 'SET CONTROLLER',
+  };
+};

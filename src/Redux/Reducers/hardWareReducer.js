@@ -1,23 +1,23 @@
 const initialState = {
   BLConnection: false,
   WFConnection: false,
+  BLController: true,
 };
 
 const hadwareReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET BLUETOOTH CONNECTION': {
-      let tempState = {...state};
-      tempState.BLConnection = action.payload;
-      state = tempState;
-      return state;
+      return {...state, BLConnection: action.payload};
     }
 
     case 'SET INTERNET CONNECTION': {
-      let tempState = {...state};
-      tempState.WFConnection = action.payload;
-      state = tempState;
-      return state;
+      return {...state, WFConnection: action.payload};
     }
+
+    case 'SET CONTROLLER': {
+      return {...state, BLController: !state.BLController};
+    }
+
     default: {
       return state;
     }

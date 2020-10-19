@@ -40,13 +40,14 @@ export default function HomeScreen({navigation}) {
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
   const BSBlueToothRef = useRef();
-  const connectionStatus = useSelector((state) => state.hardware);
+  const hardwareController = useSelector((state) => state.hardware);
 
   useEffect(() => {
     listenConnection();
     GetUserProflie();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hardwareController.WFConnection]);
+
+ 
 
   async function GetUserProflie() {
     const currentUser = auth().currentUser;
@@ -101,28 +102,32 @@ export default function HomeScreen({navigation}) {
     });
   };
 
-  const setUpBLConnection = () => {
-    if (connectionStatus.BLConnection) {
-      BSBlueToothRef.current.snapTo(0);
-      bleManagerEmitter.addListener('BleManagerStopScan', () =>
-        console.log('scan stopped'),
-      );
-      bleManagerEmitter.addListener(
-        'BleManagerDiscoverPeripheral',
-        (device) => {
-          let duplicateDevice = nearbyDevices.filter(
-            (item) => item.id === device.id,
-          );
-          if (duplicateDevice.length === 0) {
-            nearbyDevices.push(device);
-            setNearbyDevices([...nearbyDevices]);
-          }
-        },
-      );
-      BLEManager.scan([], 15, true).then(() => {
-        console.log('Scanning...');
-        // setScanning(true);
-      });
+  const setUpBLConnection = async () => {
+    if (hardwareController.BLConnection) {
+      const BLDevice = await AsyncStorage.getItem('BLDevice');
+      if (BLDevice) {
+      } else {
+        BSBlueToothRef.current.snapTo(0);
+        bleManagerEmitter.addListener('BleManagerStopScan', () =>
+          console.log('scan stopped'),
+        );
+        bleManagerEmitter.addListener(
+          'BleManagerDiscoverPeripheral',
+          (device) => {
+            let duplicateDevice = nearbyDevices.filter(
+              (item) => item.id === device.id,
+            );
+            if (duplicateDevice.length === 0) {
+              nearbyDevices.push(device);
+              setNearbyDevices([...nearbyDevices]);
+            }
+          },
+        );
+        BLEManager.scan([], 15, true).then(() => {
+          console.log('Scanning...');
+          // setScanning(true);
+        });
+      }
     } else {
       Alert.alert('Vui Lòng Kiểm Tra Trạng Thái BLuetooth');
     }

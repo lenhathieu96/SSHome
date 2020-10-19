@@ -8,6 +8,8 @@ import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
 
+import {addRoom, getRoom_Master} from '../../../Api/roomAPI';
+
 import livingRoomHeader from '../../../Assets/Images/livingRoomHeader.png';
 import bedRoomHeader from '../../../Assets/Images/bedroomHeader.png';
 import kitchenHeader from '../../../Assets/Images/kitchenHeader.png';
@@ -131,7 +133,7 @@ export default function AddRoomScreen({navigation, route}) {
       <TextButton
         text="Tạo Phòng"
         style={styles.btnAddRoom}
-        onPress={() => console.log('create Room')}
+        onPress={() => getRoom_Master()}
       />
     </KeyboardAvoidingView>
   );

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
-import hardwareReducer from './HardwareReducer';
-import userReducer from './UserReducer';
+import hardwareReducer from './hardWareReducer';
+import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
   hardware: hardwareReducer,
