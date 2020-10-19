@@ -135,9 +135,9 @@ export default function DashboardStack() {
           name="personal"
           component={PersonalStack}
           options={{
-            drawerLabel: () => <BoldText>Thành Viên</BoldText>,
+            drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
             drawerIcon: ({focused}) => (
-              <Icon color={'black'} size={fontSize.bigger} name="users" />
+              <Icon color={'black'} size={fontSize.bigger} name="user" />
             ),
           }}
         />

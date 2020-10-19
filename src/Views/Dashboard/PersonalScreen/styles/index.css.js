@@ -5,6 +5,30 @@ import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   masterInfoContainer: {
     flex: 0.2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+  },
+
+  avatarContainer: {
+    flex: 0.3,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 120,
+  },
+
+  infoContainer: {
+    flex: 0.7,
+    marginLeft: 10,
+    justifyContent: 'flex-end',
+  },
+
+  txtInfoContainer: {
+    flexDirection: 'row',
+    marginVertical: 5,
   },
 
   memberListContainer: {

@@ -1,5 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import * as fontSize from '../../../../../Utils/FontSize';
+import Color from '../../../../../Utils/Color';
+
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
@@ -20,15 +22,14 @@ const styles = StyleSheet.create({
   image_container: {
     position: 'relative',
     overflow: 'hidden',
-    backgroundColor: 'red',
+    backgroundColor: Color.secondary,
   },
   image: {
-    flex: 1,
+    flex: 0.8,
     width: null,
     height: null,
   },
   cta_container: {
-    backgroundColor: 'blue',
     position: 'relative',
   },
   text: {
@@ -38,9 +39,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   icon_container: {
-    width: fontSize.biggest,
-    height: fontSize.biggest,
-    borderRadius: 32,
+    width: 1.2 * fontSize.biggest,
+    height: 1.2 * fontSize.biggest,
+    borderRadius: 50,
     backgroundColor: '#3578E5',
     position: 'absolute',
     borderWidth: 3,
@@ -54,10 +55,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   fake_card: {
+    position: 'relative',
     width: 0.4 * width,
     height: 0.6 * width,
-    backgroundColor: '#dddddd',
+    backgroundColor: 'white',
     marginLeft: 5,
+    padding: 5,
     borderWidth: 1,
     borderColor: '#cccccc',
     borderRadius: 16,
@@ -73,6 +76,19 @@ const styles = StyleSheet.create({
   column_spacer: {
     width: 10,
     height: 0.6 * width,
+  },
+  nameContainer: {
+    backgroundColor: Color.secondary,
+    height: 0.4 * width,
+    paddingTop: 5,
+    alignItems: 'center',
+    borderTopRightRadius: 16,
+    borderTopLeftRadius: 16,
+  },
+  txtUserName: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
   },
 });
 
