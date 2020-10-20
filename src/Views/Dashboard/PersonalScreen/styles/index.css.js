@@ -19,6 +19,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 120,
   },
+  btnCamera: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+  },
 
   infoContainer: {
     flex: 0.7,

@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   //Body
   bodyContainer: {
     backgroundColor: Color.secondary,
-    flex: 1,
+    flex: 0.9,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 5,

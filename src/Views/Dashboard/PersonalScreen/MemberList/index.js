@@ -14,7 +14,7 @@ import styles from './styles/index.css';
 import Member from './Member';
 
 export default function MemberList(props) {
-  const {data, showBSPersonal} = props;
+  const {data, showBSPersonal, toogleModal} = props;
   const scrollX = new Animated.Value(0);
   const {width} = Dimensions.get('window');
   // personal card container
@@ -156,7 +156,13 @@ export default function MemberList(props) {
         ])}>
         <View style={styles.fake_card_ghost} />
         {data.map((item, index) => {
-          return <Member Key={index} User={item} />;
+          return (
+            <Member
+              Key={index.toString()}
+              User={item}
+              toogleModal={toogleModal}
+            />
+          );
         })}
         <View style={styles.column_spacer} />
       </Animated.ScrollView>
