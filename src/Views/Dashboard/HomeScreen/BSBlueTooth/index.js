@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
+import BLEManager from 'react-native-ble-manager';
 import IconButton from '../../../../Components/IconButton';
 import Text, {BoldText} from '../../../../Components/Text';
 import Color from '../../../../Utils/Color';
@@ -40,6 +41,11 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => (
               <TouchableOpacity
+                onPress={() =>
+                  BLEManager.connect(item.id)
+                    .then(() => console.log('connected success'))
+                    .catch((error) => console.log('connect fail', error))
+                }
                 style={{
                   backgroundColor: index % 2 === 0 ? 'gray' : 'white',
                   padding: 10,

@@ -6,8 +6,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 
 import Text, {BoldText} from '../../../Components/Text';
+import {getMemberList} from '../../../Api/userAPI';
 
 import RootContainer from '../../../Components/RootContainer';
+import BSPersonal from './BSPersonal';
 
 import userBlank from '../../../Assets/Images/userBlank.png';
 import * as fontSize from '../../../Utils/FontSize';
@@ -15,31 +17,17 @@ import styles from './styles/index.css';
 
 import MemberList from './MemberList';
 
-const userData = [
-  {
-    id: '12',
-    name: 'Member1',
-    phone: '032252385256',
-  },
-  {
-    id: '13',
-    name: 'Member2',
-    phone: '032252385245',
-  },
-  {
-    id: '14',
-    name: 'Member3',
-    phone: '032252385224',
-  },
-];
-
 export default function Personal() {
   const headerHeight = useHeaderHeight();
   const masterInfo = useSelector((state) => state.user);
   const [homeID, setHomeID] = useState();
+  const [memberList, setMemberList] = useState([]);
 
-  useEffect(function () {
+  const BSPersonalRef = useRef();
+
+  useEffect(() => {
     getHomeID();
+    getMembers();
   }, []);
 
   const getHomeID = async () => {
@@ -47,6 +35,16 @@ export default function Personal() {
     if (homeIDStorage) {
       setHomeID(homeIDStorage);
     }
+  };
+
+  const getMembers = async () => {
+    const Users = await getMemberList();
+    setMemberList(Users);
+    // setMemberList(MemberList);
+  };
+
+  const showBSPersonal = () => {
+    BSPersonalRef.current.snapTo(0);
   };
 
   return (
@@ -69,20 +67,21 @@ export default function Personal() {
           </View>
           <View style={styles.txtInfoContainer}>
             <BoldText>Số thành viên: </BoldText>
-            <Text>3</Text>
+            <Text>{memberList.length}</Text>
           </View>
         </View>
       </View>
       {/* Member List */}
       <View style={styles.memberListContainer}>
         <BoldText style={styles.title}>Danh sách thành viên</BoldText>
-        <MemberList data={userData} />
+        <MemberList data={memberList} showBSPersonal={showBSPersonal} />
       </View>
       {/* Home ID */}
       <SafeAreaView style={styles.QRCodeContainer}>
         <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
         <QRCode value={homeID} size={4 * fontSize.biggest} />
       </SafeAreaView>
+      <BSPersonal ref={BSPersonalRef} />
     </RootContainer>
   );
 }

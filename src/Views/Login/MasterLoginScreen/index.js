@@ -1,12 +1,15 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
-import {handleMasterLogin} from '../../../Api/userAPI';
+import {
+  handleMasterLogin,
+  handleMasterForgotPassword,
+} from '../../../Api/userAPI';
 
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
@@ -67,6 +70,16 @@ export default function MasterLoginScreen({navigation}) {
           onLogin();
         }}
       />
+      <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+        <Text style={{alignSelf: 'center', color: 'black'}}>
+          Đăng Ký Chủ Nhà
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => handleMasterForgotPassword('lenhathieu96@gmail.com')}>
+        <Text style={{alignSelf: 'center', color: 'black'}}>Quên Mật Khẩu</Text>
+      </TouchableOpacity>
     </RootContainer>
   );
 }

@@ -54,6 +54,13 @@ export const handleMasterLogin = async (email, password) => {
   }
 };
 
+export const handleMasterForgotPassword = async (email) => {
+  auth()
+    .sendPasswordResetEmail(email)
+    .then(() => console.log('email sent'))
+    .catch((error) => console.log(error));
+};
+
 export const hanldeMemberSignUp = async (homeID, signupForm) => {
   try {
     await firestore()
@@ -65,6 +72,28 @@ export const hanldeMemberSignUp = async (homeID, signupForm) => {
   } catch (error) {
     console.log('error while create new member: ', error);
     return '';
+  }
+};
+
+export const getMemberList = async () => {
+  const homeIDStorage = await AsyncStorage.getItem('homeID');
+  try {
+    let Users = [];
+    const data = await firestore()
+      .collection('Home')
+      .doc(homeIDStorage)
+      .collection('Member')
+      .get();
+    data.docs.forEach((userData) => {
+      let user = {
+        id: userData.id,
+        ...userData.data(),
+      };
+      Users.push(user);
+    });
+    return Users;
+  } catch (error) {
+    console.log(error);
   }
 };
 

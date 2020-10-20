@@ -1,9 +1,8 @@
 import React from 'react';
-import {ImageBackground, View, Image, TouchableOpacity} from 'react-native';
+import {ImageBackground, View, Image} from 'react-native';
 
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
-import Text, {BoldText} from '../../../Components/Text';
 
 import appLogo from '../../../Assets/Images/appLogo.png';
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
@@ -30,11 +29,6 @@ export default function LoginScreen({navigation}) {
             textStyle={{color: Color.primary}}
             onPress={async () => navigation.navigate('member')}
           />
-          <TouchableOpacity onPress={() => navigation.navigate('signup')}>
-            <Text style={{alignSelf: 'center', color: 'black'}}>
-              Đăng Ký Chủ Nhà
-            </Text>
-          </TouchableOpacity>
         </View>
       </RootContainer>
     </ImageBackground>

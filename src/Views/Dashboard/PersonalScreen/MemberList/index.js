@@ -14,7 +14,7 @@ import styles from './styles/index.css';
 import Member from './Member';
 
 export default function MemberList(props) {
-  const {data} = props;
+  const {data, showBSPersonal} = props;
   const scrollX = new Animated.Value(0);
   const {width} = Dimensions.get('window');
   // personal card container
@@ -92,7 +92,7 @@ export default function MemberList(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => console.log('ayyyo')}>
+      <TouchableWithoutFeedback onPress={() => showBSPersonal()}>
         <Animated.View
           style={[
             styles.personal_card_container,

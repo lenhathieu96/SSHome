@@ -44,10 +44,15 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     listenConnection();
-    GetUserProflie();
-  }, [hardwareController.WFConnection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
- 
+  useEffect(() => {
+    GetUserProflie();
+    if (hardwareController.BLController) {
+      setUpBLConnection();
+    }
+  }, [hardwareController.BLConnection, hardwareController.WFConnection]);
 
   async function GetUserProflie() {
     const currentUser = auth().currentUser;
@@ -129,6 +134,7 @@ export default function HomeScreen({navigation}) {
         });
       }
     } else {
+      BSBlueToothRef.current.snapTo(1);
       Alert.alert('Vui Lòng Kiểm Tra Trạng Thái BLuetooth');
     }
   };
