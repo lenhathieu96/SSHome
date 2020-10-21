@@ -2,19 +2,22 @@ import React from 'react';
 import {
   Dimensions,
   View,
-  Image,
   Animated,
   TouchableWithoutFeedback,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import * as fontSize from '../../../../Utils/FontSize';
+import Text from '../../../../Components/Text';
+
 import userBlank from '../../../../Assets/Images/userBlank.png';
+import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
-import Member from './Member';
 
 export default function MemberList(props) {
-  const {data, showBSPersonal, toogleModal} = props;
+  const {data, showBSPersonal, onChoseUser} = props;
+
   const scrollX = new Animated.Value(0);
   const {width} = Dimensions.get('window');
   // personal card container
@@ -157,11 +160,13 @@ export default function MemberList(props) {
         <View style={styles.fake_card_ghost} />
         {data.map((item, index) => {
           return (
-            <Member
-              Key={index.toString()}
-              User={item}
-              toogleModal={toogleModal}
-            />
+            <TouchableOpacity
+              onLongPress={() => onChoseUser(item)}
+              key={index.toString()}>
+              <ImageBackground source={userBlank} style={styles.fake_card}>
+                <Text style={styles.txtUserName}>{item.name}</Text>
+              </ImageBackground>
+            </TouchableOpacity>
           );
         })}
         <View style={styles.column_spacer} />

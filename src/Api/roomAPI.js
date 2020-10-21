@@ -3,8 +3,6 @@ import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const MASTER_UID = auth().currentUser.uid;
-
 export const addRoom = async () => {
   const homeID = await AsyncStorage.getItem('homeID');
   const roomID = `R${homeID.slice(2, 5)}${createID()}`;

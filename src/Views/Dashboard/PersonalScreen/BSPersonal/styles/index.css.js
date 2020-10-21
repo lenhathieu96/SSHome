@@ -10,20 +10,19 @@ const styles = StyleSheet.create({
     height: 0.7 * height,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    position: 'relative',
+    zIndex: 1000,
   },
   BSTitle: {
     textAlign: 'center',
     fontSize: fontSize.large,
   },
   input: {
+    marginVertical: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
     backgroundColor: 'white',
-  },
-  formController: {
-    height: 0.3 * height,
-    justifyContent: 'space-around',
   },
 });
 

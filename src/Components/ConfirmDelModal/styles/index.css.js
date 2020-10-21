@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import * as fontSize from '../../../Utils/fontSize';
-import color from '../../../Utils/Color';
+import * as fontSize from '../../../Utils/FontSize';
+import Color from '../../../Utils/Color';
 
 const styles = StyleSheet.create({
   ModalContainer: {
@@ -8,8 +8,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 20,
+    borderColor: Color.primary,
     width: 10 * fontSize.biggest,
     backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   ModalText: {
     textAlign: 'center',
@@ -22,16 +32,17 @@ const styles = StyleSheet.create({
   },
   btnDeny: {
     borderWidth: 1,
-    borderColor: color.primary,
+    borderColor: Color.primary,
+    backgroundColor: 'white',
     margin: 10,
     flex: 0.4,
   },
   btnDeny__Text: {
-    color: color.primary,
+    color: Color.primary,
   },
 
   btnAccept: {
-    backgroundColor: color.primary,
+    backgroundColor: Color.primary,
     margin: 10,
     flex: 0.4,
   },

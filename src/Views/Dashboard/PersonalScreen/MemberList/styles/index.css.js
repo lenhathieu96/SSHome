@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
   personal_card_container: {
     backgroundColor: '#ffffff',
     position: 'absolute',
-    zIndex: 10,
-    elevation: 10,
+    zIndex: 1,
+    elevation: 1,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     overflow: 'hidden',
