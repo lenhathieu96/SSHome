@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {useSelector} from 'react-redux';
@@ -12,32 +11,30 @@ import CameraScreen from '../../../Views/Dashboard/CameraScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
-import { Form } from 'formik';
 
 const HomeStacks = createStackNavigator();
 
 export default function HomeStack() {
-  const BLController = useSelector((state)=>state.hardware.BLController);
+  const BLController = useSelector((state) => state.hardware.BLController);
   return (
     <HomeStacks.Navigator>
       <HomeStacks.Screen
         name="Home"
         component={HomeScreen}
         options={({navigation}) => ({
-          ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
           headerTitle: 'SSHOME',
-          headerTitleStyle:{
+          headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
             alignSelf: 'center',
-            fontFamily:'MavenPro-Bold',
+            fontFamily: 'MavenPro-Bold',
           },
           headerLeft: () => (
             <Icon.Button
               name="bar-chart-2"
-              style={{transform:[{rotate:'90deg'}]}}
-              color= {Color.primary}
+              style={{transform: [{rotate: '90deg'}]}}
+              color={Color.primary}
               size={fontSize.bigger}
               backgroundColor="transparent"
               borderRadius={10}
@@ -63,7 +60,6 @@ export default function HomeStack() {
         name="Room"
         component={RoomScreen}
         options={({navigation}) => ({
-          ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
           headerTitle: null,
           headerLeft: () => (

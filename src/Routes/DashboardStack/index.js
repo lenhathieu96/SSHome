@@ -22,7 +22,6 @@ import PersonalStack from './PersonalStack';
 import styles from './styles/index.css';
 import * as fontSize from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
-import flagVn from '../../Assets/Images/vietnam.png';
 
 const DashboardDrawer = createDrawerNavigator();
 

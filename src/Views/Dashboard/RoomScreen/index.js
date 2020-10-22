@@ -50,7 +50,7 @@ const ITEM_SIZE = 0.6 * width;
 const SPACER_SIZE = (width - ITEM_SIZE) / 2;
 
 export default function RoomDetailScreen({navigation, route}) {
-  const {roomData, pictureUri} = route.params;
+  const {roomData, pictureUri, imgBG} = route.params;
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const [customHeader, setCustomHeader] = useState(false);
@@ -96,101 +96,8 @@ export default function RoomDetailScreen({navigation, route}) {
   };
 
   return (
-    <RootContainer safeArea={false}>
-      <View style={styles.headerContainer}>
-        <ImageBackground
-          source={customHeader ? {uri: bgHeader} : bgHeader}
-          style={styles.headerBg}
-          resizeMode="stretch"
-          imageStyle={styles.imgBg}
-        />
-        <View style={styles.titleContainer}>
-          {isBtnChangeVisible ? (
-            <TextButton
-              text="Lưu thay đổi"
-              onPress={() => onConfirmPicture()}
-              style={styles.btnChangeBg}
-              textStyle={styles.txtBtnChangeBg}
-            />
-          ) : null}
-          <BoldText style={styles.title}>{roomData.name}</BoldText>
-        </View>
-      </View>
-
-      <View style={styles.bodyContainer}>
-        <BoldText style={styles.deviceTitle}>Danh Sách Thiết Bị</BoldText>
-        <Animated.FlatList
-          style={styles.listDevice}
-          contentContainerStyle={{alignItems: 'flex-end'}}
-          data={listDevices}
-          keyExtractor={(item, index) => index.toString()}
-          snapToInterval={ITEM_SIZE}
-          //speed of scroll, normal is 0.9
-          decelerationRate={0.5}
-          bounces={false}
-          horizontal
-          snapToAlignment="start"
-          showsHorizontalScrollIndicator={false}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: true},
-          )}
-          renderItem={({item, index}) => {
-            const inputRange = [
-              (index - 2) * ITEM_SIZE,
-              (index - 1) * ITEM_SIZE,
-              index * ITEM_SIZE,
-            ];
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [0, -(0.2 * ITEM_SIZE), 0],
-              extrapolate: 'clamp',
-            });
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.3, 1, 0.3],
-            });
-            if (!item.name) {
-              return (
-                <View
-                  style={{
-                    width: SPACER_SIZE,
-                  }}
-                />
-              );
-            }
-            return (
-              <DeviceButton
-                opacity={opacity}
-                translateY={translateY}
-                index={index}
-                name={item.name}
-                status={item.status}
-                onChangeDeviceStatus={onChangeDeviceStatus}
-              />
-            );
-          }}
-        />
-      </View>
-
-      <View style={styles.footerContainer}>
-        <IconButton
-          iconName="sync-alt"
-          iconColor={'black'}
-          iconSize={fontSize.larger}
-        />
-        <IconButton
-          iconName="microphone"
-          iconColor={Color.primary}
-          iconSize={fontSize.biggest}
-          style={styles.floatButton}
-        />
-        <IconButton
-          iconName="plus"
-          iconColor={'black'}
-          iconSize={fontSize.huge}
-        />
-      </View>
-    </RootContainer>
+    <ImageBackground source={imgBG}>
+    
+    </ImageBackground>
   );
 }
