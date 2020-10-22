@@ -8,8 +8,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 20,
+    borderColor: Color.primary,
     width: 10 * fontSize.biggest,
     backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   ModalText: {
     textAlign: 'center',
@@ -23,6 +33,7 @@ const styles = StyleSheet.create({
   btnDeny: {
     borderWidth: 1,
     borderColor: Color.primary,
+    backgroundColor: 'white',
     margin: 10,
     flex: 0.4,
   },

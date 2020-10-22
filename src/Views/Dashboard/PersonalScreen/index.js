@@ -1,10 +1,11 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, SafeAreaView, Image, ImageBackground} from 'react-native';
+import {View, SafeAreaView, Image} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
+import {Portal} from 'react-native-paper';
 
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/ConfirmDelModal';
@@ -24,10 +25,12 @@ import MemberList from './MemberList';
 export default function Personal() {
   const headerHeight = useHeaderHeight();
   const masterInfo = useSelector((state) => state.user);
+
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
   const [avatarSrc, setAvatarSrc] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [chosenUser, setChosenUser] = useState();
 
   const BSPersonalRef = useRef();
 
@@ -61,6 +64,16 @@ export default function Personal() {
     setModalVisible(isShowConfirmModal);
   };
 
+  const onChoseUser = (user) => {
+    setChosenUser(user);
+    toogleModal(true);
+  };
+
+  const delUser = () => {
+    toogleModal(false);
+    console.log(chosenUser.id);
+  };
+
   const selectPhotoTapped = () => {
     const options = {
       quality: 1.0,
@@ -87,15 +100,16 @@ export default function Personal() {
     });
   };
   return (
-    <RootContainer
-      safeArea={false}
-      style={{marginTop: headerHeight, justifyContent: 'space-between'}}>
-      {/* Master Info */}
-      <View style={styles.masterInfoContainer}>
-        <View style={styles.avatarContainer}>
-          <ImageBackground
-            source={avatarSrc ? avatarSrc : userBlank}
-            style={styles.avatar}>
+    <Portal>
+      <RootContainer
+        safeArea={false}
+        style={{
+          marginTop: headerHeight,
+          justifyContent: 'space-between',
+        }}>
+        {/* Master Info */}
+        <View style={styles.masterInfoContainer}>
+          <View style={styles.avatarContainer}>
             <IconButton
               iconName="camera"
               onPress={() => showBSPersonal()}
@@ -103,31 +117,47 @@ export default function Personal() {
               iconSize={fontSize.biggest}
               iconColor={Color.primary}
             />
-          </ImageBackground>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Tên: </BoldText>
+              <Text>{masterInfo.name}</Text>
+            </View>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Email: </BoldText>
+              <Text>{masterInfo.email}</Text>
+            </View>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Số thành viên: </BoldText>
+              <Text>{memberList.length}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Tên: </BoldText>
-            <Text>{masterInfo.name}</Text>
-          </View>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Email: </BoldText>
-            <Text>{masterInfo.email}</Text>
-          </View>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Số thành viên: </BoldText>
-            <Text>{memberList.length}</Text>
-          </View>
+        {/* Member List */}
+        <View style={styles.memberListContainer}>
+          <BoldText style={styles.title}>Danh sách thành viên</BoldText>
+          <MemberList
+            data={memberList}
+            showBSPersonal={showBSPersonal}
+            onChoseUser={onChoseUser}
+          />
         </View>
-      </View>
-      {/* Member List */}
-      {/* Home ID */}
-      <SafeAreaView style={styles.QRCodeContainer}>
-        <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
-        <QRCode value={homeID} size={4 * fontSize.biggest} />
-      </SafeAreaView>
-      <BSPersonal ref={BSPersonalRef} addNewMember={addNewMember} />
-      <ConfirmDelModal modalVisible={modalVisible} toogleModal={toogleModal} />
-    </RootContainer>
+        {/* Home ID */}
+        <SafeAreaView style={styles.QRCodeContainer}>
+          <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
+          <QRCode value={homeID} size={4 * fontSize.biggest} />
+        </SafeAreaView>
+
+        <BSPersonal ref={BSPersonalRef} addNewMember={addNewMember} />
+        <ConfirmDelModal
+          modalVisible={modalVisible}
+          toggleModal={toogleModal}
+          title={`${
+            chosenUser ? chosenUser.name : ''
+          } sẽ bị xoá khỏi danh sách thành viên`}
+          onAccept={delUser}
+        />
+      </RootContainer>
+    </Portal>
   );
 }

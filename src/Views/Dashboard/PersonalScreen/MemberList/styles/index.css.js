@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     position: 'absolute',
     zIndex: 1,
-    elevation: 10,
+    elevation: 1,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     overflow: 'hidden',

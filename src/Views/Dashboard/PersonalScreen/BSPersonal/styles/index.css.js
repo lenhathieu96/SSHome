@@ -18,14 +18,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize.large,
   },
   input: {
+    marginVertical: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
     backgroundColor: 'white',
-  },
-  formController: {
-    height: 0.3 * height,
-    justifyContent: 'space-around',
   },
 });
 

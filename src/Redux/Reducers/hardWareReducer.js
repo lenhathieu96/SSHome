@@ -1,7 +1,7 @@
 const initialState = {
   BLConnection: false,
   WFConnection: false,
-  BLController: true,
+  BLController: false,
 };
 
 const hadwareReducer = (state = initialState, action) => {

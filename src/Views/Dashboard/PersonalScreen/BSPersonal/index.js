@@ -37,32 +37,31 @@ const BSPersonal = React.forwardRef((props, ref) => {
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>
-          <View style={styles.formController}>
-            <TextInput
-              ref={inputRef}
-              value={name}
-              onChangeText={(text) => setName(text)}
-              label="Tên thành viên"
-              mode="outlined"
-              style={styles.input}
-              theme={{
-                colors: {primary: Color.primary, underlineColor: 'transparent'},
-              }}
-            />
-            <TextInput
-              value={phone}
-              onChangeText={(text) => setPhone(text)}
-              label="Số điện thoại"
-              keyboardType="number-pad"
-              mode="outlined"
-              style={styles.input}
-              theme={{
-                colors: {primary: Color.primary, underlineColor: 'transparent'},
-              }}
-            />
-            <BoldText>Danh sách phòng được phép truy cập</BoldText>
-            <TextButton text="Thêm Mới" onPress={() => handleOnClickAdd()} />
-          </View>
+
+          <TextInput
+            ref={inputRef}
+            value={name}
+            onChangeText={(text) => setName(text)}
+            label="Tên thành viên"
+            mode="outlined"
+            style={styles.input}
+            theme={{
+              colors: {primary: Color.primary, underlineColor: 'transparent'},
+            }}
+          />
+          <TextInput
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+            label="Số điện thoại"
+            keyboardType="number-pad"
+            mode="outlined"
+            style={styles.input}
+            theme={{
+              colors: {primary: Color.primary, underlineColor: 'transparent'},
+            }}
+          />
+          <BoldText>Danh sách phòng được phép truy cập</BoldText>
+          <TextButton text="Thêm Mới" onPress={() => handleOnClickAdd()} />
         </View>
       )}
     />

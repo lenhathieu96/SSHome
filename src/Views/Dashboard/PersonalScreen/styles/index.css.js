@@ -19,12 +19,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 120,
   },
-  btnCamera: {
-    position: 'absolute',
-    bottom: 10,
-    alignSelf: 'center',
-  },
-
   infoContainer: {
     flex: 0.7,
     marginLeft: 10,
@@ -38,30 +32,17 @@ const styles = StyleSheet.create({
 
   memberListContainer: {
     flex: 0.4,
-    position: 'relative',
-  },
-  memberList: {
-    position: 'relative',
   },
   btnAddContainer: {
     backgroundColor: '#ffffff',
-    position: 'absolute',
-    zIndex: 1,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#cccccc',
   },
-  imageContainer: {
-    position: 'relative',
-    overflow: 'hidden',
-  },
   text: {
     textAlign: 'center',
-  },
-  cta_container: {
-    position: 'relative',
   },
   icon_container: {
     width: 32,
