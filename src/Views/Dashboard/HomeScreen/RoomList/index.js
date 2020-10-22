@@ -1,5 +1,6 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {View, Dimensions, Animated} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import RoomButton from './RoomButton';
 
@@ -40,11 +41,24 @@ export default function RoomList({navigation}) {
   const ITEM_SIZE = 0.7 * width;
   const SPACER_SIZE = (width - ITEM_SIZE) / 2;
   const scrollX = useRef(new Animated.Value(0)).current;
+
+  const [rooms, setRooms] = useState([]);
+
+  const availableRooms = useSelector((state) => state.user.availableRoom);
+
+  useEffect(() => {
+    if (availableRooms) {
+      availableRooms.push({});
+      availableRooms.unshift({});
+      setRooms(availableRooms);
+    }
+  }, [availableRooms]);
+
   return (
     <Animated.FlatList
       style={styles.roomlist}
       contentContainerStyle={{alignItems: 'flex-end'}}
-      data={data}
+      data={rooms}
       keyExtractor={(item, index) => index.toString()}
       snapToInterval={ITEM_SIZE}
       //speed of scroll, normal is 0.9

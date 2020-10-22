@@ -1,1 +1,2 @@
 # SSHome
+fix master phone

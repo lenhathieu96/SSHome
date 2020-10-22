@@ -1,5 +1,10 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
+
+import {Platform} from 'react-native';
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const handleMasterSignUp = async (signupForm) => {
@@ -146,32 +151,65 @@ export const getMasterProfile = async (userID) => {
   if (User.docs.length > 0) {
     const UserData = User.docs[0];
     await AsyncStorage.setItem('homeID', UserData.id);
+    const rooms = await database().ref(UserData.id).once('value');
+
     return {
       name: UserData.data().name,
       phone: UserData.data().phone,
       email: UserData.data().email,
+      avatar: UserData.data().avatar,
+      availableRoom: Object.values(rooms.val()),
     };
   }
 };
 
-export const getMemberProfile = async (phone, homeID) => {
-  firestore()
+export const getMemberProfile = async (phone) => {
+  const homeID = await AsyncStorage.getItem('homeID');
+  const User = await firestore()
     .collection('Home')
     .doc(homeID)
     .collection('Member')
     .where('phone', '==', phone)
-    .onSnapshot((document) => {
-      const UserData = document.docs[0];
-      if (UserData) {
-        return {
-          name: UserData.data().name,
-          phone: UserData.data().phone,
-          email: UserData.data().email,
-        };
-      } else {
-        handleLogout();
+    .get();
+  if (User.docs.length > 0) {
+    const result = [];
+    const UserData = User.docs[0];
+    const userAvailableRooms = UserData.data().availableRoom;
+    const roomlist = await database().ref(homeID).once('value');
+
+    userAvailableRooms.forEach((roomID) => {
+      for (const room in roomlist.val()) {
+        if (room === roomID) {
+          result.push(roomlist.val()[room]);
+        }
       }
     });
+
+    return {
+      name: UserData.data().name,
+      phone: UserData.data().phone,
+      email: UserData.data().email,
+      availableRoom: result,
+    };
+  }
+};
+
+export const uploadMasterAvatar = async (imageURI) => {
+  const homeID = await AsyncStorage.getItem('homeID');
+  // const filename = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+  // const uploadUri =
+  //   Platform.OS === 'ios' ? imageURI.replace('file://', '') : imageURI;
+
+  const reference = storage().ref(`/${homeID}/Master`);
+  try {
+    await reference.putFile(imageURI);
+    const URL = await reference.getDownloadURL();
+    await firestore().collection('Home').doc(homeID).update({avatar: URL});
+    return {result: true, uri: URL};
+  } catch (error) {
+    console.log(error);
+    return {result: false};
+  }
 };
 
 export const handleLogout = () => {

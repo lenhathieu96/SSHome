@@ -1,11 +1,10 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, SafeAreaView, Image} from 'react-native';
+import {View, SafeAreaView, ImageBackground} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
-import {Portal} from 'react-native-paper';
 
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/ConfirmDelModal';
@@ -13,9 +12,10 @@ import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 import BSPersonal from './BSPersonal';
 
-import {getMemberList} from '../../../Api/userAPI';
+import {getMemberList, uploadMasterAvatar} from '../../../Api/userAPI';
+import {updateAvatar} from '../../../Redux/ActionCreators/userActions';
 
-import userBlank from '../../../Assets/Images/userBlank.png';
+import profileAvatar from '../../../Assets/Images/profile.png';
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
@@ -24,11 +24,11 @@ import MemberList from './MemberList';
 
 export default function Personal() {
   const headerHeight = useHeaderHeight();
+  const dispatch = useDispatch();
   const masterInfo = useSelector((state) => state.user);
 
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
-  const [avatarSrc, setAvatarSrc] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [chosenUser, setChosenUser] = useState();
 
@@ -83,81 +83,94 @@ export default function Personal() {
         skipBackup: true,
       },
     };
-
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-      } else if (response.error) {
+      if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
       } else {
         let source = {uri: response.uri};
-        setAvatarSrc(source);
+        const res = await uploadMasterAvatar(source.uri);
+        if (res.result) {
+          console.log('upload success');
+          dispatch(updateAvatar(res.uri));
+        } else {
+          console.log('upload failed');
+        }
       }
     });
   };
-  return (
-    <Portal>
-      <RootContainer
-        safeArea={false}
-        style={{
-          marginTop: headerHeight,
-          justifyContent: 'space-between',
-        }}>
-        {/* Master Info */}
-        <View style={styles.masterInfoContainer}>
-          <View style={styles.avatarContainer}>
-            <IconButton
-              iconName="camera"
-              onPress={() => showBSPersonal()}
-              style={styles.btnCamera}
-              iconSize={fontSize.biggest}
-              iconColor={Color.primary}
-            />
-          </View>
-          <View style={styles.infoContainer}>
-            <View style={styles.txtInfoContainer}>
-              <BoldText>Tên: </BoldText>
-              <Text>{masterInfo.name}</Text>
-            </View>
-            <View style={styles.txtInfoContainer}>
-              <BoldText>Email: </BoldText>
-              <Text>{masterInfo.email}</Text>
-            </View>
-            <View style={styles.txtInfoContainer}>
-              <BoldText>Số thành viên: </BoldText>
-              <Text>{memberList.length}</Text>
-            </View>
-          </View>
-        </View>
-        {/* Member List */}
-        <View style={styles.memberListContainer}>
-          <BoldText style={styles.title}>Danh sách thành viên</BoldText>
-          <MemberList
-            data={memberList}
-            showBSPersonal={showBSPersonal}
-            onChoseUser={onChoseUser}
-          />
-        </View>
-        {/* Home ID */}
-        <SafeAreaView style={styles.QRCodeContainer}>
-          <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
-          <QRCode value={homeID} size={4 * fontSize.biggest} />
-        </SafeAreaView>
 
-        <BSPersonal ref={BSPersonalRef} addNewMember={addNewMember} />
-        <ConfirmDelModal
-          modalVisible={modalVisible}
-          toggleModal={toogleModal}
-          title={`${
-            chosenUser ? chosenUser.name : ''
-          } sẽ bị xoá khỏi danh sách thành viên`}
-          onAccept={delUser}
+  return (
+    <RootContainer
+      safeArea={false}
+      style={{
+        marginTop: headerHeight,
+        justifyContent: 'space-between',
+      }}>
+      {/* Master Info */}
+      <View style={styles.masterInfoContainer}>
+        <View style={styles.avatarContainer}>
+          <ImageBackground
+            source={
+              masterInfo.avatar !== ''
+                ? {uri: masterInfo.avatar}
+                : profileAvatar
+            }
+            style={styles.avatar}>
+            <View style={styles.btnCameraContainer}>
+              <IconButton
+                iconName="camera"
+                onPress={() => selectPhotoTapped()}
+                style={styles.btnCamera}
+                iconSize={fontSize.biggest}
+                iconColor={Color.primary}
+              />
+            </View>
+          </ImageBackground>
+        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.txtInfoContainer}>
+            <BoldText>Tên: </BoldText>
+            <Text>{masterInfo.name}</Text>
+          </View>
+          <View style={styles.txtInfoContainer}>
+            <BoldText>Email: </BoldText>
+            <Text>{masterInfo.email}</Text>
+          </View>
+          <View style={styles.txtInfoContainer}>
+            <BoldText>Số thành viên: </BoldText>
+            <Text>{memberList.length}</Text>
+          </View>
+        </View>
+      </View>
+      {/* Member List */}
+      <View style={styles.memberListContainer}>
+        <BoldText style={styles.title}>Danh sách thành viên</BoldText>
+        <MemberList
+          data={memberList}
+          showBSPersonal={showBSPersonal}
+          onChoseUser={onChoseUser}
         />
-      </RootContainer>
-    </Portal>
+      </View>
+      {/* Home ID */}
+      <SafeAreaView style={styles.QRCodeContainer}>
+        <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
+        <QRCode value={homeID} size={4 * fontSize.biggest} />
+      </SafeAreaView>
+
+      <BSPersonal
+        ref={BSPersonalRef}
+        addNewMember={addNewMember}
+        roomList={masterInfo.availableRoom}
+      />
+      <ConfirmDelModal
+        modalVisible={modalVisible}
+        toggleModal={toogleModal}
+        title={`${
+          chosenUser ? chosenUser.name : ''
+        } sẽ bị xoá khỏi danh sách thành viên`}
+        onAccept={delUser}
+      />
+    </RootContainer>
   );
 }

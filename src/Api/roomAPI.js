@@ -9,6 +9,7 @@ export const addRoom = async () => {
   let roomData = {
     [roomID]: {
       name: 'Phòng Khách',
+      id: roomID,
     },
   };
   try {
@@ -16,12 +17,6 @@ export const addRoom = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export const getRoom_Master = async () => {
-  const homeID = await AsyncStorage.getItem('homeID');
-  const rooms = await database().ref(homeID).once('value');
-  console.log(rooms);
 };
 
 function createID() {

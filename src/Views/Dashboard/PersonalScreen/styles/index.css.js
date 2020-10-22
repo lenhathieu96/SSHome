@@ -12,13 +12,19 @@ const styles = StyleSheet.create({
 
   avatarContainer: {
     flex: 0.3,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   avatar: {
-    width: 100,
-    height: 120,
+    flex: 1,
+    justifyContent: 'flex-end',
   },
+  btnCameraContainer: {
+    flex: 0.3,
+    backgroundColor: Color.background,
+    opacity: 0.7,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   infoContainer: {
     flex: 0.7,
     marginLeft: 10,
@@ -61,17 +67,10 @@ const styles = StyleSheet.create({
     color: Color.primary,
     padding: 5,
     alignSelf: 'flex-start',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
   },
   QRCodeContainer: {
+    position: 'relative',
+    zIndex: 0,
     padding: 5,
     flex: 0.3,
     alignItems: 'center',

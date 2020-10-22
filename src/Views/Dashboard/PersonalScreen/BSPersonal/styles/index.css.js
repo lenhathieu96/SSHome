@@ -4,25 +4,39 @@ import Color from '../../../../../Utils/Color';
 
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  Body: {
-    backgroundColor: Color.red,
-    position: 'relative',
-    zIndex: 10,
-    padding: 10,
-    height: 0.7 * height,
+  Header: {
+    backgroundColor: Color.background,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    alignItems: 'center',
+  },
+  Body: {
+    backgroundColor: Color.background,
+    padding: 10,
+    height: 0.67 * height,
+    justifyContent: 'space-between',
   },
   BSTitle: {
     textAlign: 'center',
     fontSize: fontSize.large,
   },
   input: {
-    marginVertical: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
     backgroundColor: 'white',
+  },
+  radioButtonContainer: {
+    flex: 0.6,
+  },
+  listRoom: {
+    justifyContent: 'space-between',
+  },
+  radioButton: {
+    marginHorizontal: 15,
+    marginVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

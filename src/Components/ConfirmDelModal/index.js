@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {Modal} from 'react-native-paper';
+import Modal from 'react-native-modal';
 
 import PropTypes from 'prop-types';
 
@@ -13,27 +13,26 @@ export default function Confirm(props) {
   const {title, toggleModal, modalVisible, onAccept} = props;
 
   return (
-    <Modal
-      visible={modalVisible}
-      contentContainerStyle={styles.ModalContainer}
-      theme={{colors: {backdrop: 'transparent'}}}>
-      <BoldText style={styles.ModalText}>{title}</BoldText>
-      <Text style={styles.ModalText}>Bạn có chắc chắn muốn xoá ?</Text>
-      <View style={styles.ButtonWrapper}>
-        <TextButton
-          text="Không"
-          style={styles.btnDeny}
-          textStyle={styles.btnDeny__Text}
-          onPress={() => {
-            toggleModal(false);
-          }}
-        />
-        <TextButton
-          text="Có"
-          style={styles.btnAccept}
-          textStyle={styles.btnAccept__Text}
-          onPress={() => onAccept()}
-        />
+    <Modal isVisible={modalVisible}>
+      <View style={styles.ModalContainer}>
+        <BoldText style={styles.ModalText}>{title}</BoldText>
+        <Text style={styles.ModalText}>Bạn có chắc chắn muốn xoá ?</Text>
+        <View style={styles.ButtonWrapper}>
+          <TextButton
+            text="Không"
+            style={styles.btnDeny}
+            textStyle={styles.btnDeny__Text}
+            onPress={() => {
+              toggleModal(false);
+            }}
+          />
+          <TextButton
+            text="Có"
+            style={styles.btnAccept}
+            textStyle={styles.btnAccept__Text}
+            onPress={() => onAccept()}
+          />
+        </View>
       </View>
     </Modal>
   );

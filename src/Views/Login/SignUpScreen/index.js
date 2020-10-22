@@ -1,8 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {KeyboardAvoidingView, View, ScrollView} from 'react-native';
+import {KeyboardAvoidingView, View, ScrollView, TextInput} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {Formik} from 'formik';
-import {TextInput} from 'react-native-paper';
 import * as Yup from 'yup';
 
 import {handleMasterSignUp} from '../../../Api/userAPI';

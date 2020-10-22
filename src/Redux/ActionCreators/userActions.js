@@ -11,3 +11,17 @@ export const setUserProfile = (userProfile) => {
     payload: userProfile,
   };
 };
+
+export const setAvailableRoom = (roomList) => {
+  return {
+    type: 'SET AVAILABLE ROOM',
+    payload: roomList,
+  };
+};
+
+export const updateAvatar = (avatarURI) => {
+  return {
+    type: 'SET AVATAR',
+    payload: avatarURI,
+  };
+};

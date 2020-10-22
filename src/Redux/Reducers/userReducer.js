@@ -3,6 +3,8 @@ const initialState = {
   name: '',
   phone: '',
   email: '',
+  avatar: '',
+  availableRoom: [],
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -16,7 +18,15 @@ const UserReducer = (state = initialState, action) => {
         name: action.payload.name,
         phone: action.payload.phone.slice(3),
         email: action.payload.email,
+        avatar: action.payload.avatar,
+        availableRoom: action.payload.availableRoom,
       };
+
+    case 'SET AVAILABLE ROOM':
+      return {...state, availableRoom: action.payload};
+
+    case 'SET AVATAR':
+      return {...state, avatar: action.payload};
 
     default:
       return state;

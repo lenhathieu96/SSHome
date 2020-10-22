@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, ImageBackground, KeyboardAvoidingView} from 'react-native';
-import {TextInput} from 'react-native-paper';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {RadioButton} from 'react-native-paper';
+import {RadioButton, TextInput} from 'react-native-paper';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';

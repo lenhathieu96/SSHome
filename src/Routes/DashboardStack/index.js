@@ -49,7 +49,7 @@ export default function DashboardStack() {
           <DrawerContentScrollView {...props}>
             {/* Header */}
             <View style={styles.drawerHeaderContainer}>
-              <Image source={flagVn} style={styles.avatar} />
+              <Image source={{uri: UserProfile.avatar}} style={styles.avatar} />
               <View style={styles.userInfoContainer}>
                 <BoldText style={styles.userName}>{UserProfile.name}</BoldText>
                 <Text style={styles.userInfo}>(+84) {UserProfile.phone}</Text>

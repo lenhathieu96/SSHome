@@ -1,8 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, TextInput} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {TextInput} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Text, {BoldText} from '../../../Components/Text';
@@ -10,7 +8,6 @@ import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 
-import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {handleMemberLogin} from '../../../Api/userAPI';
 
 import VNFlag from '../../../Assets/Images/vietnam.png';
@@ -21,7 +18,6 @@ import styles from './styles/index.css';
 export default function MemberLoginScreen({navigation, route}) {
   const headerHeight = useHeaderHeight();
   const inputRef = useRef();
-  const dispatch = useDispatch();
 
   const [phoneNumber, setPhoneNUmber] = useState('707366517');
   const [homeID, setHomeID] = useState();

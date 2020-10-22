@@ -8,12 +8,15 @@ import {
 import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
-import {getMasterProfile, handleLogout} from '../../../Api/userAPI';
+import {
+  getMasterProfile,
+  getMemberProfile,
+  handleLogout,
+} from '../../../Api/userAPI';
 
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
@@ -41,6 +44,7 @@ export default function HomeScreen({navigation}) {
 
   const BSBlueToothRef = useRef();
   const hardwareController = useSelector((state) => state.hardware);
+  const userProfile = useSelector((state) => state.user);
 
   useEffect(() => {
     listenConnection();
@@ -48,43 +52,25 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   useEffect(() => {
-    GetUserProflie();
+    getUserProflie();
     if (hardwareController.BLController) {
       setUpBLConnection();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hardwareController.BLConnection, hardwareController.WFConnection]);
 
-  async function GetUserProflie() {
+  const getUserProflie = async () => {
     const currentUser = auth().currentUser;
     const userRole = await AsyncStorage.getItem('userRole');
-    //Master role
-    if (userRole === 'Master') {
-      const MasterUser = await getMasterProfile(currentUser.uid);
-      dispatch(setUserProfile(MasterUser));
-    }
-    //Member role
-    else if (userRole === 'Member') {
-      const homeID = await AsyncStorage.getItem('homeID');
-      firestore()
-        .collection('Home')
-        .doc(homeID)
-        .collection('Member')
-        .where('phone', '==', auth().currentUser.phoneNumber)
-        .onSnapshot((document) => {
-          const UserData = document.docs[0];
-          if (UserData) {
-            let MemberUser = {
-              name: UserData.data().name,
-              phone: UserData.data().phone,
-              email: UserData.data().email,
-            };
-            dispatch(setUserProfile(MemberUser));
-          } else {
-            handleLogout();
-          }
-        });
-    }
-  }
+
+    const User =
+      userRole === 'Master'
+        ? await getMasterProfile(currentUser.uid)
+        : await getMemberProfile(currentUser.phoneNumber);
+
+    dispatch(setUserProfile(User));
+  };
+
   //listener Internet and Bluetooth connection
   const listenConnection = async () => {
     BLEManager.checkState();
@@ -145,6 +131,7 @@ export default function HomeScreen({navigation}) {
     bleManagerEmitter.removeListener('BleManagerDiscoverPeripheral');
     setNearbyDevices([]);
   };
+
   return (
     <RootContainer>
       {/* Info Container */}

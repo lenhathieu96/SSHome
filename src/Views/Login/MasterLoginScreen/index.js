@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {View, Image, TouchableOpacity, TextInput} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {TextInput} from 'react-native-paper';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -45,21 +44,13 @@ export default function MasterLoginScreen({navigation}) {
           value={email}
           onChangeText={(text) => setEmail(text)}
           label="Email"
-          mode="outlined"
           style={styles.input}
-          theme={{
-            colors: {primary: Color.primary, underlineColor: 'transparent'},
-          }}
         />
         <TextInput
           value={password}
           onChangeText={(text) => setPassword(text)}
           label="Mật Khẩu"
-          mode="outlined"
           style={styles.input}
-          theme={{
-            colors: {primary: Color.primary, underlineColor: 'transparent'},
-          }}
         />
         <Text style={styles.txtloginError}>{loginError}</Text>
       </View>
