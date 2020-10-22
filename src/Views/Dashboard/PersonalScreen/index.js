@@ -98,7 +98,7 @@ export default function Personal() {
             style={styles.avatar}>
             <IconButton
               iconName="camera"
-              onPress={() => selectPhotoTapped()}
+              onPress={() => showBSPersonal()}
               style={styles.btnCamera}
               iconSize={fontSize.biggest}
               iconColor={Color.primary}
@@ -121,14 +121,6 @@ export default function Personal() {
         </View>
       </View>
       {/* Member List */}
-      <View style={styles.memberListContainer}>
-        <BoldText style={styles.title}>Danh sách thành viên</BoldText>
-        <MemberList
-          data={memberList}
-          showBSPersonal={showBSPersonal}
-          toogleModal={toogleModal}
-        />
-      </View>
       {/* Home ID */}
       <SafeAreaView style={styles.QRCodeContainer}>
         <BoldText style={styles.title}>Mã Khách Hàng</BoldText>

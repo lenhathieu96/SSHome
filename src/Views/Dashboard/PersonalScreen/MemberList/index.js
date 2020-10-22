@@ -158,7 +158,7 @@ export default function MemberList(props) {
         {data.map((item, index) => {
           return (
             <Member
-              Key={index.toString()}
+              key={index.toString()}
               User={item}
               toogleModal={toogleModal}
             />

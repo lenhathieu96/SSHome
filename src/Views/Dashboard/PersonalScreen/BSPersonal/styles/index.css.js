@@ -5,7 +5,9 @@ import Color from '../../../../../Utils/Color';
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Body: {
-    backgroundColor: Color.background,
+    backgroundColor: Color.red,
+    position: 'relative',
+    zIndex: 10,
     padding: 10,
     height: 0.7 * height,
     borderTopRightRadius: 30,
