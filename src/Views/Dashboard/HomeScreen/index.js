@@ -35,10 +35,10 @@ import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
-const BleManagerModule = NativeModules.BleManager;
-const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
-
 export default function HomeScreen({navigation}) {
+  const BleManagerModule = NativeModules.BleManager;
+  const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
   const dispatch = useDispatch();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
@@ -139,19 +139,13 @@ export default function HomeScreen({navigation}) {
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        <RoomList navigation={navigation} />
+        <RoomList navigation={navigation} data={userProfile.availableRoom} />
         <IconButton
           iconName="microphone"
           iconColor={Color.primary}
           iconSize={fontSize.biggest}
           style={styles.floatButton}
-          onPress={() => {
-            let signupForm = {
-              name: 'leeChongwei',
-              phone: '+8432652065851',
-              availableRoom: ['121', '123', '41231'],
-            };
-          }}
+          onPress={() => {}}
         />
       </SafeAreaView>
       {/* BSBlueTooth */}

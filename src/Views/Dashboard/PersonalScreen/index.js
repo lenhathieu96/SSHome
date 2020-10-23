@@ -12,7 +12,11 @@ import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 import BSPersonal from './BSPersonal';
 
-import {getMemberList, uploadMasterAvatar} from '../../../Api/userAPI';
+import {
+  getMemberList,
+  uploadMasterAvatar,
+  configMember,
+} from '../../../Api/userAPI';
 import {updateAvatar} from '../../../Redux/ActionCreators/userActions';
 
 import profileAvatar from '../../../Assets/Images/profile.png';
@@ -30,7 +34,7 @@ export default function Personal() {
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [chosenUser, setChosenUser] = useState();
+  const [chosenUser, setChosenUser] = useState({});
 
   const BSPersonalRef = useRef();
 
@@ -48,30 +52,33 @@ export default function Personal() {
 
   const getMembers = async () => {
     const Users = await getMemberList();
+    console.log(Users);
     setMemberList(Users);
     // setMemberList(MemberList);
-  };
-
-  const addNewMember = (member) => {
-    console.log(member);
-  };
-
-  const showBSPersonal = () => {
-    BSPersonalRef.current.snapTo(0);
   };
 
   const toogleModal = (isShowConfirmModal) => {
     setModalVisible(isShowConfirmModal);
   };
 
-  const onChoseUser = (user) => {
+  const onPressMember = (user) => {
+    setChosenUser(user);
+    BSPersonalRef.current.snapTo(0);
+  };
+
+  const onLongPressMember = (user) => {
     setChosenUser(user);
     toogleModal(true);
   };
 
-  const delUser = () => {
+  const onDelMember = () => {
     toogleModal(false);
     console.log(chosenUser.id);
+  };
+
+  const onConfigMember = async (member, isUpdate) => {
+    const response = await configMember(member, isUpdate);
+    console.log(response.message);
   };
 
   const selectPhotoTapped = () => {
@@ -148,8 +155,8 @@ export default function Personal() {
         <BoldText style={styles.title}>Danh sách thành viên</BoldText>
         <MemberList
           data={memberList}
-          showBSPersonal={showBSPersonal}
-          onChoseUser={onChoseUser}
+          onPressMember={onPressMember}
+          onLongPressMember={onLongPressMember}
         />
       </View>
       {/* Home ID */}
@@ -160,8 +167,9 @@ export default function Personal() {
 
       <BSPersonal
         ref={BSPersonalRef}
-        addNewMember={addNewMember}
+        onConfigMember={onConfigMember}
         roomList={masterInfo.availableRoom}
+        memberProfile={chosenUser}
       />
       <ConfirmDelModal
         modalVisible={modalVisible}
@@ -169,7 +177,7 @@ export default function Personal() {
         title={`${
           chosenUser ? chosenUser.name : ''
         } sẽ bị xoá khỏi danh sách thành viên`}
-        onAccept={delUser}
+        onAccept={onDelMember}
       />
     </RootContainer>
   );

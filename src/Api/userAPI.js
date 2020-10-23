@@ -66,20 +66,6 @@ export const handleMasterForgotPassword = async (email) => {
     .catch((error) => console.log(error));
 };
 
-export const hanldeMemberSignUp = async (homeID, signupForm) => {
-  try {
-    await firestore()
-      .collection('Home')
-      .doc(homeID)
-      .collection('Member')
-      .add(signupForm);
-    console.log('add Member Success');
-  } catch (error) {
-    console.log('error while create new member: ', error);
-    return '';
-  }
-};
-
 export const getMemberList = async () => {
   const homeIDStorage = await AsyncStorage.getItem('homeID');
   try {
@@ -212,9 +198,60 @@ export const uploadMasterAvatar = async (imageURI) => {
   }
 };
 
+export const configMember = async (member, isUpdate) => {
+  console.log(member)
+  const homeID = await AsyncStorage.getItem('homeID');
+  //Check user exists
+  // if (isUpdate) {
+  //   if (Member.docs[0]) {
+  //     const memberID = Member.docs[0].id;
+  //     try {
+  //       await firestore()
+  //         .collection('Home')
+  //         .doc(homeID)
+  //         .collection('Member')
+  //         .doc(memberID)
+  //         .update(member);
+  //       return {result: true, message: 'Cập Nhập thành viên thành công'};
+  //     } catch (error) {
+  //       console.log(error);
+  //       return {result: false, message: 'Cập Nhập thành viên thất bại'};
+  //     }
+  //   }
+  // } else {
+  //   //add new member
+  //   if (Member.docs[0]) {
+  //     return {result: false, message: 'Số điện thoại đã tồn tại'};
+  //   } else {
+  //     const memberID = `R${homeID.slice(3, 6)}${createID()}`;
+  //     let newMember = {
+  //       ...member,
+  //       phone: `+84${member.phone.slice(1)}`,
+  //       id: memberID,
+  //     };
+  //     try {
+  //       await firestore()
+  //         .collection('Home')
+  //         .doc(homeID)
+  //         .collection('Member')
+  //         .doc(memberID)
+  //         .add(newMember);
+  //       return {result: true, message: 'Tạo thành viên thành công'};
+  //     } catch (error) {
+  //       console.log(error);
+  //       return {result: false, message: 'Tạo thành viên thất bại'};
+  //     }
+  //   }
+  // }
+};
+
 export const handleLogout = () => {
   AsyncStorage.removeItem('userRole');
   auth()
     .signOut()
     .then(() => true);
 };
+
+function createID() {
+  return Math.random().toString(36).substr(2, 5).toUpperCase();
+}

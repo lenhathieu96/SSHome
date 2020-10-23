@@ -1,41 +1,11 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, Dimensions, Animated} from 'react-native';
-import {useSelector} from 'react-redux';
 
 import RoomButton from './RoomButton';
 
 import styles from './styles/index.css';
-const data = [
-  {},
-  {
-    name: 'Phòng Khách',
-    roomtypeID: 0,
-    deviceQuantity: 4,
-  },
-  {
-    name: 'Phòng Ngủ',
-    roomtypeID: 1,
-    deviceQuantity: 5,
-  },
-  {
-    name: 'Phòng Bếp',
-    roomtypeID: 2,
-    deviceQuantity: 6,
-  },
-  {
-    name: 'Phòng Tắm',
-    roomtypeID: 3,
-    deviceQuantity: 8,
-  },
 
-  {
-    name: 'Phòng Tắm',
-    roomtypeID: 3,
-    deviceQuantity: 8,
-  },
-  {},
-];
-export default function RoomList({navigation}) {
+export default function RoomList({navigation, data}) {
   const {width} = Dimensions.get('window');
 
   const ITEM_SIZE = 0.7 * width;
@@ -44,15 +14,12 @@ export default function RoomList({navigation}) {
 
   const [rooms, setRooms] = useState([]);
 
-  const availableRooms = useSelector((state) => state.user.availableRoom);
-
   useEffect(() => {
-    if (availableRooms) {
-      availableRooms.push({});
-      availableRooms.unshift({});
-      setRooms(availableRooms);
-    }
-  }, [availableRooms]);
+    const roomlist = [...data];
+    roomlist.push({});
+    roomlist.unshift({});
+    setRooms(roomlist);
+  }, [data]);
 
   return (
     <Animated.FlatList

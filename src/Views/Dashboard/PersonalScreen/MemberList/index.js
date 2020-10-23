@@ -16,7 +16,7 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function MemberList(props) {
-  const {data, showBSPersonal, onChoseUser} = props;
+  const {data, onPressMember, onLongPressMember} = props;
 
   const scrollX = new Animated.Value(0);
   const {width} = Dimensions.get('window');
@@ -95,7 +95,8 @@ export default function MemberList(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => showBSPersonal()}>
+      <TouchableWithoutFeedback
+        onPress={() => onPressMember({name: '', phone: '', availableRoom: []})}>
         <Animated.View
           style={[
             styles.personal_card_container,
@@ -152,16 +153,20 @@ export default function MemberList(props) {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={5}
-        onScroll={Animated.event([
-          {
-            nativeEvent: {contentOffset: {x: scrollX}},
-          },
-        ])}>
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {contentOffset: {x: scrollX}},
+            },
+          ],
+          {useNativeDriver: false},
+        )}>
         <View style={styles.fake_card_ghost} />
         {data.map((item, index) => {
           return (
             <TouchableOpacity
-              onLongPress={() => onChoseUser(item)}
+              onPress={() => onPressMember(item)}
+              onLongPress={() => onLongPressMember(item)}
               key={index.toString()}>
               <ImageBackground source={userBlank} style={styles.fake_card}>
                 <Text style={styles.txtUserName}>{item.name}</Text>
