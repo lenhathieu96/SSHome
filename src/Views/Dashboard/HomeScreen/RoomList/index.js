@@ -8,7 +8,7 @@ import styles from './styles/index.css';
 export default function RoomList({navigation, data}) {
   const {width} = Dimensions.get('window');
 
-  const ITEM_SIZE = 0.7 * width;
+  const ITEM_SIZE = 0.8 * width;
   const SPACER_SIZE = (width - ITEM_SIZE) / 2;
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -45,7 +45,7 @@ export default function RoomList({navigation, data}) {
         ];
         const translateY = scrollX.interpolate({
           inputRange,
-          outputRange: [0, -(0.2 * ITEM_SIZE), 0],
+          outputRange: [0, -(0.15 * ITEM_SIZE), 0],
           extrapolate: 'clamp',
         });
         const opacity = scrollX.interpolate({

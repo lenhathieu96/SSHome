@@ -38,7 +38,8 @@ const BSPersonal = React.forwardRef((props, ref) => {
         let member = {
           name,
           phone,
-          memberRooms,
+          id: memberProfile.id ? memberProfile.id : '',
+          availableRoom: memberRooms,
         };
         onConfigMember(member, isUpdate);
       }

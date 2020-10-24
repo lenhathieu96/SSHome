@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import * as fontSize from '../../../Utils/FontSize';
-import Color from '../../../Utils/Color';
+import * as fontSize from '../../../../Utils/FontSize';
+import Color from '../../../../Utils/Color';
 
 const styles = StyleSheet.create({
   ModalContainer: {

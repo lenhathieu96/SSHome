@@ -1,23 +1,21 @@
 import React from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {useSelector} from 'react-redux';
-
 import HomeScreen from '../../../Views/Dashboard/HomeScreen';
 import RoomScreen from '../../../Views/Dashboard/RoomScreen';
-import CameraScreen from '../../../Views/Dashboard/CameraScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 
-const HomeStacks = createStackNavigator();
+const HomeStacks = createSharedElementStackNavigator();
 
 export default function HomeStack() {
   const BLController = useSelector((state) => state.hardware.BLController);
   return (
-    <HomeStacks.Navigator>
+    <HomeStacks.Navigator initialRouteName="Home">
       <HomeStacks.Screen
         name="Home"
         component={HomeScreen}
@@ -59,6 +57,10 @@ export default function HomeStack() {
       <HomeStacks.Screen
         name="Room"
         component={RoomScreen}
+        sharedElementsConfig={(route, otherRoute, showing) => {
+          const {room} = route.params;
+          return [{id: `item.${room.id}.photo`}];
+        }}
         options={({navigation}) => ({
           headerTransparent: true,
           headerTitle: null,
@@ -79,22 +81,10 @@ export default function HomeStack() {
               size={fontSize.bigger}
               backgroundColor="transparent"
               borderRadius={10}
-              onPress={() =>
-                navigation.navigate('Camera', {isFromAddNewRoom: false})
-              }
               underlayColor="transparent"
               activeOpacity={0.4}
             />
           ),
-        })}
-      />
-      <HomeStacks.Screen
-        name="Camera"
-        component={CameraScreen}
-        options={({navigation}) => ({
-          ...TransitionPresets.SlideFromRightIOS,
-          title: '',
-          headerShown: false,
         })}
       />
     </HomeStacks.Navigator>

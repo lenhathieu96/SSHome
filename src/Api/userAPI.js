@@ -7,6 +7,7 @@ import {Platform} from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+//Auth Management===================================================================================
 export const handleMasterSignUp = async (signupForm) => {
   const userDBRef = firestore().collection('Home');
   const homeID = await userDBRef.doc(signupForm.homeID).get();
@@ -66,28 +67,6 @@ export const handleMasterForgotPassword = async (email) => {
     .catch((error) => console.log(error));
 };
 
-export const getMemberList = async () => {
-  const homeIDStorage = await AsyncStorage.getItem('homeID');
-  try {
-    let Users = [];
-    const data = await firestore()
-      .collection('Home')
-      .doc(homeIDStorage)
-      .collection('Member')
-      .get();
-    data.docs.forEach((userData) => {
-      let user = {
-        id: userData.id,
-        ...userData.data(),
-      };
-      Users.push(user);
-    });
-    return Users;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const handleMemberLogin = async (phoneNumber, homeID) => {
   const User = await firestore()
     .collection('Home')
@@ -127,6 +106,13 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   } catch (error) {
     console.log('OTP Auth Err', error);
   }
+};
+
+export const handleLogout = () => {
+  AsyncStorage.removeItem('userRole');
+  auth()
+    .signOut()
+    .then(() => true);
 };
 
 export const getMasterProfile = async (userID) => {
@@ -198,60 +184,68 @@ export const uploadMasterAvatar = async (imageURI) => {
   }
 };
 
+//Member Management===================================================================================
+
 export const configMember = async (member, isUpdate) => {
-  console.log(member)
   const homeID = await AsyncStorage.getItem('homeID');
   //Check user exists
-  // if (isUpdate) {
-  //   if (Member.docs[0]) {
-  //     const memberID = Member.docs[0].id;
-  //     try {
-  //       await firestore()
-  //         .collection('Home')
-  //         .doc(homeID)
-  //         .collection('Member')
-  //         .doc(memberID)
-  //         .update(member);
-  //       return {result: true, message: 'Cập Nhập thành viên thành công'};
-  //     } catch (error) {
-  //       console.log(error);
-  //       return {result: false, message: 'Cập Nhập thành viên thất bại'};
-  //     }
-  //   }
-  // } else {
-  //   //add new member
-  //   if (Member.docs[0]) {
-  //     return {result: false, message: 'Số điện thoại đã tồn tại'};
-  //   } else {
-  //     const memberID = `R${homeID.slice(3, 6)}${createID()}`;
-  //     let newMember = {
-  //       ...member,
-  //       phone: `+84${member.phone.slice(1)}`,
-  //       id: memberID,
-  //     };
-  //     try {
-  //       await firestore()
-  //         .collection('Home')
-  //         .doc(homeID)
-  //         .collection('Member')
-  //         .doc(memberID)
-  //         .add(newMember);
-  //       return {result: true, message: 'Tạo thành viên thành công'};
-  //     } catch (error) {
-  //       console.log(error);
-  //       return {result: false, message: 'Tạo thành viên thất bại'};
-  //     }
-  //   }
-  // }
+  const Member = await firestore()
+    .collection('Home')
+    .doc(homeID)
+    .collection('Member')
+    .doc(member.id)
+    .get();
+  if (isUpdate) {
+    if (Member.data()) {
+      try {
+        await firestore()
+          .collection('Home')
+          .doc(homeID)
+          .collection('Member')
+          .doc(member.id)
+          .update(member);
+        return {result: true, message: 'Cập Nhập thành viên thành công'};
+      } catch (error) {
+        console.log(error);
+        return {result: false, message: 'Cập Nhập thành viên thất bại'};
+      }
+    }
+  } else {
+    //add new member
+    if (Member.data()) {
+      return {result: false, message: 'Số điện thoại đã tồn tại'};
+    } else {
+      let newMember = {
+        ...member,
+        phone: `+84${member.phone.slice(1)}`,
+      };
+      try {
+        await firestore()
+          .collection('Home')
+          .doc(homeID)
+          .collection('Member')
+          .add(newMember);
+        return {result: true, message: 'Tạo thành viên thành công'};
+      } catch (error) {
+        console.log(error);
+        return {result: false, message: 'Tạo thành viên thất bại'};
+      }
+    }
+  }
 };
 
-export const handleLogout = () => {
-  AsyncStorage.removeItem('userRole');
-  auth()
-    .signOut()
-    .then(() => true);
+export const deleteMember = async (memberID) => {
+  const homeID = await AsyncStorage.getItem('homeID');
+  console.log(memberID);
+  try {
+    await firestore()
+      .collection('Home')
+      .doc(homeID)
+      .collection('Member')
+      .doc(memberID)
+      .delete();
+    return {result: true, message: 'Xoá thành viên thành công'};
+  } catch (error) {
+    return {result: false, message: 'Xoá thành viên thất bại'};
+  }
 };
-
-function createID() {
-  return Math.random().toString(36).substr(2, 5).toUpperCase();
-}

@@ -17,7 +17,6 @@ import styles from './styles/index.css';
 
 export default function MemberList(props) {
   const {data, onPressMember, onLongPressMember} = props;
-
   const scrollX = new Animated.Value(0);
   const {width} = Dimensions.get('window');
   // personal card container

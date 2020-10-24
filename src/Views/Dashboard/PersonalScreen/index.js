@@ -2,20 +2,22 @@ import React, {useRef, useEffect, useState} from 'react';
 import {View, SafeAreaView, ImageBackground} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
 
 import Text, {BoldText} from '../../../Components/Text';
-import ConfirmDelModal from '../../../Components/ConfirmDelModal';
+import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
+import NotifyModal from '../../../Components/Modal/NotificationModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 import BSPersonal from './BSPersonal';
 
 import {
-  getMemberList,
   uploadMasterAvatar,
   configMember,
+  deleteMember,
 } from '../../../Api/userAPI';
 import {updateAvatar} from '../../../Redux/ActionCreators/userActions';
 
@@ -33,35 +35,45 @@ export default function Personal() {
 
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const [apiResponse, setApiResponse] = useState();
+  const [notifyModalVisible, setNotifyModalVisible] = useState(false);
   const [chosenUser, setChosenUser] = useState({});
 
   const BSPersonalRef = useRef();
 
   useEffect(() => {
-    getHomeID();
-    getMembers();
-  }, []);
+    getMemberList();
+    const subscriber = firestore()
+      .collection('Home')
+      .doc(homeID)
+      .collection('Member')
+      .onSnapshot((querySnapshot) => {
+        const users = [];
+        querySnapshot.forEach((documentSnapshot) => {
+          users.push({
+            ...documentSnapshot.data(),
+            id: documentSnapshot.id,
+          });
+        });
+        setMemberList(users);
+      });
+    return () => subscriber();
+  }, [homeID]);
 
-  const getHomeID = async () => {
+  const getMemberList = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
     if (homeIDStorage) {
       setHomeID(homeIDStorage);
     }
   };
 
-  const getMembers = async () => {
-    const Users = await getMemberList();
-    console.log(Users);
-    setMemberList(Users);
-    // setMemberList(MemberList);
-  };
-
-  const toogleModal = (isShowConfirmModal) => {
-    setModalVisible(isShowConfirmModal);
+  const toogleConfirmModal = (isShowConfirmModal) => {
+    setConfirmModalVisible(isShowConfirmModal);
   };
 
   const onPressMember = (user) => {
+    console.log(user.id, 'chosen user');
     setChosenUser(user);
     BSPersonalRef.current.snapTo(0);
   };
@@ -73,16 +85,26 @@ export default function Personal() {
 
   const onDelMember = () => {
     toogleModal(false);
-    console.log(chosenUser.id);
+    deleteMember(chosenUser.id);
   };
 
   const onConfigMember = async (member, isUpdate) => {
     const response = await configMember(member, isUpdate);
-    console.log(response.message);
+    BSPersonalRef.current.snapTo(1);
+    setApiResponse(response.message);
+    setNotifyModalVisible(true);
+    setTimeout(() => {
+      setNotifyModalVisible(false);
+      setApiResponse('');
+    }, 1000);
   };
 
   const selectPhotoTapped = () => {
     const options = {
+      title: 'Chọn Hình',
+      takePhotoButtonTitle: 'Chụp ảnh',
+      chooseFromLibraryButtonTitle: 'Chọn từ thư viện ảnh',
+      cancelButtonTitle: 'Hủy',
       quality: 1.0,
       maxWidth: 500,
       maxHeight: 500,
@@ -172,13 +194,14 @@ export default function Personal() {
         memberProfile={chosenUser}
       />
       <ConfirmDelModal
-        modalVisible={modalVisible}
-        toggleModal={toogleModal}
+        isVisible={confirmModalVisible}
+        toggleModal={toogleConfirmModal}
         title={`${
           chosenUser ? chosenUser.name : ''
         } sẽ bị xoá khỏi danh sách thành viên`}
         onAccept={onDelMember}
       />
+      <NotifyModal isVisible={notifyModalVisible} title={apiResponse} />
     </RootContainer>
   );
 }

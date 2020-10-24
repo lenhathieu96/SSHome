@@ -143,7 +143,7 @@ export default function HomeScreen({navigation}) {
         <IconButton
           iconName="microphone"
           iconColor={Color.primary}
-          iconSize={fontSize.biggest}
+          iconSize={fontSize.bigger}
           style={styles.floatButton}
           onPress={() => {}}
         />

@@ -12,21 +12,21 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 5,
+    justifyContent: 'space-between',
   },
   listTitle: {
     color: Color.primary,
     fontSize: fontSize.huge,
     alignSelf: 'center',
     marginTop: 10,
-    flex: 0.1,
   },
 
   floatButton: {
     alignSelf: 'center',
     backgroundColor: 'white',
-    width: 0.2 * width,
-    height: 0.2 * width,
-    borderRadius: (0.2 * width) / 2,
+    width: 0.15 * width,
+    height: 0.15 * width,
+    borderRadius: (0.15 * width) / 2,
     padding: 0,
     shadowColor: '#000',
     shadowOffset: {

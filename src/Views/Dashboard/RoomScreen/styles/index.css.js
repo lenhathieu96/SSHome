@@ -17,10 +17,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
   },
   imgBg: {
-    flex: 1,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    opacity: 0.6,
+    width: '100%',
+    height: '100%',
   },
   btnChangeBg: {
     width: 120,

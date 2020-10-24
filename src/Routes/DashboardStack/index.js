@@ -19,6 +19,7 @@ import HomeStack from './HomeStack';
 import AddRoomStack from './AddRoomStack';
 import PersonalStack from './PersonalStack';
 
+import profileAvatar from '../../Assets/Images/profile.png';
 import styles from './styles/index.css';
 import * as fontSize from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
@@ -48,7 +49,14 @@ export default function DashboardStack() {
           <DrawerContentScrollView {...props}>
             {/* Header */}
             <View style={styles.drawerHeaderContainer}>
-              <Image source={{uri: UserProfile.avatar}} style={styles.avatar} />
+              <Image
+                source={
+                  UserProfile.avatar !== null
+                    ? {uri: UserProfile.avatar}
+                    : profileAvatar
+                }
+                style={styles.avatar}
+              />
               <View style={styles.userInfoContainer}>
                 <BoldText style={styles.userName}>{UserProfile.name}</BoldText>
                 <Text style={styles.userInfo}>(+84) {UserProfile.phone}</Text>

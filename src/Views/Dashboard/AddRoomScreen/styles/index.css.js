@@ -18,11 +18,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  imageContainer: {
+  groupImageContainer: {
+    flex: 0.5,
+    flexDirection: 'row',
     margin: 10,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'blue',
   },
+  imgContainer: {
+    flex: 0.2,
+  },
+
   picture: {
     borderRadius: 30,
     width: 0.95 * width,
