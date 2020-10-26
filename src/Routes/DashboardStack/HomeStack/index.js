@@ -62,29 +62,7 @@ export default function HomeStack() {
           return [{id: `item.${room.id}.photo`}];
         }}
         options={({navigation}) => ({
-          headerTransparent: true,
-          headerTitle: null,
-          headerLeft: () => (
-            <Icon.Button
-              name="chevron-left"
-              size={fontSize.bigger}
-              backgroundColor="transparent"
-              borderRadius={10}
-              onPress={() => navigation.goBack()}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-            />
-          ),
-          headerRight: () => (
-            <Icon.Button
-              name="camera"
-              size={fontSize.bigger}
-              backgroundColor="transparent"
-              borderRadius={10}
-              underlayColor="transparent"
-              activeOpacity={0.4}
-            />
-          ),
+          headerShown: false,
         })}
       />
     </HomeStacks.Navigator>

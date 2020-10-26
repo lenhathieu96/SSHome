@@ -80,11 +80,11 @@ export default function Personal() {
 
   const onLongPressMember = (user) => {
     setChosenUser(user);
-    toogleModal(true);
+    toogleConfirmModal(true);
   };
 
   const onDelMember = () => {
-    toogleModal(false);
+    toogleConfirmModal(false);
     deleteMember(chosenUser.id);
   };
 

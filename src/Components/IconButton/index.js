@@ -1,8 +1,8 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import PropTypes from 'prop-types';
 
+import * as fontSize from '../../Utils/FontSize';
 import styles from './styles/index.css';
 
 IconButton.propTypes = {
@@ -17,16 +17,18 @@ IconButton.propTypes = {
 function IconButton(props) {
   const {onPress, iconName, style, disabled, iconSize, iconColor} = props;
   return (
-    <TouchableOpacity
-      style={[styles.iconButton, style]}
+    <Icon.Button
+      iconStyle={styles.icon}
+      style={[styles.button, style]}
       onPress={onPress}
-      disabled={disabled}>
-      <Icon
-        name={iconName}
-        color={iconColor ? iconColor : 'white'}
-        size={iconSize}
-      />
-    </TouchableOpacity>
+      disabled={disabled}
+      name={iconName}
+      backgroundColor="transparent"
+      underlayColor="transparent"
+      borderRadius={50}
+      color={iconColor ? iconColor : 'white'}
+      size={iconSize ? iconSize : fontSize.bigger}
+    />
   );
 }
 

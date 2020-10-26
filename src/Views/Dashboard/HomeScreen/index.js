@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  View,
   SafeAreaView,
   Alert,
   NativeModules,
@@ -140,11 +141,11 @@ export default function HomeScreen({navigation}) {
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
         <RoomList navigation={navigation} data={userProfile.availableRoom} />
+
         <IconButton
-          iconName="microphone"
-          iconColor={Color.primary}
-          iconSize={fontSize.bigger}
           style={styles.floatButton}
+          iconName="mic"
+          iconColor={Color.primary}
           onPress={() => {}}
         />
       </SafeAreaView>

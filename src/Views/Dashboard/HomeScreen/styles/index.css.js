@@ -26,16 +26,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: 0.15 * width,
     height: 0.15 * width,
-    borderRadius: (0.15 * width) / 2,
-    padding: 0,
+    borderRadius: 50,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: -6,
+      height: 6,
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    elevation: 8,
+    elevation: 6,
+    marginBottom: 10,
   },
 });
 

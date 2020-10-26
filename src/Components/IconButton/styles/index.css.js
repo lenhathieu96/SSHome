@@ -1,10 +1,15 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  iconButton: {
-    fontWeight: 'bold',
+  icon: {
+    alignSelf: 'center',
+    marginTop: 8,
+    marginLeft: 8,
+  },
+  button: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
