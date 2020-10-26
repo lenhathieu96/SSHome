@@ -57,7 +57,7 @@ export default function HomeStack() {
       <HomeStacks.Screen
         name="Room"
         component={RoomScreen}
-        sharedElementsConfig={(route, otherRoute, showing) => {
+        sharedElements={(route, otherRoute, showing) => {
           const {room} = route.params;
           return [{id: `item.${room.id}.photo`}];
         }}

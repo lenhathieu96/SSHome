@@ -51,7 +51,7 @@ export default function DashboardStack() {
             <View style={styles.drawerHeaderContainer}>
               <Image
                 source={
-                  UserProfile.avatar !== null
+                  UserProfile.avatar !== ''
                     ? {uri: UserProfile.avatar}
                     : profileAvatar
                 }
