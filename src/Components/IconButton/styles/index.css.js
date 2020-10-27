@@ -5,8 +5,7 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
-    marginTop: 8,
-    marginLeft: 8,
+    marginLeft: 7,
   },
   button: {
     justifyContent: 'center',

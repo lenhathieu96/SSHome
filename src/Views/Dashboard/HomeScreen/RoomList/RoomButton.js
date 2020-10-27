@@ -5,14 +5,11 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Feather';
 
 import Text, {BoldText} from '../../../../Components/Text';
-
-import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function RoomButton(props) {
   const {navigation, roomData, opacity, translateY} = props;
-
   return (
     <Animated.View
       style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>

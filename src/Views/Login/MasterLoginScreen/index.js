@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image, TouchableOpacity, TextInput} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
-
+import {TextInput} from 'react-native-paper';
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';

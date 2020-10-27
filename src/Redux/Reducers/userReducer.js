@@ -4,7 +4,7 @@ const initialState = {
   phone: '',
   email: '',
   avatar: '',
-  availableRoom: [],
+  availableRooms: [],
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -19,14 +19,26 @@ const UserReducer = (state = initialState, action) => {
         phone: action.payload.phone.slice(3),
         email: action.payload.email,
         avatar: action.payload.avatar,
-        availableRoom: action.payload.availableRoom,
+        availableRooms: action.payload.availableRooms,
       };
 
     case 'SET AVAILABLE ROOM':
-      return {...state, availableRoom: action.payload};
+      return {...state, availableRooms: action.payload};
 
     case 'SET AVATAR':
       return {...state, avatar: action.payload};
+
+    case 'SET ROOM AVATAR':
+      let availableRooms = [...state.availableRooms];
+      let index = availableRooms.findIndex(
+        (room) => room.id === action.payload.roomID,
+      );
+      if (index >= 0) {
+        availableRooms[index].background = action.payload.imageURI;
+        return {...state, availableRooms};
+      } else {
+        return {...state};
+      }
 
     default:
       return state;

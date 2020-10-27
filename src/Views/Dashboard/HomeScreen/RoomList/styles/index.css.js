@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     height: 0.58 * height,
     borderRadius: 20,
     position: 'relative',
-    opacity: 0.7,
     zIndex: 0,
   },
   roomTitle: {

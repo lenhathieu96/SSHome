@@ -39,7 +39,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
           name,
           phone,
           id: memberProfile.id ? memberProfile.id : '',
-          availableRoom: memberRooms,
+          availableRooms: memberRooms,
         };
         onConfigMember(member, isUpdate);
       }
@@ -90,7 +90,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
           <IconButton
             style={{marginTop: 10}}
             iconSize={fontSize.huge}
-            iconName="grip-lines"
+            iconName="minus"
             onPress={() => {
               Keyboard.dismiss;
               ref.current.snapTo(1);

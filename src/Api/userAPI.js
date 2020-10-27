@@ -2,9 +2,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
-
-import {Platform} from 'react-native';
-
 import AsyncStorage from '@react-native-community/async-storage';
 
 //Auth Management===================================================================================
@@ -130,7 +127,7 @@ export const getMasterProfile = async (userID) => {
       phone: UserData.data().phone,
       email: UserData.data().email,
       avatar: UserData.data().avatar,
-      availableRoom: Object.values(rooms.val()),
+      availableRooms: Object.values(rooms.val()),
     };
   }
 };
@@ -161,7 +158,7 @@ export const getMemberProfile = async (phone) => {
       name: UserData.data().name,
       phone: UserData.data().phone,
       email: UserData.data().email,
-      availableRoom: result,
+      availableRooms: result,
     };
   }
 };

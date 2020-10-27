@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  View,
   SafeAreaView,
   Alert,
   NativeModules,
@@ -13,11 +13,7 @@ import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
-import {
-  getMasterProfile,
-  getMemberProfile,
-  handleLogout,
-} from '../../../Api/userAPI';
+import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
 
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
@@ -36,10 +32,10 @@ import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
-export default function HomeScreen({navigation}) {
-  const BleManagerModule = NativeModules.BleManager;
-  const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const [nearbyDevices, setNearbyDevices] = useState([]);
 
@@ -54,11 +50,15 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     getUserProflie();
+    BLEManager.start({showAlert: false});
     if (hardwareController.BLController) {
       setUpBLConnection();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hardwareController.BLConnection, hardwareController.WFConnection]);
+  }, [
+    hardwareController.BLConnection,
+    hardwareController.WFConnection,
+    hardwareController.BLController,
+  ]);
 
   const getUserProflie = async () => {
     const currentUser = auth().currentUser;
@@ -101,11 +101,12 @@ export default function HomeScreen({navigation}) {
       } else {
         BSBlueToothRef.current.snapTo(0);
         bleManagerEmitter.addListener('BleManagerStopScan', () =>
-          console.log('scan stopped'),
+          Alert.alert('Kết thúc quét'),
         );
         bleManagerEmitter.addListener(
           'BleManagerDiscoverPeripheral',
           (device) => {
+            console.log(device);
             let duplicateDevice = nearbyDevices.filter(
               (item) => item.id === device.id,
             );
@@ -117,7 +118,6 @@ export default function HomeScreen({navigation}) {
         );
         BLEManager.scan([], 15, true).then(() => {
           console.log('Scanning...');
-          // setScanning(true);
         });
       }
     } else {
@@ -140,7 +140,7 @@ export default function HomeScreen({navigation}) {
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        <RoomList navigation={navigation} data={userProfile.availableRoom} />
+        <RoomList navigation={navigation} data={userProfile.availableRooms} />
 
         <IconButton
           style={styles.floatButton}

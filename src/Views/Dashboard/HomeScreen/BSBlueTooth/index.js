@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import BLEManager from 'react-native-ble-manager';
 import IconButton from '../../../../Components/IconButton';
@@ -26,7 +32,7 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
           <IconButton
             iconColor={Color.primary}
             iconSize={fontSize.huge}
-            iconName="grip-lines"
+            iconName="minus"
             onPress={() => stopSearchingBLDevices()}
           />
           <BoldText text="Các Thiết Bị Lân Cận" style={styles.Title} />
@@ -43,8 +49,11 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
               <TouchableOpacity
                 onPress={() =>
                   BLEManager.connect(item.id)
-                    .then(() => console.log('connected success'))
-                    .catch((error) => console.log('connect fail', error))
+                    .then(() => Alert.alert('connect successed'))
+                    .catch((error) => {
+                      console.log('connect fail', error),
+                        Alert.alert('Connect failed');
+                    })
                 }
                 style={{
                   backgroundColor: index % 2 === 0 ? 'gray' : 'white',

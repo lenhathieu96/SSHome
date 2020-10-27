@@ -25,3 +25,13 @@ export const updateAvatar = (avatarURI) => {
     payload: avatarURI,
   };
 };
+
+export const updateRoomAvatar = (roomID, imageURI) => {
+  return {
+    type: 'SET ROOM AVATAR',
+    payload: {
+      roomID,
+      imageURI,
+    },
+  };
+};

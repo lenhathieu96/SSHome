@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {BoldText} from '../../Components/Text';
 import BleManager from 'react-native-ble-manager';
@@ -92,6 +93,11 @@ export default function Demo() {
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
+        onPress={() =>
+          BleManager.connect(item.id)
+            .then(() => Alert.alert('Ket noi thanh cong'))
+            .catch((error) => Alert.alert('Ket noi that bai'))
+        }
         style={{
           backgroundColor: index % 2 === 0 ? 'gray' : 'white',
           padding: 10,
