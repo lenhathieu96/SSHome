@@ -8,13 +8,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.background,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    height: 30,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   Body: {
     backgroundColor: Color.background,
     padding: 10,
     height: 0.67 * height,
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   BSTitle: {
     textAlign: 'center',
@@ -25,8 +27,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderRadius: 10,
     backgroundColor: 'white',
+    marginHorizontal: 10,
   },
   radioButtonContainer: {
+    marginHorizontal: 10,
     flex: 0.6,
   },
   listRoom: {
@@ -37,6 +41,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  lines: {
+    width: 50,
+    height: 5,
+    borderRadius: 50,
+    backgroundColor: 'white',
   },
 });
 

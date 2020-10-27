@@ -1,9 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import Text from '../../Text';
 import {View} from 'react-native';
-
-import PropTypes from 'prop-types';
 
 import styles from './styles/index.css';
 

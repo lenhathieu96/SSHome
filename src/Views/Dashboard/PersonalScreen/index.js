@@ -10,6 +10,7 @@ import ImagePicker from 'react-native-image-picker';
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
 import NotifyModal from '../../../Components/Modal/NotificationModal';
+import LoadingModal from '../../../Components/Modal/LoadingModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 import BSPersonal from './BSPersonal';
@@ -35,10 +36,11 @@ export default function Personal() {
 
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-  const [apiResponse, setApiResponse] = useState();
-  const [notifyModalVisible, setNotifyModalVisible] = useState(false);
+  const [apiResponse, setApiResponse] = useState('');
   const [chosenUser, setChosenUser] = useState({});
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const [notifyModalVisible, setNotifyModalVisible] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const BSPersonalRef = useRef();
 
@@ -57,6 +59,7 @@ export default function Personal() {
           });
         });
         setMemberList(users);
+        setLoading(false);
       });
     return () => subscriber();
   }, [homeID]);
@@ -83,12 +86,20 @@ export default function Personal() {
     toogleConfirmModal(true);
   };
 
-  const onDelMember = () => {
+  const onDelMember = async () => {
     toogleConfirmModal(false);
-    deleteMember(chosenUser.id);
+    setLoading(true);
+    const response = await deleteMember(chosenUser.id);
+    setApiResponse(response.message);
+    setNotifyModalVisible(true);
+    setTimeout(() => {
+      setNotifyModalVisible(false);
+      setApiResponse('');
+    }, 2000);
   };
 
   const onConfigMember = async (member, isUpdate) => {
+    setLoading(true);
     const response = await configMember(member, isUpdate);
     BSPersonalRef.current.snapTo(1);
     setApiResponse(response.message);
@@ -96,7 +107,7 @@ export default function Personal() {
     setTimeout(() => {
       setNotifyModalVisible(false);
       setApiResponse('');
-    }, 1000);
+    }, 2000);
   };
 
   const selectPhotoTapped = () => {
@@ -190,7 +201,7 @@ export default function Personal() {
       <BSPersonal
         ref={BSPersonalRef}
         onConfigMember={onConfigMember}
-        roomList={masterInfo.availableRoom}
+        roomList={masterInfo.availableRooms}
         memberProfile={chosenUser}
       />
       <ConfirmDelModal
@@ -202,6 +213,7 @@ export default function Personal() {
         onAccept={onDelMember}
       />
       <NotifyModal isVisible={notifyModalVisible} title={apiResponse} />
+      <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );
 }

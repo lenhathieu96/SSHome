@@ -6,7 +6,7 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 
-const checkPermission = async () => {
+export const checkPermission = async () => {
   await checkMultiple(
     Platform.OS === 'ios'
       ? [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, PERMISSIONS.IOS.CAMERA]
@@ -15,10 +15,12 @@ const checkPermission = async () => {
           PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
         ],
   ).then((result) => {
+    console.log(result, ' user permisson');
     switch (result) {
       case RESULTS.GRANTED:
+        console.log('All permissions granted');
         return true;
-      case RESULTS.DENIED:
+      default:
         requestPermission();
         break;
     }
@@ -32,9 +34,11 @@ const requestPermission = async () => {
       : [
           PERMISSIONS.ANDROID.CAMERA,
           PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         ],
   )
     .then((result) => {
+      console.log(result, 'request result');
       if (result === 'granted') {
         // getDriverLocation();
       }
@@ -44,5 +48,3 @@ const requestPermission = async () => {
       console.log(err);
     });
 };
-
-export {checkPermission, requestPermission};

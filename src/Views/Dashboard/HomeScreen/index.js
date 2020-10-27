@@ -18,6 +18,7 @@ import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
+import LoadingModal from '../../../Components/Modal/LoadingModal';
 
 import Header from './Header';
 import RoomList from './RoomList';
@@ -42,15 +43,16 @@ export default function HomeScreen({navigation}) {
   const BSBlueToothRef = useRef();
   const hardwareController = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    BLEManager.start({showAlert: false});
     listenConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getUserProflie();
-    BLEManager.start({showAlert: false});
     if (hardwareController.BLController) {
       setUpBLConnection();
     }
@@ -70,6 +72,7 @@ export default function HomeScreen({navigation}) {
         : await getMemberProfile(currentUser.phoneNumber);
 
     dispatch(setUserProfile(User));
+    setLoading(false);
   };
 
   //listener Internet and Bluetooth connection
@@ -134,7 +137,7 @@ export default function HomeScreen({navigation}) {
   };
 
   return (
-    <RootContainer>
+    <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Info Container */}
       <Header />
       {/* Room List */}
@@ -155,6 +158,7 @@ export default function HomeScreen({navigation}) {
         listDevice={nearbyDevices}
         stopSearchingBLDevices={stopSearchingBLDevices}
       />
+      <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );
 }

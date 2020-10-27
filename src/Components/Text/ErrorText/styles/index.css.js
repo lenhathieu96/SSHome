@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     color: Color.red,
     marginVertical: 5,
     textAlign: 'center',
+    marginHorizontal: 10,
   },
 });
 export default styles;

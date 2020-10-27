@@ -3,12 +3,12 @@ import {StyleSheet, Dimensions} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   //Body
   bodyContainer: {
     backgroundColor: Color.secondary,
-    flex: 0.9,
+    flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 5,

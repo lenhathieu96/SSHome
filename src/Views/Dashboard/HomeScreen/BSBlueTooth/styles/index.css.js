@@ -5,11 +5,12 @@ import Color from '../../../../../Utils/Color';
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Header: {
-    padding: 10,
-    backgroundColor: 'white',
-    borderTopRightRadius: 50,
-    borderTopLeftRadius: 50,
+    backgroundColor: Color.background,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    height: 30,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   Body: {
     backgroundColor: 'white',
@@ -28,6 +29,12 @@ const styles = StyleSheet.create({
   },
   BSEmptyTables__itemTitle: {
     fontSize: fontSize.larger,
+  },
+  lines: {
+    width: 60,
+    height: 5,
+    borderRadius: 50,
+    backgroundColor: 'white',
   },
 });
 

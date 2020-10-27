@@ -29,11 +29,11 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
       enabledGestureInteraction={false}
       renderHeader={() => (
         <View style={styles.Header}>
-          <IconButton
-            iconColor={Color.primary}
-            iconSize={fontSize.huge}
-            iconName="minus"
-            onPress={() => stopSearchingBLDevices()}
+          <TouchableOpacity
+            style={styles.lines}
+            onPress={() => {
+              ref.current.snapTo(1);
+            }}
           />
           <BoldText text="Các Thiết Bị Lân Cận" style={styles.Title} />
         </View>

@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../../Utils/FontSize';
 const styles = StyleSheet.create({
   infoContainer: {
-    flex: 0.15,
+    flex: 0.1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

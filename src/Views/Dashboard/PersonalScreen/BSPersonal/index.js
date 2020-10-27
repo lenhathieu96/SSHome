@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {View, Dimensions, Keyboard, FlatList} from 'react-native';
+import {View, Dimensions, Keyboard, FlatList, SafeAreaView} from 'react-native';
 import {RadioButton, TextInput} from 'react-native-paper';
 import BottomSheet from 'reanimated-bottom-sheet';
 
@@ -10,6 +10,7 @@ import TextButton from '../../../../Components/TextButton';
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const BSPersonal = React.forwardRef((props, ref) => {
   const {onConfigMember, roomList, memberProfile} = props;
@@ -87,19 +88,17 @@ const BSPersonal = React.forwardRef((props, ref) => {
       initialSnap={1}
       renderHeader={() => (
         <View style={styles.Header}>
-          <IconButton
-            style={{marginTop: 10}}
-            iconSize={fontSize.huge}
-            iconName="minus"
+          <TouchableOpacity
+            style={styles.lines}
             onPress={() => {
-              Keyboard.dismiss;
+              Keyboard.dismiss();
               ref.current.snapTo(1);
             }}
           />
         </View>
       )}
       renderContent={() => (
-        <View style={styles.Body}>
+        <SafeAreaView style={styles.Body}>
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>
 
           <TextInput
@@ -124,7 +123,9 @@ const BSPersonal = React.forwardRef((props, ref) => {
               colors: {primary: Color.primary, underlineColor: 'transparent'},
             }}
           />
-          <BoldText>Phòng được phép truy cập</BoldText>
+          <BoldText style={{marginHorizontal: 10}}>
+            Phòng được phép truy cập
+          </BoldText>
           <View style={styles.radioButtonContainer}>
             <FlatList
               contentContainerStyle={styles.listRoom}
@@ -133,6 +134,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
               data={roomList}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => {
+                console.log(item);
                 return (
                   <View style={styles.radioButton}>
                     <RadioButton.Android
@@ -158,7 +160,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
             text={isUpdate ? 'Cập Nhập' : 'Thêm Mới'}
             onPress={() => handleOnClickAdd()}
           />
-        </View>
+        </SafeAreaView>
       )}
     />
   );

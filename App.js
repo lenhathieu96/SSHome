@@ -13,24 +13,13 @@ import store from './src/Redux/Store';
 export default function App() {
   // const dispatch = useDispatch();
   useEffect(() => {
-    PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-    ).then((result) => {
-      if (result) {
-        BLEManager.start({showAlert: false});
-      } else {
-        PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-        ).then((result) => {
-          if (result) {
-            console.log('User accept');
-          } else {
-            console.log('User refuse');
-          }
-        });
-      }
-    });
-  });
+    const result = checkPermission();
+    if (result) {
+      BLEManager.start({showAlert: false});
+    } else {
+      console.log('user not grant all permissons');
+    }
+  }, []);
 
   // NetInfo.addEventListener((state) => {
   //   dispatch(setInternetConnection(state.isConnected));
