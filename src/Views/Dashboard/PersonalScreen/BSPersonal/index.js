@@ -15,7 +15,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const BSPersonal = React.forwardRef((props, ref) => {
   const {onConfigMember, roomList, memberProfile} = props;
   const {height} = Dimensions.get('window');
-  const BSHeight = 0.7 * height;
+  const BSHeight = 0.8 * height;
   const inputRef = useRef();
 
   const [name, setName] = useState('');

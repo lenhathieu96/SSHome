@@ -19,15 +19,16 @@ const styles = StyleSheet.create({
   },
 
   groupImageContainer: {
-    flex: 0.5,
+    flex: 0.3,
     flexDirection: 'row',
-    margin: 10,
-    justifyContent: 'space-between',
+    marginVertical: 10,
+    justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: 'blue',
   },
   imgContainer: {
-    flex: 0.2,
+    flex: 0.4,
+    borderWidth: 1,
+    borderRadius: 20,
   },
 
   picture: {

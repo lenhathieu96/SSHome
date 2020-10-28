@@ -10,6 +10,7 @@ import {useDispatch} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
+import Icon from 'react-native-vector-icons/Feather';
 
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
@@ -128,7 +129,8 @@ const AddButton = () => {
   return (
     <TouchableWithoutFeedback>
       <View style={styles.btnContainer}>
-        <Text>ayyyo</Text>
+        <Icon name="plus" size={fontSize.bigger} />
+        <Text>Thêm thiết bị</Text>
       </View>
     </TouchableWithoutFeedback>
   );
