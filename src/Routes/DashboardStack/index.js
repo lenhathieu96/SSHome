@@ -78,7 +78,10 @@ export default function DashboardStack() {
                     name="bluetooth"
                   />
                 )}
-                onPress={() => dispatch(setController())}
+                onPress={() => {
+                  dispatch(setController());
+                  props.navigation.closeDrawer();
+                }}
               />
               <DrawerItem
                 label="Trợ Giúp"

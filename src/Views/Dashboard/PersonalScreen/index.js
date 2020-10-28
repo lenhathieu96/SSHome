@@ -38,14 +38,14 @@ export default function Personal() {
   const [memberList, setMemberList] = useState([]);
   const [apiResponse, setApiResponse] = useState('');
   const [chosenUser, setChosenUser] = useState({});
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-  const [notifyModalVisible, setNotifyModalVisible] = useState(false);
+  const [showConfirm, setShowConfig] = useState(false);
+  const [showNotify, setShowNotify] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
   const BSPersonalRef = useRef();
 
   useEffect(() => {
-    getMemberList();
+    getHomeID();
     const subscriber = firestore()
       .collection('Home')
       .doc(homeID)
@@ -64,7 +64,7 @@ export default function Personal() {
     return () => subscriber();
   }, [homeID]);
 
-  const getMemberList = async () => {
+  const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
     if (homeIDStorage) {
       setHomeID(homeIDStorage);
@@ -72,11 +72,10 @@ export default function Personal() {
   };
 
   const toogleConfirmModal = (isShowConfirmModal) => {
-    setConfirmModalVisible(isShowConfirmModal);
+    setShowConfig(isShowConfirmModal);
   };
 
   const onPressMember = (user) => {
-    console.log(user.id, 'chosen user');
     setChosenUser(user);
     BSPersonalRef.current.snapTo(0);
   };
@@ -91,9 +90,9 @@ export default function Personal() {
     setLoading(true);
     const response = await deleteMember(chosenUser.id);
     setApiResponse(response.message);
-    setNotifyModalVisible(true);
+    setShowNotify(true);
     setTimeout(() => {
-      setNotifyModalVisible(false);
+      setShowNotify(false);
       setApiResponse('');
     }, 2000);
   };
@@ -103,9 +102,9 @@ export default function Personal() {
     const response = await configMember(member, isUpdate);
     BSPersonalRef.current.snapTo(1);
     setApiResponse(response.message);
-    setNotifyModalVisible(true);
+    setShowNotify(true);
     setTimeout(() => {
-      setNotifyModalVisible(false);
+      setShowNotify(false);
       setApiResponse('');
     }, 2000);
   };
@@ -205,14 +204,14 @@ export default function Personal() {
         memberProfile={chosenUser}
       />
       <ConfirmDelModal
-        isVisible={confirmModalVisible}
+        isVisible={showConfirm}
         toggleModal={toogleConfirmModal}
         title={`${
           chosenUser ? chosenUser.name : ''
         } sẽ bị xoá khỏi danh sách thành viên`}
         onAccept={onDelMember}
       />
-      <NotifyModal isVisible={notifyModalVisible} title={apiResponse} />
+      <NotifyModal isVisible={showNotify} title={apiResponse} />
       <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );

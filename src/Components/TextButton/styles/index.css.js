@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Color.primary,
     marginHorizontal: 5,
+    marginBottom: 10,
   },
   text: {
     fontWeight: 'bold',

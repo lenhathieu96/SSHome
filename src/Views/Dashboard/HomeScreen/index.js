@@ -18,6 +18,7 @@ import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
+import NotifyModal from '../../../Components/Modal/NotificationModal';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
 
 import Header from './Header';
@@ -43,7 +44,12 @@ export default function HomeScreen({navigation}) {
   const BSBlueToothRef = useRef();
   const hardwareController = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
+  const [showNotify, setShowNotify] = useState(false);
+  const [textNotify, setTextNotify] = useState('');
   const [isLoading, setLoading] = useState(true);
+
+  const [deviceData, setDeviceData] = useState({});
+  const [showUID, setShowUID] = useState(false);
 
   useEffect(() => {
     BLEManager.start({showAlert: false});
@@ -99,17 +105,20 @@ export default function HomeScreen({navigation}) {
 
   const setUpBLConnection = async () => {
     if (hardwareController.BLConnection) {
-      const BLDevice = await AsyncStorage.getItem('BLDevice');
-      if (BLDevice) {
+      const BLStoreDevice = await AsyncStorage.getItem('ESP');
+      if (BLStoreDevice) {
+        console.log('start connect stored device');
+        const BLDevice = JSON.parse(BLStoreDevice);
+        await connectBLDevice(BLDevice);
       } else {
         BSBlueToothRef.current.snapTo(0);
-        bleManagerEmitter.addListener('BleManagerStopScan', () =>
-          Alert.alert('Kết thúc quét'),
-        );
+        bleManagerEmitter.addListener('BleManagerStopScan', () => {
+          setLoading(false);
+          showNotification('Đã quét xong');
+        });
         bleManagerEmitter.addListener(
           'BleManagerDiscoverPeripheral',
           (device) => {
-            console.log(device);
             let duplicateDevice = nearbyDevices.filter(
               (item) => item.id === device.id,
             );
@@ -120,7 +129,8 @@ export default function HomeScreen({navigation}) {
           },
         );
         BLEManager.scan([], 15, true).then(() => {
-          console.log('Scanning...');
+          console.log('Start Scanning...');
+          setLoading(true);
         });
       }
     } else {
@@ -129,11 +139,34 @@ export default function HomeScreen({navigation}) {
     }
   };
 
-  const stopSearchingBLDevices = () => {
-    BLEManager.stopScan().then(() => console.log('scan set stopped'));
-    BSBlueToothRef.current.snapTo(1);
-    bleManagerEmitter.removeListener('BleManagerDiscoverPeripheral');
-    setNearbyDevices([]);
+  const showNotification = (notitfy) => {
+    setShowNotify(true);
+    setTextNotify(notitfy);
+    setTimeout(() => {
+      setShowNotify(false);
+      setTextNotify('');
+    }, 1000);
+  };
+
+  const connectBLDevice = async (device) => {
+    try {
+      console.log(device.id);
+      await BLEManager.connect(device.id);
+      const DeviceData = JSON.stringify(device);
+      await AsyncStorage.setItem('ESP', DeviceData);
+      showNotification('Kết nối thành công');
+      BLEManager.retrieveServices(
+        device.id,
+        device.advertising.serviceUUIDs,
+      ).then((peripheralInfo) => {
+        setDeviceData(peripheralInfo);
+        setShowUID(true);
+      });
+      BSBlueToothRef.current.snapTo(0);
+    } catch (error) {
+      console.log('connect fail', error);
+      showNotification('Kết nối thất bại');
+    }
   };
 
   return (
@@ -156,9 +189,12 @@ export default function HomeScreen({navigation}) {
       <BSBlueToothSearching
         ref={BSBlueToothRef}
         listDevice={nearbyDevices}
-        stopSearchingBLDevices={stopSearchingBLDevices}
+        connectDevice={connectBLDevice}
+        showUID={showUID}
+        deviceData={deviceData}
       />
       <LoadingModal isVisible={isLoading} />
+      <NotifyModal isVisible={showNotify} title={textNotify} />
     </RootContainer>
   );
 }

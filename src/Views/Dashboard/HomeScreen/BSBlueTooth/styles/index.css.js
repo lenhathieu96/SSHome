@@ -5,7 +5,7 @@ import Color from '../../../../../Utils/Color';
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Header: {
-    backgroundColor: Color.background,
+    backgroundColor: 'white',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     height: 30,
@@ -17,24 +17,16 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 0.8 * height,
   },
-  BSEmptyTables__Title: {
-    fontSize: fontSize.huge,
-    color: Color.primary,
-  },
-  BSEmptyTables__itemContainer: {
-    padding: 10,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: Color.unactive,
-  },
-  BSEmptyTables__itemTitle: {
+  title: {
     fontSize: fontSize.larger,
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   lines: {
     width: 60,
     height: 5,
     borderRadius: 50,
-    backgroundColor: 'white',
+    backgroundColor: Color.primary,
   },
 });
 

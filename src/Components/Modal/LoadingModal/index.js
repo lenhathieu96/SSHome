@@ -12,7 +12,7 @@ import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
 export default function LoadingModal(props) {
-  const {isVisible} = props;
+  const {isVisible, title} = props;
   return (
     <Modal isVisible={isVisible} animationIn="fadeIn" animationOut="fadeOut">
       <View style={styles.ModalContainer}>
@@ -21,7 +21,9 @@ export default function LoadingModal(props) {
           size={fontSize.bigger}
           color={Color.primary}
         />
-        <Text style={styles.ModalText}>Vui lòng đợi ...</Text>
+        <Text style={styles.ModalText}>
+          {title ? title : 'Vui lòng đợi ...'}
+        </Text>
       </View>
     </Modal>
   );

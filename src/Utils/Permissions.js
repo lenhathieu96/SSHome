@@ -15,7 +15,6 @@ export const checkPermission = async () => {
           PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
         ],
   ).then((result) => {
-    console.log(result, ' user permisson');
     switch (result) {
       case RESULTS.GRANTED:
         console.log('All permissions granted');
@@ -38,7 +37,6 @@ const requestPermission = async () => {
         ],
   )
     .then((result) => {
-      console.log(result, 'request result');
       if (result === 'granted') {
         // getDriverLocation();
       }

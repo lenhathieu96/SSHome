@@ -1,14 +1,21 @@
-import React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  SafeAreaView,
+  FlatList,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 import {useDispatch} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
+import database from '@react-native-firebase/database';
 
 import RootContainer from '../../../Components/RootContainer';
-import {BoldText} from '../../../Components/Text';
+import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
+import LoadingModal from '../../../Components/Modal/LoadingModal';
 
 import {updateRoomBackground} from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
@@ -16,11 +23,16 @@ import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
 import Color from '../../../Utils/Color';
 import * as fontSize from '../../../Utils/FontSize';
 import styles from './styles/index.css';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
+
+  const [isLoading, setLoading] = useState(false);
+  const [homeID, setHomeID] = useState('');
+  const [devices, setDevices] = useState([]);
+
   const dispatch = useDispatch();
-  console.log(room.id);
   const selectPhotoTapped = () => {
     const options = {
       title: 'Chọn Hình',
@@ -38,17 +50,41 @@ export default function RoomDetailScreen({navigation, route}) {
       if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
+        setLoading(true);
         let source = {uri: response.uri};
         const res = await updateRoomBackground(source.uri, room.id);
         if (res.result) {
           console.log('upload success');
           dispatch(updateRoomAvatar(room.id, res.uri));
           navigation.goBack();
-        } else {
-          console.log('upload failed');
         }
+        setLoading(false);
       }
     });
+  };
+
+  useEffect(() => {
+    getHomeID();
+    const onValueChange = database()
+      .ref(`${homeID}/${room.id}`)
+      .on('value', (snapshot) => {
+        let result = [{}];
+        let deviceList = snapshot.val().devices;
+        // console.log(snapshot.val().devices);
+        for (let device in deviceList) {
+          result.unshift(deviceList[device]);
+        }
+        setDevices(result);
+      });
+    return () =>
+      database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
+  });
+
+  const getHomeID = async () => {
+    const homeIDStorage = await AsyncStorage.getItem('homeID');
+    if (homeIDStorage) {
+      setHomeID(homeIDStorage);
+    }
   };
 
   return (
@@ -70,9 +106,30 @@ export default function RoomDetailScreen({navigation, route}) {
           <IconButton iconName="camera" onPress={() => selectPhotoTapped()} />
         </SafeAreaView>
         <View style={styles.bodyContainer}>
-          <DeviceButton />
+          <FlatList
+            data={devices}
+            numColumns={2}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => {
+              if (index === devices.length - 1) {
+                return <AddButton />;
+              }
+              return <DeviceButton />;
+            }}
+          />
         </View>
+        <LoadingModal isVisible={isLoading} />
       </View>
     </RootContainer>
   );
 }
+
+const AddButton = () => {
+  return (
+    <TouchableWithoutFeedback>
+      <View style={styles.btnContainer}>
+        <Text>ayyyo</Text>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};

@@ -16,8 +16,6 @@ export default function App() {
     const result = checkPermission();
     if (result) {
       BLEManager.start({showAlert: false});
-    } else {
-      console.log('user not grant all permissons');
     }
   }, []);
 

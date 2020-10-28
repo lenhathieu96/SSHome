@@ -134,7 +134,6 @@ const BSPersonal = React.forwardRef((props, ref) => {
               data={roomList}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => {
-                console.log(item);
                 return (
                   <View style={styles.radioButton}>
                     <RadioButton.Android
