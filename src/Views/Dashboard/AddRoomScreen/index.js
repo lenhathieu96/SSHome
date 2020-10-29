@@ -34,11 +34,19 @@ export default function AddRoomScreen({navigation, route}) {
       />
       <View style={styles.groupImageContainer}>
         <View style={styles.imgContainer}>
-          <Image source={roomBg1} style={{flex: 1, width: null, height: null}} resizeMode="contain" />
+          <Image
+            source={roomBg1}
+            style={{flex: 1, width: null, height: null}}
+            resizeMode="contain"
+          />
         </View>
         <View style={styles.imgContainer}>
-        <Image source={roomBg1} style={{flex: 1, width: null, height: null}} resizeMode="contain" />
-      </View>
+          <Image
+            source={roomBg1}
+            style={{flex: 1, width: null, height: null}}
+            resizeMode="contain"
+          />
+        </View>
       </View>
       <TextButton
         text="Tạo Phòng"

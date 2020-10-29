@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
@@ -18,8 +18,13 @@ import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
 
-import {updateRoomBackground} from '../../../Api/roomAPI';
+import {
+  updateRoomBackground,
+  addNewDevice,
+  updateStatusDevice,
+} from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
+import BSAddNewDevice from './BSAddNewDevice';
 
 import Color from '../../../Utils/Color';
 import * as fontSize from '../../../Utils/FontSize';
@@ -29,12 +34,47 @@ import AsyncStorage from '@react-native-community/async-storage';
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
 
+  const BSRef = useRef();
+
   const [isLoading, setLoading] = useState(false);
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
 
   const dispatch = useDispatch();
-  const selectPhotoTapped = () => {
+  const isBLController = useSelector((state) => state.hardware.BLConnection);
+
+  useEffect(() => {
+    getHomeID();
+    //Wifi control
+    if (!isBLController) {
+      const onValueChange = database()
+        .ref(`${homeID}/${room.id}`)
+        .on('value', (snapshot) => {
+          let result = [{}];
+          let deviceList = snapshot.val().devices;
+          // console.log(snapshot.val().devices);
+          for (let device in deviceList) {
+            result.unshift(deviceList[device]);
+          }
+          setDevices(result);
+        });
+      return () =>
+        database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
+    }
+    //BLE Control
+    else {
+    }
+  }, [isBLController, homeID, room.id]);
+
+  const getHomeID = async () => {
+    const homeIDStorage = await AsyncStorage.getItem('homeID');
+    if (homeIDStorage) {
+      setHomeID(homeIDStorage);
+    }
+  };
+
+  //Change room background
+  const onChangeRoomBackground = () => {
     const options = {
       title: 'Chọn Hình',
       takePhotoButtonTitle: 'Chụp ảnh',
@@ -53,7 +93,7 @@ export default function RoomDetailScreen({navigation, route}) {
       } else {
         setLoading(true);
         let source = {uri: response.uri};
-        const res = await updateRoomBackground(source.uri, room.id);
+        const res = await updateRoomBackground(homeID, source.uri, room.id);
         if (res.result) {
           console.log('upload success');
           dispatch(updateRoomAvatar(room.id, res.uri));
@@ -64,27 +104,21 @@ export default function RoomDetailScreen({navigation, route}) {
     });
   };
 
-  useEffect(() => {
-    getHomeID();
-    const onValueChange = database()
-      .ref(`${homeID}/${room.id}`)
-      .on('value', (snapshot) => {
-        let result = [{}];
-        let deviceList = snapshot.val().devices;
-        // console.log(snapshot.val().devices);
-        for (let device in deviceList) {
-          result.unshift(deviceList[device]);
-        }
-        setDevices(result);
-      });
-    return () =>
-      database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
-  });
+  // Change status device
+  const onChangeStatus = async (deviceID, status) => {
+    const response = await updateStatusDevice(
+      homeID,
+      room.id,
+      deviceID,
+      status,
+    );
+    console.log(response.message);
+  };
 
-  const getHomeID = async () => {
-    const homeIDStorage = await AsyncStorage.getItem('homeID');
-    if (homeIDStorage) {
-      setHomeID(homeIDStorage);
+  const onAddNewDevice = async (device) => {
+    const response = await addNewDevice(homeID, room.id, device);
+    if (response.result) {
+      BSRef.current.snapTo(1);
     }
   };
 
@@ -104,7 +138,10 @@ export default function RoomDetailScreen({navigation, route}) {
             onPress={() => navigation.goBack()}
           />
           <BoldText style={styles.roomTitle}>{room.name}</BoldText>
-          <IconButton iconName="camera" onPress={() => selectPhotoTapped()} />
+          <IconButton
+            iconName="camera"
+            onPress={() => onChangeRoomBackground()}
+          />
         </SafeAreaView>
         <View style={styles.bodyContainer}>
           <FlatList
@@ -113,21 +150,28 @@ export default function RoomDetailScreen({navigation, route}) {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               if (index === devices.length - 1) {
-                return <AddButton />;
+                return <AddButton onPress={() => BSRef.current.snapTo(0)} />;
               }
-              return <DeviceButton />;
+              return (
+                <DeviceButton device={item} onChangeStatus={onChangeStatus} />
+              );
             }}
           />
         </View>
         <LoadingModal isVisible={isLoading} />
+        <BSAddNewDevice
+          ref={BSRef}
+          devices={devices}
+          onAddNewDevice={onAddNewDevice}
+        />
       </View>
     </RootContainer>
   );
 }
 
-const AddButton = () => {
+const AddButton = ({onPress}) => {
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.btnContainer}>
         <Icon name="plus" size={fontSize.bigger} />
         <Text>Thêm thiết bị</Text>

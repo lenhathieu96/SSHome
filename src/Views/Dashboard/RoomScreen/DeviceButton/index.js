@@ -1,7 +1,6 @@
-import React, {useState, useRef} from 'react';
+import React from 'react';
 import {View, Switch, TouchableWithoutFeedback} from 'react-native';
 
-import IconButton from '../../../../Components/IconButton';
 import Text, {BoldText} from '../../../../Components/Text';
 
 import Color from '../../../../Utils/Color';
@@ -9,28 +8,26 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function DeviceButton(props) {
-  const [isActive, setActive] = useState(false);
+  const {device, onChangeStatus} = props;
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => {
-        setActive(!isActive);
-      }}>
+      onPress={() => onChangeStatus(device.id, !device.status)}>
       <View
         style={[
           styles.btnContainer,
-          {backgroundColor: isActive ? Color.secondary : Color.background},
+          {backgroundColor: device.status ? Color.secondary : Color.background},
         ]}>
         <View style={styles.deviceInfoContainer}>
-          <BoldText style={styles.deviceName}>{'Đèn 1'}</BoldText>
-          <Text>{isActive ? 'Bật' : 'Tắt'}</Text>
+          <BoldText style={styles.deviceName}>{device.name}</BoldText>
+          <Text>{device.status ? 'Bật' : 'Tắt'}</Text>
         </View>
         <View style={styles.deviceStatusContainer}>
           <Switch
             style={styles.switch}
-            value={isActive}
+            value={device.status}
             trackColor={{true: 'white', false: 'white'}}
-            thumbColor={isActive ? Color.secondary : Color.background}
+            thumbColor={device.status ? Color.secondary : Color.background}
           />
           <View />
         </View>

@@ -39,15 +39,16 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
-  const [nearbyDevices, setNearbyDevices] = useState([]);
-
   const BSBlueToothRef = useRef();
+
   const hardwareController = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
+
   const [showNotify, setShowNotify] = useState(false);
   const [textNotify, setTextNotify] = useState('');
   const [isLoading, setLoading] = useState(true);
-
+  const [nearbyDevices, setNearbyDevices] = useState([]);
+  //demo=================================================================
   const [deviceData, setDeviceData] = useState({});
   const [showUID, setShowUID] = useState(false);
 
@@ -105,6 +106,7 @@ export default function HomeScreen({navigation}) {
 
   const setUpBLConnection = async () => {
     if (hardwareController.BLConnection) {
+      setLoading(true);
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
       if (BLStoreDevice) {
         console.log('start connect stored device');
@@ -130,22 +132,12 @@ export default function HomeScreen({navigation}) {
         );
         BLEManager.scan([], 15, true).then(() => {
           console.log('Start Scanning...');
-          setLoading(true);
         });
       }
     } else {
       BSBlueToothRef.current.snapTo(1);
       Alert.alert('Vui Lòng Kiểm Tra Trạng Thái BLuetooth');
     }
-  };
-
-  const showNotification = (notitfy) => {
-    setShowNotify(true);
-    setTextNotify(notitfy);
-    setTimeout(() => {
-      setShowNotify(false);
-      setTextNotify('');
-    }, 1000);
   };
 
   const connectBLDevice = async (device) => {
@@ -169,6 +161,14 @@ export default function HomeScreen({navigation}) {
     }
   };
 
+  const showNotification = (notitfy) => {
+    setShowNotify(true);
+    setTextNotify(notitfy);
+    setTimeout(() => {
+      setShowNotify(false);
+      setTextNotify('');
+    }, 1000);
+  };
   return (
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Info Container */}

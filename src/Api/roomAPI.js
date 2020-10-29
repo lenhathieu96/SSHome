@@ -18,19 +18,41 @@ export const addRoom = async () => {
   }
 };
 
-export const updateRoomBackground = async (imageURI, roomID) => {
-  console.log(roomID, 'API');
+export const updateRoomBackground = async (homeID, imageURI, roomID) => {
   try {
-    const homeID = await AsyncStorage.getItem('homeID');
     const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
-
     await reference.putFile(imageURI);
     const URL = await reference.getDownloadURL();
     await database().ref(`/${homeID}/${roomID}`).update({background: URL});
     return {result: true, uri: URL};
   } catch (error) {
     console.log(error);
-    return {result: false};
+    return {result: false, message: 'Cập nhập hình thất bại'};
+  }
+};
+
+export const addNewDevice = async (homeID, roomID, device) => {
+  try {
+    let deviceID = `DV${homeID.slice(2, 5)}${createID()}`;
+    let uploadDevice = {...device, id: deviceID};
+    await database()
+      .ref(`/${homeID}/${roomID}/devices/${deviceID}`)
+      .set(uploadDevice);
+    return {result: true, message: 'Thêm Thành Công'};
+  } catch (error) {
+    return {result: false, message: 'Thêm Thất bại'};
+  }
+};
+
+export const updateStatusDevice = async (homeID, roomID, deviceID, status) => {
+  try {
+    await database()
+      .ref(`/${homeID}/${roomID}/devices/${deviceID}`)
+      .update({status});
+    return {result: true, message: 'Cập Nhập Trạng Thái Thành công'};
+  } catch (error) {
+    console.log(error);
+    return {result: false, message: 'Cập Nhập Trạng Thái Thất bại'};
   }
 };
 
