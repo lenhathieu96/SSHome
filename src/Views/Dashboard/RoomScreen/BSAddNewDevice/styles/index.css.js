@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
   },
   radioButton: {
-    flex: 0.4,
+    flex: 0.3,
     marginVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
   listRoom: {
     flex: 0.6,
   },
-  text: {
+  textContainer: {
     flex: 0.2,
-    textAlignVertical: 'center',
+    justifyContent: 'center',
   },
   btnContainer: {
     flex: 0.3,
-    textAlignVertical: 'center',
+    justifyContent: 'flex-end',
   },
 });
 

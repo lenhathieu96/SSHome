@@ -17,14 +17,16 @@ import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
+import ConfirmModal from '../../../Components/Modal/ConfirmDelModal';
+import BSAddNewDevice from './BSAddNewDevice';
 
 import {
   updateRoomBackground,
-  addNewDevice,
   updateStatusDevice,
+  addNewDevice,
+  deleteDevice,
 } from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
-import BSAddNewDevice from './BSAddNewDevice';
 
 import Color from '../../../Utils/Color';
 import * as fontSize from '../../../Utils/FontSize';
@@ -36,9 +38,11 @@ export default function RoomDetailScreen({navigation, route}) {
 
   const BSRef = useRef();
 
-  const [isLoading, setLoading] = useState(false);
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
+  const [chosenDevice, chooseDevice] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const dispatch = useDispatch();
   const isBLController = useSelector((state) => state.hardware.BLConnection);
@@ -115,8 +119,15 @@ export default function RoomDetailScreen({navigation, route}) {
     console.log(response.message);
   };
 
+  const onDeleteDevice = async () => {
+    const response = await deleteDevice(homeID, room.id, chosenDevice.id);
+    console.log(response.message);
+    setShowConfirm(false);
+  };
+
   const onAddNewDevice = async (device) => {
     const response = await addNewDevice(homeID, room.id, device);
+    console.log(response.message);
     if (response.result) {
       BSRef.current.snapTo(1);
     }
@@ -147,18 +158,32 @@ export default function RoomDetailScreen({navigation, route}) {
           <FlatList
             data={devices}
             numColumns={2}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               if (index === devices.length - 1) {
                 return <AddButton onPress={() => BSRef.current.snapTo(0)} />;
               }
               return (
-                <DeviceButton device={item} onChangeStatus={onChangeStatus} />
+                <DeviceButton
+                  device={item}
+                  onChangeStatus={onChangeStatus}
+                  onDelete={(device) => {
+                    chooseDevice(device);
+                    setShowConfirm(true);
+                  }}
+                />
               );
             }}
           />
         </View>
         <LoadingModal isVisible={isLoading} />
+        <ConfirmModal
+          title={`${chosenDevice.name} sẽ bị xoá khỏi danh sách thiết bị`}
+          isVisible={showConfirm}
+          onAccept={onDeleteDevice}
+          toggleModal={() => setShowConfirm(false)}
+        />
         <BSAddNewDevice
           ref={BSRef}
           devices={devices}

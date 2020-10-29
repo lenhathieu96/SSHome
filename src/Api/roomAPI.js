@@ -56,6 +56,16 @@ export const updateStatusDevice = async (homeID, roomID, deviceID, status) => {
   }
 };
 
+export const deleteDevice = async (homeID, roomID, deviceID) => {
+  try {
+    await database().ref(`/${homeID}/${roomID}/devices/${deviceID}`).remove();
+    return {result: true, message: 'Xoá Thiết Bi Thành công'};
+  } catch (error) {
+    console.log(error);
+    return {result: false, message: 'Xoá  Thiết Bị Thất bại'};
+  }
+};
+
 function createID() {
   return Math.random().toString(36).substr(2, 5).toUpperCase();
 }

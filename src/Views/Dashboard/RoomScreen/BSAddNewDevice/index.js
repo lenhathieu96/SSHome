@@ -59,7 +59,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
       ref={ref}
       snapPoints={[BSHeight, 0]}
       initialSnap={1}
-      enabledInnerScrolling={true}
+      enabledInnerScrolling={false}
       renderHeader={() => (
         <View style={styles.Header}>
           <TouchableOpacity
@@ -84,7 +84,9 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
             }}
             onChange={(text) => setDeviceName(text)}
           />
-          <Text style={styles.text}>Chọn cổng kết nối:</Text>
+          <View style={styles.textContainer}>
+            <Text>Chọn cổng kết nối:</Text>
+          </View>
           <FlatList
             styl
             contentContainerStyle={styles.listRoom}
@@ -111,8 +113,8 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
               );
             }}
           />
-          <ErrorText>{txtError}</ErrorText>
           <SafeAreaView style={styles.btnContainer}>
+            <ErrorText>{txtError}</ErrorText>
             <TextButton
               text="Thêm Thiết Bị"
               onPress={() => handleBtnAddPress()}

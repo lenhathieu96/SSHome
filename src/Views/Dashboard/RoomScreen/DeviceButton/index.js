@@ -8,11 +8,12 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function DeviceButton(props) {
-  const {device, onChangeStatus} = props;
+  const {device, onChangeStatus, onDelete} = props;
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => onChangeStatus(device.id, !device.status)}>
+      onPress={() => onChangeStatus(device.id, !device.status)}
+      onLongPress={() => onDelete(device)}>
       <View
         style={[
           styles.btnContainer,
