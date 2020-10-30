@@ -35,3 +35,10 @@ export const updateRoomAvatar = (roomID, imageURI) => {
     },
   };
 };
+
+export const updateNewRoom = (room) => {
+  return {
+    type: 'UPDATE_AVAILABLE_ROOM',
+    payload: room,
+  };
+};

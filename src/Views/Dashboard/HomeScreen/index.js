@@ -24,6 +24,7 @@ import LoadingModal from '../../../Components/Modal/LoadingModal';
 import Header from './Header';
 import RoomList from './RoomList';
 import BSBlueToothSearching from './BSBlueTooth';
+import BSVoice from './BSVoice';
 
 import {
   setBLConnection,
@@ -40,6 +41,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const BSBlueToothRef = useRef();
+  const BSVoiceRef = useRef();
 
   const hardwareController = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
@@ -169,6 +171,15 @@ export default function HomeScreen({navigation}) {
       setTextNotify('');
     }, 1000);
   };
+
+  const onLongPressRoom = async (roomID) => {
+    // const homeID = await AsyncStorage.getItem('homeID');
+    // const userRole = await AsyncStorage.getItem('userRole');
+    // if(userRole==='Master'){
+    //   const response = await deleteRoom(homeID, roomID);
+    // }
+  };
+
   return (
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Info Container */}
@@ -176,13 +187,17 @@ export default function HomeScreen({navigation}) {
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        <RoomList navigation={navigation} data={userProfile.availableRooms} />
+        <RoomList
+          navigation={navigation}
+          data={userProfile.availableRooms}
+          onLongPress={onLongPressRoom}
+        />
 
         <IconButton
           style={styles.floatButton}
           iconName="mic"
           iconColor={Color.primary}
-          onPress={() => {}}
+          onPress={() => BSVoiceRef.current.snapTo(0)}
         />
       </SafeAreaView>
       {/* BSBlueTooth */}
@@ -193,6 +208,7 @@ export default function HomeScreen({navigation}) {
         showUID={showUID}
         deviceData={deviceData}
       />
+      <BSVoice ref={BSVoiceRef} />
       <LoadingModal isVisible={isLoading} />
       <NotifyModal isVisible={showNotify} title={textNotify} />
     </RootContainer>

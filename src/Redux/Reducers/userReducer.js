@@ -28,6 +28,11 @@ const UserReducer = (state = initialState, action) => {
     case 'SET AVATAR':
       return {...state, avatar: action.payload};
 
+    case 'UPDATE_AVAILABLE_ROOM':
+      let rooms = [...state.availableRooms];
+      rooms.push(action.payload);
+      return {...state, availableRooms: rooms};
+
     case 'SET ROOM AVATAR':
       let availableRooms = [...state.availableRooms];
       let index = availableRooms.findIndex(

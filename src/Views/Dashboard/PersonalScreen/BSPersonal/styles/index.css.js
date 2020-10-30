@@ -8,14 +8,14 @@ const styles = StyleSheet.create({
     backgroundColor: Color.background,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    height: 30,
+    height: 0.05 * height,
     alignItems: 'center',
     justifyContent: 'center',
   },
   Body: {
     backgroundColor: Color.background,
     padding: 10,
-    height: 0.67 * height,
+    height: 0.75 * height,
     justifyContent: 'space-around',
   },
   BSTitle: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   radioButton: {
-    marginHorizontal: 15,
+    flex: 0.5,
     marginVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',

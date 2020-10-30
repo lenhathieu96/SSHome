@@ -8,24 +8,39 @@ import {
 } from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
+import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
+import AsyncStorage from '@react-native-community/async-storage';
+import FastImage from 'react-native-fast-image';
 
 import Text, {ErrorText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
+import NotifyModal from '../../../Components/Modal/NotificationModal';
 
-import roomBg1 from '../../../Assets/Images/roomBackground1.jpg';
+import {addRoom} from '../../../Api/roomAPI';
+import {updateNewRoom} from '../../../Redux/ActionCreators/userActions';
+
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
-export default function AddRoomScreen({navigation, route}) {
+const BACKGROUND_1 =
+  'https://firebasestorage.googleapis.com/v0/b/sshome-6d962.appspot.com/o/EjAcqoniSmyL2Iu4wkjR%2FRooms%2FBg1.jpeg?alt=media&token=090fcca1-7c54-4cfc-b0fa-ff295935e0f1';
+const BACKGROUND_2 =
+  'https://firebasestorage.googleapis.com/v0/b/sshome-6d962.appspot.com/o/EjAcqoniSmyL2Iu4wkjR%2FRooms%2FBg2.jpg?alt=media&token=b23dd9e7-26bf-4351-b49b-0ac174ba5df1';
+
+export default function AddRoomScreen({navigation}) {
   const headerHeight = useHeaderHeight();
+  const dispatch = useDispatch();
 
   const [roomName, setRoomName] = useState('');
   const [chosenImg, chooseImg] = useState(0);
   const [customImg, setCustomImg] = useState();
   const [txtError, setTxtError] = useState('');
+
+  const [apiResponse, setApiResponse] = useState('');
+  const [showNotify, setShowNotify] = useState(false);
 
   const takeCustomImg = () => {
     const options = {
@@ -46,22 +61,71 @@ export default function AddRoomScreen({navigation, route}) {
       } else {
         let source = {uri: response.uri};
         setCustomImg(source.uri);
+        chooseImg(3);
       }
     });
   };
 
-  const onAddRoom = () => {
-    if (roomName !== '') {
-      setTxtError('Tên không đưọc để trống');
-    } else if (!customImg && chosenImg === 0) {
-      setTxtError('Bạn phải chọn ảnh đại diện cho phòng');
-    } else {
-      console.log('bingo');
+  const showNotifyModal = (response) => {
+    setApiResponse(response.message);
+    setShowNotify(true);
+    setTimeout(() => {
+      setShowNotify(false);
+      setApiResponse('');
+    }, 2000);
+  };
+
+  const onAddRoom = async () => {
+    const homeID = await AsyncStorage.getItem('homeID');
+    if (homeID) {
+      if (!roomName) {
+        setTxtError('Tên phòng không đưọc để trống');
+      } else if (!customImg && chosenImg === 0) {
+        setTxtError('Bạn phải chọn ảnh đại diện cho phòng');
+      } else {
+        switch (chosenImg) {
+          case 1:
+            const response_1 = await addRoom(
+              homeID,
+              roomName,
+              BACKGROUND_1,
+              false,
+            );
+            showNotifyModal(response_1);
+            if (response_1.result) {
+              dispatch(updateNewRoom(response_1.room));
+            }
+            break;
+          case 2:
+            const response_2 = await addRoom(
+              homeID,
+              roomName,
+              BACKGROUND_2,
+              false,
+            );
+            showNotifyModal(response_2);
+            if (response_2.result) {
+              dispatch(updateNewRoom(response_2.room));
+            }
+            break;
+          case 3:
+            const response_3 = await addRoom(homeID, roomName, customImg, true);
+            showNotifyModal(response_3);
+            if (response_3.result) {
+              dispatch(updateNewRoom(response_3.room));
+            }
+            break;
+        }
+      }
     }
   };
 
   return (
-    <KeyboardAvoidingView style={{flex: 1, marginTop: headerHeight}}>
+    <KeyboardAvoidingView
+      style={{
+        flex: 1,
+        marginTop: headerHeight,
+      }}>
       <TextInput
         value={roomName}
         onChangeText={(text) => setRoomName(text)}
@@ -73,21 +137,25 @@ export default function AddRoomScreen({navigation, route}) {
         }}
         onChange={(text) => setRoomName(text)}
       />
+      <View style={{flex: 0.1, justifyContent: 'center', padding: 5}}>
+        <Text>Chọn ảnh mặc định</Text>
+      </View>
       <View style={styles.groupImageContainer}>
-        <TouchableWithoutFeedback onPress={() => chooseImg(1)}>
-          <ImageBackground
-            source={roomBg1}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            chooseImg(1);
+          }}>
+          <FastImage
+            source={{uri: BACKGROUND_1}}
             style={chosenImg === 1 ? styles.chosenImg : styles.defaultImg}
-            borderRadius={20}
             resizeMode="contain"
           />
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={() => chooseImg(2)}>
-          <ImageBackground
-            source={roomBg1}
+          <FastImage
+            source={{uri: BACKGROUND_2}}
             style={chosenImg === 2 ? styles.chosenImg : styles.defaultImg}
-            borderRadius={20}
             resizeMode="contain"
           />
         </TouchableWithoutFeedback>
@@ -115,6 +183,7 @@ export default function AddRoomScreen({navigation, route}) {
           onPress={() => onAddRoom()}
         />
       </SafeAreaView>
+      <NotifyModal isVisible={showNotify} title={apiResponse} />
     </KeyboardAvoidingView>
   );
 }

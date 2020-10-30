@@ -5,30 +5,33 @@ const styles = StyleSheet.create({
   formController: {
     marginHorizontal: 10,
     justifyContent: 'center',
+    flex: 0.2,
   },
 
   groupImageContainer: {
-    flex: 0.3,
+    flex: 0.4,
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
 
   defaultImg: {
-    flex: 0.35,
-    borderRadius: 20,
+    flex: 0.4,
     width: '100%',
     height: '100%',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   chosenImg: {
-    flex: 0.35,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: Color.primary,
-    borderRadius: 20,
+    overflow: 'hidden',
+    flex: 0.35,
     shadowColor: '#000',
     shadowOffset: {
-      width: 2,
+      width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
   },
   customImgContainer: {
     padding: 5,
-    flex: 0.4,
+    flex: 0.5,
   },
   customImg: {
     alignSelf: 'center',
@@ -48,12 +51,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 20,
     width: 0.4 * width,
-    flex: 1,
+    flex: 0.9,
     borderWidth: 2,
     borderColor: Color.primary,
   },
   btnAddContainer: {
-    flex: 0.3,
+    flex: 0.2,
     justifyContent: 'flex-end',
   },
 

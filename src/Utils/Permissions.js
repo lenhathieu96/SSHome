@@ -29,11 +29,17 @@ export const checkPermission = async () => {
 const requestPermission = async () => {
   await requestMultiple(
     Platform.OS === 'ios'
-      ? [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, PERMISSIONS.IOS.CAMERA]
+      ? [
+          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+          PERMISSIONS.IOS.CAMERA,
+          PERMISSIONS.IOS.SPEECH_RECOGNITION,
+          PERMISSIONS.IOS.MICROPHONE,
+        ]
       : [
           PERMISSIONS.ANDROID.CAMERA,
           PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          PERMISSIONS.ANDROID.RECORD_AUDIO,
         ],
   )
     .then((result) => {

@@ -9,12 +9,13 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function RoomButton(props) {
-  const {navigation, roomData, opacity, translateY} = props;
+  const {navigation, roomData, opacity, translateY, onLongPress} = props;
   return (
     <Animated.View
       style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
       <TouchableOpacity
         style={styles.BtnContainer}
+        onLongPress={() => onLongPress(roomData.id)}
         onPress={() => navigation.navigate('Room', {room: roomData})}>
         <SharedElement id={`item.${roomData.id}.photo`}>
           <FastImage
@@ -28,7 +29,11 @@ export default function RoomButton(props) {
         <BoldText style={styles.roomTitle}>{roomData.name}</BoldText>
         <View style={styles.descContainer}>
           <Icon name="activity" size={fontSize.normal} />
-          <Text>{`${Object.keys(roomData.devices).length} thiết bị`}</Text>
+          <Text>{`${
+            roomData.hasOwnProperty('devices')
+              ? Object.keys(roomData.devices).length
+              : 0
+          } thiết bị`}</Text>
         </View>
       </TouchableOpacity>
     </Animated.View>

@@ -1,20 +1,42 @@
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
-import AsyncStorage from '@react-native-community/async-storage';
 
-export const addRoom = async () => {
-  const homeID = await AsyncStorage.getItem('homeID');
+export const addRoom = async (homeID, name, imageURI, isCustomImage) => {
   const roomID = `R${homeID.slice(2, 5)}${createID()}`;
-  let roomData = {
-    [roomID]: {
-      name: 'Phòng Khách',
-      id: roomID,
-    },
-  };
   try {
+    const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
+    let URL;
+    if (isCustomImage) {
+      await reference.putFile(imageURI);
+      URL = await reference.getDownloadURL();
+    } else {
+      URL = imageURI;
+    }
+    let roomData = {
+      [roomID]: {
+        name,
+        id: roomID,
+        background: URL,
+      },
+    };
     await database().ref(homeID).update(roomData);
+    return {
+      result: true,
+      message: 'Tạo phòng thành công',
+      room: roomData[roomID],
+    };
   } catch (error) {
     console.log(error);
+    return {result: false, message: 'Tạo phòng thất bại'};
+  }
+};
+
+export const deleteRoom = async (homeID, roomID) => {
+  try {
+    await database().ref(`${homeID}/${roomID}`).remove();
+  } catch (error) {
+    console.log(error);
+    return {result: false, message: 'Tạo phòng thất bại'};
   }
 };
 
