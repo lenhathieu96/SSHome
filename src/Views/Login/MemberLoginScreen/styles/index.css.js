@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+
+import * as  fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   body: {
@@ -7,6 +9,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   input: {
+    fontSize: fontSize.large,
+    padding: 10,
     justifyContent: 'center',
     textAlign: 'center',
     letterSpacing: 2,

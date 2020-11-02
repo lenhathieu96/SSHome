@@ -14,15 +14,16 @@ const styles = StyleSheet.create({
   },
   Body: {
     backgroundColor: 'white',
-    padding: 10,
     height: 0.75 * height,
     justifyContent: 'space-around',
   },
   BSTitle: {
     textAlign: 'center',
     fontSize: fontSize.large,
+    marginHorizontal: 5,
   },
   input: {
+    marginHorizontal: 5,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
   },
   radioButtonContainer: {
     flex: 0.7,
+    marginHorizontal: 5,
   },
   listRoom: {
     justifyContent: 'space-between',

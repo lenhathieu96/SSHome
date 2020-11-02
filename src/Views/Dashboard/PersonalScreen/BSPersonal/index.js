@@ -116,7 +116,9 @@ const BSPersonal = React.forwardRef((props, ref) => {
             keyboardType="number-pad"
             style={styles.input}
           />
-          <BoldText>Phòng được phép truy cập</BoldText>
+          <BoldText style={{marginHorizontal: 5}}>
+            Phòng được phép truy cập
+          </BoldText>
           <View style={styles.radioButtonContainer}>
             <FlatList
               contentContainerStyle={styles.listRoom}

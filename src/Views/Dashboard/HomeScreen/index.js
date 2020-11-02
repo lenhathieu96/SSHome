@@ -31,7 +31,6 @@ import {
   setInternetConnection,
 } from '../../../Redux/ActionCreators/hardwareActions';
 
-import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 

@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   },
   body: {
     marginHorizontal: 10,
-    flex: 0.4,
-    justifyContent: 'space-between',
+    flex: 0.3,
+    justifyContent: 'space-evenly',
   },
   btnLogin: {
     marginHorizontal: 10,
