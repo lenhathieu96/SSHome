@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-
+import {Platform} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -19,13 +19,18 @@ export default function AddRoomStack() {
     component={AddRoomScreen}
     options={({navigation}) => ({
       ...TransitionPresets.SlideFromRightIOS,
-      headerTransparent: true,
       headerTitle: 'Thêm Phòng',
       headerTitleStyle:{
+        marginLeft: Platform.OS === 'android' ? 50 : 0,
         color: Color.primary,
         fontSize: fontSize.huge,
-        alignSelf: 'center',
+        alignSelf: 'flex-start',
         fontFamily:'MavenPro-Bold',
+        backgroundColor: 'white',
+      },
+      headerStyle:{
+        elevation: 0,
+        shadowOpacity: 0,
       },
       headerLeft: () => (
         <Icon.Button

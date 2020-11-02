@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
-import {TextInput, RadioButton} from 'react-native-paper';
-import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText, ErrorText} from '../../../../Components/Text';
+import RadioButton from '../../../../Components/RadioButton';
 import TextButton from '../../../../Components/TextButton';
+import TextInput from '../../../../Components/TextInput';
 
-import Color from '../../../../Utils/Color';
 import styles from './styles/index.css';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 const BSAddNewDevice = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
@@ -77,39 +82,33 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
             value={deviceName}
             onChangeText={(text) => setDeviceName(text)}
             label="Tên Thiết Bị"
-            mode="outlined"
+            placeholder="Nhập tên thiết bị"
             style={{flex: 0.2}}
-            theme={{
-              colors: {primary: Color.primary, underlineColor: 'transparent'},
-            }}
-            onChange={(text) => setDeviceName(text)}
           />
           <View style={styles.textContainer}>
             <Text>Chọn cổng kết nối:</Text>
           </View>
           <FlatList
             styl
-            contentContainerStyle={styles.listRoom}
+            contentContainerStyle={styles.listPorts}
             showsVerticalScrollIndicator={false}
             numColumns={3}
             data={portList}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {
               return (
-                <View style={styles.radioButton}>
-                  <RadioButton.Android
-                    value={item}
-                    status={
-                      chosenPort
-                        ? chosenPort === item
-                          ? 'checked'
-                          : 'unchecked'
+                <RadioButton
+                  style={styles.radioButton}
+                  status={
+                    chosenPort
+                      ? chosenPort === item
+                        ? 'checked'
                         : 'unchecked'
-                    }
-                    onPress={() => choosePort(item)}
-                  />
-                  <Text>{`Cổng ${item}`}</Text>
-                </View>
+                      : 'unchecked'
+                  }
+                  title={`Cổng ${item}`}
+                  onPress={() => choosePort(item)}
+                />
               );
             }}
           />

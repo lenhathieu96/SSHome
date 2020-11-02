@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
-import {View} from 'react-native';
-import {ActivityIndicator} from 'react-native-paper';
+import {View, ActivityIndicator} from 'react-native';
 
 import Text from '../../Text';
 

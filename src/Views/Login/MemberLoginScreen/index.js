@@ -1,26 +1,22 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image} from 'react-native';
-import {TextInput} from 'react-native-paper';
-import {useHeaderHeight} from '@react-navigation/stack';
+import {View, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import Text, {BoldText} from '../../../Components/Text';
+import Text, {ErrorText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
 
 import {handleMemberLogin} from '../../../Api/userAPI';
 
-import VNFlag from '../../../Assets/Images/vietnam.png';
 import {bigger} from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
-  const headerHeight = useHeaderHeight();
   const inputRef = useRef();
 
-  const [phoneNumber, setPhoneNUmber] = useState('707366517');
+  const [phoneNumber, setPhoneNUmber] = useState('0707366517');
   const [homeID, setHomeID] = useState();
   const [loginError, setloginError] = useState('');
 
@@ -40,7 +36,7 @@ export default function MemberLoginScreen({navigation, route}) {
   }, [route.params?.qrcode]);
 
   return (
-    <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
+    <RootContainer safeArea={true}>
       <View style={{flex: 0.25}}>
         <Text>Chỗ này để logo</Text>
       </View>
@@ -48,38 +44,28 @@ export default function MemberLoginScreen({navigation, route}) {
         <Text style={{marginHorizontal: 5, marginVertical: 10}}>
           Nhập số điện thoại của bạn để đăng nhập
         </Text>
-        <Text style={styles.txtInfo}>Vui lòng bỏ qua số 0 đầu tiên</Text>
-        <View style={styles.inputController}>
-          <View style={styles.areaCodeContainer}>
-            <Image source={VNFlag} />
-            <BoldText>+84</BoldText>
-          </View>
 
-          <TextInput
-            theme={{
-              colors: {primary: 'transparent'},
-            }}
-            underlineColor={'transparent'}
-            style={styles.input}
-            ref={inputRef}
-            textContentType="telephoneNumber"
-            autoFocus={true}
-            keyboardType="number-pad"
-            value={phoneNumber}
-            onChangeText={(text) => setPhoneNUmber(text)}
-          />
-        </View>
+        <TextInput
+          style={styles.input}
+          ref={inputRef}
+          textContentType="telephoneNumber"
+          autoFocus={true}
+          keyboardType="number-pad"
+          value={phoneNumber}
+          onChangeText={(text) => setPhoneNUmber(text)}
+        />
 
         <View>
-          <Text style={styles.txtInfo}>Quét mã xác nhận từ chủ nhà</Text>
+          <Text style={styles.txtInfo}>
+            {homeID ? 'Bạn đã có mã xác nhận' : 'Quét mã xác nhận từ chủ nhà'}
+          </Text>
           <Icon.Button
-            style={{alignSelf: 'center'}}
-            backgroundColor="transparent"
-            underlayColor="transparent"
-            activeOpacity={0.4}
             name="qrcode"
             size={bigger}
             color={Color.primary}
+            style={{alignSelf: 'center'}}
+            backgroundColor="transparent"
+            underlayColor="transparent"
             onPress={() =>
               navigation.navigate('qrcode', {isFromMasterSignUp: false})
             }
@@ -87,18 +73,18 @@ export default function MemberLoginScreen({navigation, route}) {
         </View>
       </View>
       <View style={{padding: 10}}>
-        <Text style={styles.txtError}>{loginError}</Text>
+        <ErrorText style={styles.txtError}>{loginError}</ErrorText>
         <TextButton
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
-            const result = await handleMemberLogin(phoneNumber, homeID);
-            if (result.error) {
-              setloginError(`Đăng nhập không thành công, ${result.error} !`);
+            const response = await handleMemberLogin(phoneNumber, homeID);
+            if (!response.result) {
+              setloginError(
+                `Đăng nhập không thành công, ${response.message} !`,
+              );
             } else {
-              if (result.success !== null) {
-                navigation.navigate('otp', {confirmation: result.success});
-              }
+              navigation.navigate('otp', {confirmation: response.data});
             }
           }}
         />

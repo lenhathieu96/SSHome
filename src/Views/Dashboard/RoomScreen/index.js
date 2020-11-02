@@ -45,7 +45,7 @@ export default function RoomDetailScreen({navigation, route}) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const dispatch = useDispatch();
-  const isBLController = useSelector((state) => state.hardware.BLConnection);
+  const isBLController = useSelector((state) => state.hardware.BLController);
 
   useEffect(() => {
     getHomeID();

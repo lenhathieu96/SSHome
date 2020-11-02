@@ -1,5 +1,5 @@
-import React, {useRef, useState} from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {View, TouchableOpacity} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
 import Text from '../../../Components/Text';

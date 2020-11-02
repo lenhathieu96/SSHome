@@ -15,11 +15,13 @@ export default function RootContainer({
   ...otherProps
 }) {
   return safeArea ? (
-    <SafeAreaView style={[{flex: 1}, style]} {...otherProps}>
+    <SafeAreaView
+      style={[{flex: 1, backgroundColor: 'white'}, style]}
+      {...otherProps}>
       {children}
     </SafeAreaView>
   ) : (
-    <View style={[{flex: 1}, style]} {...otherProps}>
+    <View style={[{flex: 1, backgroundColor: 'white'}, style]} {...otherProps}>
       {children}
     </View>
   );

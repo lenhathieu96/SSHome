@@ -1,6 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {View, TextInput} from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
 
 import Text from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -12,7 +11,6 @@ import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
   const {confirmation} = route.params;
-  const headerHeight = useHeaderHeight();
   const inputRef0 = useRef();
   const inputRef1 = useRef();
   const inputRef2 = useRef();
@@ -54,7 +52,7 @@ export default function MemberLoginScreen({navigation, route}) {
   };
 
   return (
-    <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
+    <RootContainer safeArea={true}>
       <View style={{flex: 0.25}}>
         <Text>Chỗ này để logo</Text>
         <Text>{OTP}</Text>

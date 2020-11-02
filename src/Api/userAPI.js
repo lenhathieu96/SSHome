@@ -49,11 +49,14 @@ export const handleMasterLogin = async (email, password) => {
       await AsyncStorage.setItem('userRole', 'Master');
       await auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
+      if (error.code === 'auth/wrong-password') {
+        return {result: false, message: 'Sai mật khẩu'};
+      }
       console.log(error);
-      return '';
+      return {result: false, message: ''};
     }
   } else {
-    return 'Tài Khoản Không Tồn Tại';
+    return {result: false, message: 'Tài khoản không tồn tại'};
   }
 };
 
@@ -65,32 +68,35 @@ export const handleMasterForgotPassword = async (email) => {
 };
 
 export const handleMemberLogin = async (phoneNumber, homeID) => {
+  let phone = phoneNumber.slice(1);
   const User = await firestore()
     .collection('Home')
     .doc(homeID)
     .collection('Member')
-    .where('phone', '==', `+84${phoneNumber}`)
+    .where('phone', '==', `+84${phone}`)
     .get();
   if (User.docs.length > 0) {
     try {
       await AsyncStorage.setItem('userRole', 'Member');
       await AsyncStorage.setItem('homeID', homeID);
-      const confirmation = await auth().signInWithPhoneNumber(
-        `+84${phoneNumber}`,
-      );
-      return {success: confirmation ? confirmation : null};
+      const confirmation = await auth().signInWithPhoneNumber(`+84${phone}`);
+      return {
+        result: true,
+        message: '',
+        data: confirmation ? confirmation : null,
+      };
     } catch (error) {
       if (error.code === 'auth/invalid-phone-number') {
-        return {error: 'Số điện thoại không hợp lệ'};
+        return {result: false, message: 'Số điện thoại không hợp lệ'};
       }
       if (error.code === 'auth/too-many-requests') {
-        return {error: 'Quá số lần quy định'};
+        return {result: false, message: 'Quá số lần quy định'};
       }
       console.log(error);
-      return {error: ''};
+      return {result: false, message: ''};
     }
   } else {
-    return {error: 'Tài Khoản Không Tồn Tại'};
+    return {result: false, message: 'Tài khoản không tồn tại'};
   }
 };
 

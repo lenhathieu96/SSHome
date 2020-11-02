@@ -5,7 +5,7 @@ import Color from '../../../../../Utils/Color';
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Header: {
-    backgroundColor: Color.background,
+    backgroundColor: 'white',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     height: 0.05 * height,
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   Body: {
-    backgroundColor: Color.background,
+    backgroundColor: 'white',
     padding: 10,
     height: 0.75 * height,
     justifyContent: 'space-around',
@@ -26,12 +26,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderRadius: 10,
+    marginVertical: 5,
     backgroundColor: 'white',
-    marginHorizontal: 10,
   },
   radioButtonContainer: {
-    marginHorizontal: 10,
-    flex: 0.6,
+    flex: 0.7,
   },
   listRoom: {
     justifyContent: 'space-between',
@@ -43,10 +42,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lines: {
-    width: 50,
+    width: 60,
     height: 5,
     borderRadius: 50,
-    backgroundColor: 'white',
+    backgroundColor: Color.primary,
   },
 });
 
