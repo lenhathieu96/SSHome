@@ -1,22 +1,25 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {View, Dimensions, Keyboard, FlatList, SafeAreaView} from 'react-native';
-import {RadioButton, TextInput} from 'react-native-paper';
-import BottomSheet from 'reanimated-bottom-sheet';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Dimensions,
+  Keyboard,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 
-import Text, {BoldText, ErrorText} from '../../../../Components/Text';
-import IconButton from '../../../../Components/IconButton';
+import BottomSheet from 'reanimated-bottom-sheet';
+import RadioButton from '../../../../Components/RadioButton';
+import {BoldText, ErrorText} from '../../../../Components/Text';
+import TextInput from '../../../../Components/TextInput';
 import TextButton from '../../../../Components/TextButton';
 
-import Color from '../../../../Utils/Color';
-import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const BSPersonal = React.forwardRef((props, ref) => {
   const {onConfigMember, roomList, memberProfile} = props;
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
-  const inputRef = useRef();
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -83,7 +86,6 @@ const BSPersonal = React.forwardRef((props, ref) => {
       ref={ref}
       onCloseStart={() => Keyboard.dismiss()}
       enabledInnerScrolling={true}
-      enabledContentGestureInteraction={false}
       snapPoints={[BSHeight, 0]}
       initialSnap={1}
       renderHeader={() => (
@@ -102,30 +104,19 @@ const BSPersonal = React.forwardRef((props, ref) => {
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>
 
           <TextInput
-            ref={inputRef}
             value={name}
             onChangeText={(text) => setName(text)}
             label="Tên thành viên"
-            mode="outlined"
             style={styles.input}
-            theme={{
-              colors: {primary: Color.primary, underlineColor: 'transparent'},
-            }}
           />
           <TextInput
             value={phone}
             onChangeText={(text) => setPhone(text)}
             label="Số điện thoại"
             keyboardType="number-pad"
-            mode="outlined"
             style={styles.input}
-            theme={{
-              colors: {primary: Color.primary, underlineColor: 'transparent'},
-            }}
           />
-          <BoldText style={{marginHorizontal: 10}}>
-            Phòng được phép truy cập
-          </BoldText>
+          <BoldText>Phòng được phép truy cập</BoldText>
           <View style={styles.radioButtonContainer}>
             <FlatList
               contentContainerStyle={styles.listRoom}
@@ -136,8 +127,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
               renderItem={({item}) => {
                 return (
                   <View style={styles.radioButton}>
-                    <RadioButton.Android
-                      value={item.id}
+                    <RadioButton
                       status={
                         memberRooms
                           ? memberRooms.filter((room) => room === item.id)
@@ -147,8 +137,8 @@ const BSPersonal = React.forwardRef((props, ref) => {
                           : 'unchecked'
                       }
                       onPress={() => updatememberRooms(item.id)}
+                      title={item.name}
                     />
-                    <Text>{item.name}</Text>
                   </View>
                 );
               }}

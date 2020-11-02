@@ -13,13 +13,12 @@ const styles = StyleSheet.create({
     flex: 0.3,
     justifyContent: 'space-evenly',
   },
-  txtloginError: {
-    marginTop: 5,
-    color: Color.red,
-    textAlign: 'center',
-  },
   btnLogin: {
     marginHorizontal: 10,
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 

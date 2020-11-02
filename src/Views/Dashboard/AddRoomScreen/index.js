@@ -7,13 +7,13 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {TextInput} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import FastImage from 'react-native-fast-image';
 
 import Text, {ErrorText} from '../../../Components/Text';
+import TextInput from '../../../Components/TextInput';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
 import NotifyModal from '../../../Components/Modal/NotificationModal';
@@ -124,7 +124,8 @@ export default function AddRoomScreen({navigation}) {
     <KeyboardAvoidingView
       style={{
         flex: 1,
-        marginTop: headerHeight,
+        paddingTop: 10,
+        backgroundColor: 'white',
       }}>
       <TextInput
         value={roomName}

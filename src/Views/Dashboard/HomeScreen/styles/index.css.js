@@ -7,7 +7,6 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   //Body
   bodyContainer: {
-    backgroundColor: Color.secondary,
     flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,

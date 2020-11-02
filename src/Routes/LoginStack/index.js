@@ -1,4 +1,5 @@
 import React from 'react';
+import {Platform} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -26,13 +27,16 @@ export default function LoginStacks() {
         component={MasterLoginScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerTransparent: true,
           headerTitle: 'Đăng Nhập Chủ Nhà',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
             fontFamily: 'MavenPro-Bold',
             marginRight: 10,
+          },
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
           },
           headerLeft: () => (
             <Icon.Button
@@ -53,13 +57,16 @@ export default function LoginStacks() {
         component={MemberLoginScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerTransparent: true,
           headerTitle: 'Đăng Nhập Thành Viên',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
             fontFamily: 'MavenPro-Bold',
             marginRight: 20,
+          },
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
           },
           headerLeft: () => (
             <Icon.Button
@@ -80,13 +87,16 @@ export default function LoginStacks() {
         component={OTPScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerTransparent: true,
           headerTitle: 'Xác Thực OTP',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
             fontFamily: 'MavenPro-Bold',
             marginLeft: 20,
+          },
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
           },
           headerLeft: () => (
             <Icon.Button
@@ -107,10 +117,14 @@ export default function LoginStacks() {
         component={SignUpScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerTransparent: true,
           headerTitle: 'Đăng Ký',
           headerTitleStyle: {
             color: Color.primary,
+            marginLeft: Platform.OS === 'android' ? 65 : 0,
+          },
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
           },
           headerLeft: () => (
             <Icon.Button

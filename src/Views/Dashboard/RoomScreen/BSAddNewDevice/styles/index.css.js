@@ -8,14 +8,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    height: 30,
+    height: 0.05 * height,
     alignItems: 'center',
     justifyContent: 'center',
   },
   Body: {
     backgroundColor: 'white',
     padding: 10,
-    height: 0.8 * height,
+    height: 0.75 * height,
+    justifyContent: 'space-around',
   },
   title: {
     fontSize: fontSize.larger,
@@ -29,21 +30,20 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
   },
   radioButton: {
-    flex: 0.3,
-    marginVertical: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flex: 0.4,
   },
-  listRoom: {
+  listPorts: {
     flex: 0.6,
+    paddingHorizontal: 5,
   },
   textContainer: {
     flex: 0.2,
+    padding: 5,
     justifyContent: 'center',
   },
   btnContainer: {
-    flex: 0.3,
-    justifyContent: 'flex-end',
+    flex: 0.4,
+    justifyContent: 'center',
   },
 });
 

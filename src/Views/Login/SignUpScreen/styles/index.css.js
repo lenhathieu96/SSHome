@@ -10,15 +10,16 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 0.2,
+    justifyContent: 'space-evenly',
   },
   input: {
-    flex: 1,
+    flex: 0.7,
     fontSize: fontSize.normal,
     fontFamily: 'MavenPro-Regular',
   },
   txtError: {
-    marginTop: 5,
-    color: Color.red,
+    marginLeft: 5,
+    alignSelf: 'flex-start',
   },
 
   txtSignupError: {
