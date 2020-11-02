@@ -135,7 +135,6 @@ export default function AddRoomScreen({navigation}) {
         theme={{
           colors: {primary: Color.primary, underlineColor: 'transparent'},
         }}
-        onChange={(text) => setRoomName(text)}
       />
       <View style={{flex: 0.1, justifyContent: 'center', padding: 5}}>
         <Text>Chọn ảnh mặc định</Text>

@@ -1,11 +1,12 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, Image, TextInput} from 'react-native';
+import {View, Image} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {useHeaderHeight} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Text, {BoldText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
-import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
 
 import {handleMemberLogin} from '../../../Api/userAPI';
@@ -44,9 +45,10 @@ export default function MemberLoginScreen({navigation, route}) {
         <Text>Chỗ này để logo</Text>
       </View>
       <View style={styles.body}>
-        <Text style={{marginHorizontal: 5}}>
+        <Text style={{marginHorizontal: 5, marginVertical: 10}}>
           Nhập số điện thoại của bạn để đăng nhập
         </Text>
+        <Text style={styles.txtInfo}>Vui lòng bỏ qua số 0 đầu tiên</Text>
         <View style={styles.inputController}>
           <View style={styles.areaCodeContainer}>
             <Image source={VNFlag} />
@@ -69,13 +71,15 @@ export default function MemberLoginScreen({navigation, route}) {
         </View>
 
         <View>
-          <Text style={styles.txtInfo}>
-            {homeID ? 'Bạn đã có mã xác nhận' : 'Quét mã xác nhận từ chủ nhà'}
-          </Text>
-          <IconButton
-            iconName="qrcode"
-            iconSize={bigger}
-            iconColor={Color.primary}
+          <Text style={styles.txtInfo}>Quét mã xác nhận từ chủ nhà</Text>
+          <Icon.Button
+            style={{alignSelf: 'center'}}
+            backgroundColor="transparent"
+            underlayColor="transparent"
+            activeOpacity={0.4}
+            name="qrcode"
+            size={bigger}
+            color={Color.primary}
             onPress={() =>
               navigation.navigate('qrcode', {isFromMasterSignUp: false})
             }

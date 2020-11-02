@@ -106,7 +106,7 @@ export const confirmOTP = async (confirmation, OTPCode) => {
 };
 
 export const handleLogout = () => {
-  AsyncStorage.removeItem('userRole');
+  AsyncStorage.clear();
   auth()
     .signOut()
     .then(() => true);

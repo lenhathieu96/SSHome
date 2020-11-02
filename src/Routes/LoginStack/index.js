@@ -27,7 +27,7 @@ export default function LoginStacks() {
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
-          headerTitle: 'Đăng Nhập Chủ Nhà',
+          headerTitle: 'Chủ Nhà',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
@@ -54,7 +54,7 @@ export default function LoginStacks() {
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
-          headerTitle: 'Đăng Nhập Thành Viên',
+          headerTitle: 'Thành Viên',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,

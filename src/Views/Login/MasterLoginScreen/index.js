@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput} from 'react-native-paper';
@@ -16,7 +16,6 @@ import appLogo from '../../../Assets/Images/appLogo.png';
 
 export default function MasterLoginScreen({navigation}) {
   const headerHeight = useHeaderHeight();
-  const inputRef = useRef();
 
   const [email, setEmail] = useState('lenhathieu96@gmail.com');
   const [password, setPassword] = useState('Nhathieu96');
@@ -29,48 +28,55 @@ export default function MasterLoginScreen({navigation}) {
     }
   };
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   return (
     <RootContainer safeArea={true} style={{marginTop: headerHeight}}>
       <View style={{flex: 0.25}}>
-        <Image source={appLogo} style={{alignSelf: 'center'}} />
+        <Text>logo app</Text>
       </View>
       <View style={styles.body}>
         <TextInput
-          ref={inputRef}
           value={email}
           onChangeText={(text) => setEmail(text)}
-          label="Email"
-          style={styles.input}
+          label="Tên Phòng"
+          mode="outlined"
+          theme={{
+            colors: {primary: Color.primary, underlineColor: 'transparent'},
+          }}
         />
         <TextInput
           value={password}
           onChangeText={(text) => setPassword(text)}
-          label="Mật Khẩu"
-          style={styles.input}
+          label="Tên Phòng"
+          mode="outlined"
+          theme={{
+            colors: {primary: Color.primary, underlineColor: 'transparent'},
+          }}
         />
         <Text style={styles.txtloginError}>{loginError}</Text>
-      </View>
-      <TextButton
-        style={styles.btnLogin}
-        text="Đăng Nhập"
-        onPress={() => {
-          onLogin();
-        }}
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('signup')}>
-        <Text style={{alignSelf: 'center', color: 'black'}}>
-          Đăng Ký Chủ Nhà
-        </Text>
-      </TouchableOpacity>
+        <TextButton
+          style={styles.btnLogin}
+          text="Đăng Nhập"
+          onPress={() => {
+            onLogin();
+          }}
+        />
+        <View style={styles.optionContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+            <Text style={{alignSelf: 'center', color: 'black'}}>
+              Đăng Ký Chủ Nhà
+            </Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => handleMasterForgotPassword('lenhathieu96@gmail.com')}>
-        <Text style={{alignSelf: 'center', color: 'black'}}>Quên Mật Khẩu</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              handleMasterForgotPassword('lenhathieu96@gmail.com')
+            }>
+            <Text style={{alignSelf: 'center', color: 'black'}}>
+              Quên Mật Khẩu ?
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </RootContainer>
   );
 }

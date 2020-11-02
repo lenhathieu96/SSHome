@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {KeyboardAvoidingView, View, ScrollView, TextInput} from 'react-native';
+import {KeyboardAvoidingView, View, ScrollView} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {Formik} from 'formik';
 import * as Yup from 'yup';

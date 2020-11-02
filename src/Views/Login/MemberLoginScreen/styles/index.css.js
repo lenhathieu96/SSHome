@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
   },
   body: {
     marginHorizontal: 10,
-    flex: 0.3,
-    justifyContent: 'space-evenly',
+    flex: 0.35,
+    justifyContent: 'space-between',
   },
   txtInfo: {
     textAlign: 'center',

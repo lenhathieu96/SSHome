@@ -50,24 +50,19 @@ export default function RoomDetailScreen({navigation, route}) {
   useEffect(() => {
     getHomeID();
     //Wifi control
-    if (!isBLController) {
-      const onValueChange = database()
-        .ref(`${homeID}/${room.id}`)
-        .on('value', (snapshot) => {
-          let result = [{}];
-          let deviceList = snapshot.val().devices;
-          // console.log(snapshot.val().devices);
-          for (let device in deviceList) {
-            result.unshift(deviceList[device]);
-          }
-          setDevices(result);
-        });
-      return () =>
-        database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
-    }
-    //BLE Control
-    else {
-    }
+    const onValueChange = database()
+      .ref(`${homeID}/${room.id}`)
+      .on('value', (snapshot) => {
+        let result = [{}];
+        let deviceList = snapshot.val().devices;
+        // console.log(snapshot.val().devices);
+        for (let device in deviceList) {
+          result.unshift(deviceList[device]);
+        }
+        setDevices(result);
+      });
+    return () =>
+      database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
   }, [isBLController, homeID, room.id]);
 
   const getHomeID = async () => {

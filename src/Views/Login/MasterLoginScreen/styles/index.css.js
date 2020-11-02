@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   },
   body: {
     marginHorizontal: 10,
-    flex: 0.3,
-    justifyContent: 'space-evenly',
+    flex: 0.4,
+    justifyContent: 'space-between',
   },
   txtloginError: {
     marginTop: 5,
@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
   },
   btnLogin: {
     marginHorizontal: 10,
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
 });
 
