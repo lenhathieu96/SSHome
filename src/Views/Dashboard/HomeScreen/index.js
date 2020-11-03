@@ -11,6 +11,8 @@ import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
+import {stringToBytes} from 'convert-string';
+import bytesCounter from 'bytes-counter';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
@@ -51,6 +53,7 @@ export default function HomeScreen({navigation}) {
   const [nearbyDevices, setNearbyDevices] = useState([]);
   //demo=================================================================
   const [deviceData, setDeviceData] = useState({});
+  const [deviceID, setDeviceID] = useState();
   const [showUID, setShowUID] = useState(false);
 
   useEffect(() => {
@@ -144,10 +147,12 @@ export default function HomeScreen({navigation}) {
   const connectBLDevice = async (device) => {
     try {
       console.log(device.id);
+
       await BLEManager.connect(device.id);
       const DeviceData = JSON.stringify(device);
       await AsyncStorage.setItem('ESP', DeviceData);
       showNotification('Kết nối thành công');
+      setDeviceID(device.id);
       BLEManager.retrieveServices(
         device.id,
         device.advertising.serviceUUIDs,
@@ -159,6 +164,33 @@ export default function HomeScreen({navigation}) {
     } catch (error) {
       console.log('connect fail', error);
       showNotification('Kết nối thất bại');
+    }
+  };
+
+  const sendData = async () => {
+    const peripheralInfo = await BLEManager.retrieveServices(deviceID);
+    console.log('peripheralInfo first for writing', peripheralInfo);
+    let str = 'test';
+    let bytes = bytesCounter.count(str); // count the number of bytes
+    let data = stringToBytes(str);
+    if (!peripheralInfo) {
+      return;
+    }
+
+    try {
+      await BLEManager.write(
+        deviceID,
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+        data,
+        bytes,
+      );
+
+      Alert.alert('Kết Quả', 'Thành Công');
+      // console.log(`Settings written on device ${DEVICE_UUID}`);
+      // this.setState({ settings: [...settingsArray] });
+    } catch (error) {
+      Alert.alert('Kết Quả', error);
     }
   };
 
@@ -206,6 +238,7 @@ export default function HomeScreen({navigation}) {
         connectDevice={connectBLDevice}
         showUID={showUID}
         deviceData={deviceData}
+        sendData={sendData}
       />
       <BSVoice ref={BSVoiceRef} />
       <LoadingModal isVisible={isLoading} />

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {useSelector} from 'react-redux';
@@ -10,7 +10,7 @@ import RoomScreen from '../../../Views/Dashboard/RoomScreen';
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 
-const HomeStacks = createSharedElementStackNavigator();
+const HomeStacks = createStackNavigator();
 
 export default function HomeStack() {
   const BLController = useSelector((state) => state.hardware.BLController);

@@ -1,12 +1,16 @@
 import {StyleSheet} from 'react-native';
+
+import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   input: {
-    flex: 0.12,
+    fontSize: fontSize.large,
+    padding: 10,
+    justifyContent: 'center',
     textAlign: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    letterSpacing: 2,
     borderRadius: 10,
+    marginVertical: 10,
     backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: {
@@ -17,20 +21,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
     fontWeight: 'bold',
-    padding: 0,
-  },
-
-  inputController: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  body: {
-    marginHorizontal: 10,
-    flex: 0.3,
-    justifyContent: 'space-evenly',
-  },
-  btnLogin: {
-    marginHorizontal: 20,
   },
 });
 

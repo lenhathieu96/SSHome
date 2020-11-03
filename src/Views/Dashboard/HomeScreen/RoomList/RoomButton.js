@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Animated, View, TouchableOpacity} from 'react-native';
-import {SharedElement} from 'react-navigation-shared-element';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -17,15 +16,14 @@ export default function RoomButton(props) {
         style={styles.BtnContainer}
         onLongPress={() => onLongPress(roomData.id)}
         onPress={() => navigation.navigate('Room', {room: roomData})}>
-        <SharedElement id={`item.${roomData.id}.photo`}>
-          <FastImage
-            source={{
-              uri: roomData.background,
-            }}
-            style={styles.imgBg}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-        </SharedElement>
+        <FastImage
+          source={{
+            uri: roomData.background,
+          }}
+          style={styles.imgBg}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+
         <BoldText style={styles.roomTitle}>{roomData.name}</BoldText>
         <View style={styles.descContainer}>
           <Icon name="activity" size={fontSize.normal} />

@@ -5,7 +5,7 @@ import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText} from '../../../../Components/Text';
-import NotifyModal from '../../../../Components/Modal/NotificationModal';
+import TextButton from '../../../../Components/TextButton';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -15,7 +15,7 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
 
-  const {connectDevice, listDevice, showUID, deviceData} = props;
+  const {connectDevice, listDevice, showUID, deviceData, sendData} = props;
 
   return (
     <BottomSheet
@@ -65,6 +65,7 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
                   renderItem={({item}) => <Text>{item.uuid}</Text>}
                 />
               </View>
+              <TextButton text="Gửi dữ liệu" onPress={() => sendData()} />
             </View>
           ) : (
             <FlatList

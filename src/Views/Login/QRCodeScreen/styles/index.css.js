@@ -3,19 +3,25 @@ const {width, height} = Dimensions.get('window');
 
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
-  camera: {
-    position: 'absolute',
-    width,
-    height,
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'black',
   },
-  content: {
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
     flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
   },
-  marker: {
-    borderRadius: 50,
-    borderColor: 'white',
-    borderWidth: 4,
-  }
 });
 
 export default styles;

@@ -5,7 +5,6 @@ import {
   FlatList,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {SharedElement} from 'react-navigation-shared-element';
 import {useDispatch, useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
@@ -130,13 +129,12 @@ export default function RoomDetailScreen({navigation, route}) {
 
   return (
     <RootContainer safeArea={false}>
-      <SharedElement id={`item.${room.id}.photo`}>
-        <FastImage
-          source={{uri: room.background}}
-          style={styles.imgBg}
-          resizeMode={FastImage.resizeMode.cover}
-        />
-      </SharedElement>
+      <FastImage
+        source={{uri: room.background}}
+        style={styles.imgBg}
+        resizeMode={FastImage.resizeMode.cover}
+      />
+
       <View style={styles.contentContainer}>
         <SafeAreaView style={styles.headerContainer}>
           <IconButton

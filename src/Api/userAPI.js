@@ -48,6 +48,7 @@ export const handleMasterLogin = async (email, password) => {
     try {
       await AsyncStorage.setItem('userRole', 'Master');
       await auth().signInWithEmailAndPassword(email, password);
+      return {result: true, message: 'Đăng nhập thành công'};
     } catch (error) {
       if (error.code === 'auth/wrong-password') {
         return {result: false, message: 'Sai mật khẩu'};

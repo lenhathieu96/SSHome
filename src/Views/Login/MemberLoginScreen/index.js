@@ -78,14 +78,15 @@ export default function MemberLoginScreen({navigation, route}) {
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
-            const response = await handleMemberLogin(phoneNumber, homeID);
-            if (!response.result) {
-              setloginError(
-                `Đăng nhập không thành công, ${response.message} !`,
-              );
-            } else {
-              navigation.navigate('otp', {confirmation: response.data});
-            }
+            // const response = await handleMemberLogin(phoneNumber, homeID);
+            // if (!response.result) {
+            //   setloginError(
+            //     `Đăng nhập không thành công, ${response.message} !`,
+            //   );
+            // } else {
+            // navigation.navigate('otp', {confirmation: response.data});
+            // }
+            navigation.navigate('otp');
           }}
         />
       </View>
