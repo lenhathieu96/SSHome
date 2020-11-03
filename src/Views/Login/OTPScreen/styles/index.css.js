@@ -3,6 +3,11 @@ import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
+  body: {
+    marginHorizontal: 10,
+    flex: 0.3,
+    justifyContent: 'flex-start',
+  },
   input: {
     fontSize: fontSize.large,
     padding: 10,
@@ -21,6 +26,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
     fontWeight: 'bold',
+  },
+  txtInfo: {
+    textAlign: 'center',
+    color: Color.blue,
+    marginVertical: 10,
   },
 });
 

@@ -81,10 +81,6 @@ target 'SSHome' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-  
-  pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
-
   target 'SSHomeTests' do
     inherit! :complete
     # Pods for testing

@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {View, TextInput} from 'react-native';
 
-import Text from '../../../Components/Text';
+import Text, {ErrorText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
 import RootContainer from '../../../Components/RootContainer';
 
@@ -14,6 +14,7 @@ export default function MemberLoginScreen({navigation, route}) {
   const inputRef = useRef();
 
   const [OTP, setOTP] = useState('');
+  const [loginError, setloginError] = useState('');
 
   useEffect(() => {
     inputRef.current.focus();
@@ -29,28 +30,28 @@ export default function MemberLoginScreen({navigation, route}) {
     <RootContainer safeArea={true}>
       <View style={{flex: 0.25}}>
         <Text>Chỗ này để logo</Text>
-        <Text>{OTP}</Text>
       </View>
       <View style={styles.body}>
-        <Text style={{marginHorizontal: 5}}>Nhập mã OTP gồm có 6 chữ số</Text>
-
+        <Text style={styles.txtInfo}>Nhập mã OTP gồm 6 chữ số</Text>
         <TextInput
           style={styles.input}
           ref={inputRef}
-          textContentType="telephoneNumber"
           autoFocus={true}
           keyboardType="number-pad"
           value={OTP}
           onChangeText={(text) => setOTP(text)}
         />
       </View>
-      <TextButton
-        style={styles.btnLogin}
-        text="Xác Thực"
-        onPress={async () => {
-          // const response = await confirmOTP(confirmation, OTP);
-        }}
-      />
+      <View style={{padding: 10}}>
+        <ErrorText style={styles.txtError}>{loginError}</ErrorText>
+        <TextButton
+          style={styles.btnLogin}
+          text="Đăng Nhập"
+          onPress={async () => {
+            // const response = await confirmOTP(confirmation, OTP);
+          }}
+        />
+      </View>
     </RootContainer>
   );
 }

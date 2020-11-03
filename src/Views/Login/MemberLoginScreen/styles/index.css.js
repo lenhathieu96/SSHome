@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import * as  fontSize from '../../../../Utils/FontSize';
+import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   body: {
@@ -31,11 +31,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.blue,
     marginVertical: 10,
-  },
-  txtError: {
-    marginVertical: 10,
-    color: Color.red,
-    textAlign: 'center',
   },
   btnLogin: {
     marginHorizontal: 10,
