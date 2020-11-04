@@ -11,7 +11,7 @@ import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
-const BSBlueToothSearching = React.forwardRef((props, ref) => {
+const BSBlueTooth = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
 
@@ -104,9 +104,9 @@ const BSBlueToothSearching = React.forwardRef((props, ref) => {
   );
 });
 
-export default BSBlueToothSearching;
+export default BSBlueTooth;
 
-BSBlueToothSearching.propTypes = {
+BSBlueTooth.propTypes = {
   listDevice: PropTypes.array.isRequired,
   connectDevice: PropTypes.func.isRequired,
 };
