@@ -27,6 +27,7 @@ export default function MainRoute() {
     listenConnection();
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function onAuthStateChanged(user) {

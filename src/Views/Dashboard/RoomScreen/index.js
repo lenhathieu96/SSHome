@@ -57,7 +57,6 @@ export default function RoomDetailScreen({navigation, route}) {
       .on('value', (snapshot) => {
         let result = [{}];
         let deviceList = snapshot.val().devices;
-        // console.log(snapshot.val().devices);
         for (let device in deviceList) {
           result.unshift(deviceList[device]);
         }
@@ -131,9 +130,9 @@ export default function RoomDetailScreen({navigation, route}) {
                   bytes,
                 );
                 Alert.alert('Kết Quả', 'Thành Công');
-                let tempDevice = [...device];
+                let tempDevice = [...devices];
                 let index = tempDevice.findIndex(
-                  (devicedata) => devicedata.id === BLDevice.id,
+                  (devicedata) => devicedata.id === device.id,
                 );
                 if (index >= 0) {
                   tempDevice[index].status = status;
@@ -144,7 +143,7 @@ export default function RoomDetailScreen({navigation, route}) {
               }
             }
           } else {
-            console.log('Peripheral is NOT connected!');
+            Alert.alert('Kết Quả', 'Thiết bị chưa được kết nối');
           }
         },
       );

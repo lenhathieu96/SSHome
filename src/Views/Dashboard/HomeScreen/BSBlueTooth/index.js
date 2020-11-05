@@ -20,7 +20,7 @@ const BSBlueTooth = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
 
-  const {connectDevice, listDevice, handleStopScan} = props;
+  const {connectDevice, listDevice, isScanning, handleStopScan} = props;
 
   return (
     <BottomSheet
@@ -43,10 +43,16 @@ const BSBlueTooth = React.forwardRef((props, ref) => {
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText text="Các Thiết Bị Lân Cận" style={styles.title} />
-          {listDevice.length === 0 ? (
+          {isScanning ? (
             <View style={styles.listContainer}>
               <ActivityIndicator size={fontSize.biggest} color={Color.blue} />
               <Text style={styles.txtInfo}>Đang quét thiết bị xung quanh</Text>
+            </View>
+          ) : listDevice.length === 0 ? (
+            <View style={styles.listContainer}>
+              <Text style={styles.txtInfo}>
+                Không tìm thấy các thiết bị xung quanh
+              </Text>
             </View>
           ) : (
             <FlatList

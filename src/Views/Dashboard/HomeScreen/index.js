@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
@@ -8,9 +7,10 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
-import BLEManager from 'react-native-ble-manager';
+import BleManager from 'react-native-ble-manager';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
+import {useNotify} from '../../../Hooks/useNotify';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
@@ -18,10 +18,9 @@ import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
-import NotifyModal from '../../../Components/Modal/NotificationModal';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
 
-import Header from './Header';
+import Weather from './Weather';
 import RoomList from './RoomList';
 import BSBlueTooth from './BSBlueTooth';
 import BSVoice from './BSVoice';
@@ -34,28 +33,32 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
+  const notify = useNotify();
+
   const BSBlueToothRef = useRef();
   const BSVoiceRef = useRef();
 
   const hardwareController = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
 
-  const [showNotify, setShowNotify] = useState(false);
-  const [textNotify, setTextNotify] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [nearbyDevices, setNearbyDevices] = useState([]);
+  const [isScanning, setScanning] = useState(false);
 
   useEffect(() => {
     if (hardwareController.WFConnection) {
       getUserProflie();
+      
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hardwareController.WFConnection]);
 
   useEffect(() => {
     if (hardwareController.BLController) {
-      BLEManager.start({showAlert: false});
+      BleManager.start({showAlert: false});
       setUpBLConnection();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hardwareController.BLConnection, hardwareController.BLController]);
 
   const getUserProflie = async () => {
@@ -75,21 +78,24 @@ export default function HomeScreen({navigation}) {
   const setUpBLConnection = async () => {
     if (hardwareController.BLConnection) {
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
+      console.log(BLStoreDevice, 'store');
       if (BLStoreDevice) {
         const BLDevice = JSON.parse(BLStoreDevice);
         await connectBLDevice(BLDevice);
+        BSBlueToothRef.current.snapTo(1);
       } else {
         //clear old data
-        setNearbyDevices([]);
         let devices = [];
         BSBlueToothRef.current.snapTo(0);
         bleManagerEmitter.addListener('BleManagerStopScan', () => {
           console.log('scan stopped');
           setNearbyDevices(devices);
+          setScanning(false);
         });
         bleManagerEmitter.addListener(
           'BleManagerDiscoverPeripheral',
           (device) => {
+            console.log(device);
             let duplicateDevice = devices.filter(
               (item) => item.id === device.id,
             );
@@ -98,9 +104,10 @@ export default function HomeScreen({navigation}) {
             }
           },
         );
-        BLEManager.scan([], 15, false).then(() =>
-          console.log('start scanning'),
-        );
+
+        BleManager.scan([], 15, false).then(function () {
+          return console.log('start scanning');
+        }, setScanning(true));
       }
     } else {
       BSBlueToothRef.current.snapTo(1);
@@ -110,28 +117,22 @@ export default function HomeScreen({navigation}) {
 
   const connectBLDevice = async (device) => {
     try {
-      await BLEManager.connect(device.id);
+      setLoading(true);
+      await BleManager.connect(device.id);
       const DeviceData = JSON.stringify(device);
+      setLoading(false);
       await AsyncStorage.setItem('ESP', DeviceData);
-      showNotification('Kết nối thành công');
-      BSBlueToothRef.current.snapTo(0);
+      notify('Kết nối thành công');
+      BSBlueToothRef.current.snapTo(1);
     } catch (error) {
+      setLoading(false);
       console.log('connect fail', error);
-      showNotification('Kết nối thất bại');
+      notify('Kết nối thất bại');
     }
   };
 
   const handleStopScan = () => {
-    BLEManager.stopScan();
-  };
-
-  const showNotification = (notitfy) => {
-    setShowNotify(true);
-    setTextNotify(notitfy);
-    setTimeout(() => {
-      setShowNotify(false);
-      setTextNotify('');
-    }, 1000);
+    BleManager.stopScan();
   };
 
   const onLongPressRoom = async (roomID) => {
@@ -145,7 +146,7 @@ export default function HomeScreen({navigation}) {
   return (
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Info Container */}
-      <Header />
+      <Weather />
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
@@ -166,12 +167,12 @@ export default function HomeScreen({navigation}) {
       <BSBlueTooth
         ref={BSBlueToothRef}
         listDevice={nearbyDevices}
+        isScanning={isScanning}
         connectDevice={connectBLDevice}
         handleStopScan={handleStopScan}
       />
       <BSVoice ref={BSVoiceRef} />
       <LoadingModal isVisible={isLoading} />
-      <NotifyModal isVisible={showNotify} title={textNotify} />
     </RootContainer>
   );
 }

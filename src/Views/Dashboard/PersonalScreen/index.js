@@ -7,9 +7,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
 
+import {useNotify} from '../../../Hooks/useNotify';
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
-import NotifyModal from '../../../Components/Modal/NotificationModal';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
@@ -32,15 +32,14 @@ import MemberList from './MemberList';
 export default function Personal() {
   const headerHeight = useHeaderHeight();
   const dispatch = useDispatch();
+  const notify = useNotify();
   const masterInfo = useSelector((state) => state.user);
 
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
-  const [apiResponse, setApiResponse] = useState('');
   const [chosenUser, setChosenUser] = useState({});
-  const [showConfirm, setShowConfig] = useState(false);
-  const [showNotify, setShowNotify] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const BSPersonalRef = useRef();
 
@@ -72,7 +71,7 @@ export default function Personal() {
   };
 
   const toogleConfirmModal = (isShowConfirmModal) => {
-    setShowConfig(isShowConfirmModal);
+    setShowConfirm(isShowConfirmModal);
   };
 
   const onPressMember = (user) => {
@@ -89,24 +88,14 @@ export default function Personal() {
     toogleConfirmModal(false);
     setLoading(true);
     const response = await deleteMember(chosenUser.id);
-    setApiResponse(response.message);
-    setShowNotify(true);
-    setTimeout(() => {
-      setShowNotify(false);
-      setApiResponse('');
-    }, 2000);
+    notify(response.message);
   };
 
   const onConfigMember = async (member, isUpdate) => {
     setLoading(true);
     const response = await configMember(member, isUpdate);
     BSPersonalRef.current.snapTo(1);
-    setApiResponse(response.message);
-    setShowNotify(true);
-    setTimeout(() => {
-      setShowNotify(false);
-      setApiResponse('');
-    }, 2000);
+    notify(response.message);
   };
 
   const selectPhotoTapped = () => {
@@ -211,7 +200,6 @@ export default function Personal() {
         } sẽ bị xoá khỏi danh sách thành viên`}
         onAccept={onDelMember}
       />
-      <NotifyModal isVisible={showNotify} title={apiResponse} />
       <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );

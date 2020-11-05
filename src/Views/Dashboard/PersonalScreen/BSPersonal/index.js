@@ -72,7 +72,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
     setTxtError('');
     setName(memberProfile.name);
     setPhone(memberProfile.phone);
-    setmemberRooms(memberProfile.availableRoom);
+    setmemberRooms(memberProfile.availableRooms);
     if (memberProfile.name !== '') {
       setUpdate(true);
     } else {

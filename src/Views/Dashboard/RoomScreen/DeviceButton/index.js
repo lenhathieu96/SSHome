@@ -11,23 +11,28 @@ export default function DeviceButton(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => onChangeStatus(device, !device.status)}
+      onPress={() => onChangeStatus(device, device.status === 0 ? 1 : 0)}
       onLongPress={() => onDelete(device)}>
       <View
         style={[
           styles.btnContainer,
-          {backgroundColor: device.status ? Color.secondary : Color.background},
+          {
+            backgroundColor:
+              device.status === 1 ? Color.secondary : Color.background,
+          },
         ]}>
         <View style={styles.deviceInfoContainer}>
           <BoldText style={styles.deviceName}>{device.name}</BoldText>
-          <Text>{device.status ? 'Bật' : 'Tắt'}</Text>
+          <Text>{device.status === 1 ? 'Bật' : 'Tắt'}</Text>
         </View>
         <View style={styles.deviceStatusContainer}>
           <Switch
             style={styles.switch}
-            value={device.status}
+            value={device.status === 1 ? true : false}
             trackColor={{true: 'white', false: 'white'}}
-            thumbColor={device.status ? Color.secondary : Color.background}
+            thumbColor={
+              device.status === 1 ? Color.secondary : Color.background
+            }
           />
           <View />
         </View>
