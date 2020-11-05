@@ -2018,6 +2018,11 @@ buffer@^5.4.3:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
+bytes-counter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/bytes-counter/-/bytes-counter-1.0.0.tgz#557f07b14d295e11d3e0aee9b05b490b27b3fe0c"
+  integrity sha1-VX8HsU0pXhHT4K7psFtJCyez/gw=
+
 bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -2351,6 +2356,11 @@ convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   integrity sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA==
   dependencies:
     safe-buffer "~5.1.1"
+
+convert-string@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/convert-string/-/convert-string-0.1.0.tgz#79ce41a9bb0d03bcf72cdc6a8f3c56fbbc64410a"
+  integrity sha1-ec5BqbsNA7z3LNxqjzxW+7xkQQo=
 
 copy-descriptor@^0.1.0:
   version "0.1.1"
@@ -5947,10 +5957,10 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-ble-plx@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-2.0.1.tgz#0131a8c0b92be3f0bca51012715ac7814e08e022"
-  integrity sha512-dd4IubwGu6CZoDMrZoSUb0zGmb/bSOXkB+5sYxKhaHANjem/9yPx6mifaLM13M+DJ6P+PNoLn0bPKItTYzsZiA==
+react-native-ble-manager@^7.4.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-7.4.1.tgz#062c13614e0e627a4d2648075716e02938d44a13"
+  integrity sha512-d9VS9y11SKxU6eUBIlUYrGo3kJKtGfuLJ4eDV7corETARz8JRWd5a/lXO5uqvyNP2lV5w3SiuycOJXEZdX7sow==
 
 react-native-camera@^3.40.0:
   version "3.40.0"

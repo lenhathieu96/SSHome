@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {useSelector} from 'react-redux';
@@ -20,6 +20,7 @@ export default function HomeStack() {
         name="Home"
         component={HomeScreen}
         options={({navigation}) => ({
+          ...TransitionPresets.SlideFromRightIOS,
           headerTransparent: true,
           headerTitle: 'SSHOME',
           headerTitleStyle: {
@@ -57,11 +58,8 @@ export default function HomeStack() {
       <HomeStacks.Screen
         name="Room"
         component={RoomScreen}
-        sharedElements={(route, otherRoute, showing) => {
-          const {room} = route.params;
-          return [{id: `item.${room.id}.photo`}];
-        }}
         options={({navigation}) => ({
+          ...TransitionPresets.SlideFromRightIOS,
           headerShown: false,
         })}
       />

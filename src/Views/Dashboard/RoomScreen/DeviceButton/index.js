@@ -4,7 +4,6 @@ import {View, Switch, TouchableWithoutFeedback} from 'react-native';
 import Text, {BoldText} from '../../../../Components/Text';
 
 import Color from '../../../../Utils/Color';
-import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function DeviceButton(props) {
@@ -12,7 +11,7 @@ export default function DeviceButton(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => onChangeStatus(device.id, !device.status)}
+      onPress={() => onChangeStatus(device, !device.status)}
       onLongPress={() => onDelete(device)}>
       <View
         style={[

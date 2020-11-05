@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'relative',
     zIndex: 0,
-    opacity: 0.8,
+    opacity: 1,
   },
   contentContainer: {
     width: '100%',

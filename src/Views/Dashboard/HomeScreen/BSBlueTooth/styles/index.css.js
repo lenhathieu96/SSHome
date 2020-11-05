@@ -8,14 +8,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    height: 0.1 * height,
+    height: 0.05 * height,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderColor: Color.unactive,
     alignItems: 'center',
     justifyContent: 'center',
   },
   Body: {
     backgroundColor: 'white',
-    padding: 10,
     height: 0.75 * height,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 5,
   },
   title: {
     fontSize: fontSize.larger,
@@ -27,6 +31,16 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 50,
     backgroundColor: Color.primary,
+  },
+  listContainer: {
+    flex: 0.9,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtInfo: {
+    textAlign: 'center',
+    color: Color.blue,
+    marginVertical: 10,
   },
 });
 

@@ -6,10 +6,11 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
+import {useSelector, useDispatch} from 'react-redux';
+
+import BLEManager from 'react-native-ble-manager';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-import {useSelector, useDispatch} from 'react-redux';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
@@ -22,16 +23,14 @@ import LoadingModal from '../../../Components/Modal/LoadingModal';
 
 import Header from './Header';
 import RoomList from './RoomList';
-import BSBlueToothSearching from './BSBlueTooth';
+import BSBlueTooth from './BSBlueTooth';
 import BSVoice from './BSVoice';
-
-import {
-  setBLConnection,
-  setInternetConnection,
-} from '../../../Redux/ActionCreators/hardwareActions';
 
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
+
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -45,144 +44,85 @@ export default function HomeScreen({navigation}) {
   const [textNotify, setTextNotify] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [nearbyDevices, setNearbyDevices] = useState([]);
-  //demo=================================================================
-  const [deviceData, setDeviceData] = useState({});
-  const [deviceID, setDeviceID] = useState();
-  const [showUID, setShowUID] = useState(false);
 
   useEffect(() => {
-    // BLEManager.start({showAlert: false});
-    listenConnection();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (hardwareController.WFConnection) {
+      getUserProflie();
+    }
+  }, [hardwareController.WFConnection]);
 
   useEffect(() => {
-    getUserProflie();
     if (hardwareController.BLController) {
+      BLEManager.start({showAlert: false});
       setUpBLConnection();
     }
-  }, [
-    hardwareController.BLConnection,
-    hardwareController.WFConnection,
-    hardwareController.BLController,
-  ]);
+  }, [hardwareController.BLConnection, hardwareController.BLController]);
 
   const getUserProflie = async () => {
     const currentUser = auth().currentUser;
     const userRole = await AsyncStorage.getItem('userRole');
-
-    const User =
+    const response =
       userRole === 'Master'
         ? await getMasterProfile(currentUser.uid)
         : await getMemberProfile(currentUser.phoneNumber);
-
-    dispatch(setUserProfile(User));
+    console.log(response.message);
+    if (response.result) {
+      dispatch(setUserProfile(response.data));
+    }
     setLoading(false);
   };
 
-  //listener Internet and Bluetooth connection
-  const listenConnection = async () => {
-    // BLEManager.checkState();
-    // bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
-    //   let status = args.state;
-    //   switch (status) {
-    //     case 'off':
-    //       dispatch(setBLConnection(false));
-    //       break;
-    //     case 'on':
-    //       dispatch(setBLConnection(true));
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
-
-    NetInfo.addEventListener((state) => {
-      dispatch(setInternetConnection(state.isConnected));
-    });
-  };
-
   const setUpBLConnection = async () => {
-    // if (hardwareController.BLConnection) {
-    //   setLoading(true);
-    //   const BLStoreDevice = await AsyncStorage.getItem('ESP');
-    //   if (BLStoreDevice) {
-    //     console.log('start connect stored device');
-    //     const BLDevice = JSON.parse(BLStoreDevice);
-    //     await connectBLDevice(BLDevice);
-    //   } else {
-    //     BSBlueToothRef.current.snapTo(0);
-    //     bleManagerEmitter.addListener('BleManagerStopScan', () => {
-    //       setLoading(false);
-    //       showNotification('Đã quét xong');
-    //     });
-    //     bleManagerEmitter.addListener(
-    //       'BleManagerDiscoverPeripheral',
-    //       (device) => {
-    //         let duplicateDevice = nearbyDevices.filter(
-    //           (item) => item.id === device.id,
-    //         );
-    //         if (duplicateDevice.length === 0) {
-    //           nearbyDevices.push(device);
-    //           setNearbyDevices([...nearbyDevices]);
-    //         }
-    //       },
-    //     );
-    //     BLEManager.scan([], 15, true).then(() => {
-    //       console.log('Start Scanning...');
-    //     });
-    //   }
-    // } else {
-    //   BSBlueToothRef.current.snapTo(1);
-    //   Alert.alert('Vui Lòng Kiểm Tra Trạng Thái BLuetooth');
-    // }
+    if (hardwareController.BLConnection) {
+      const BLStoreDevice = await AsyncStorage.getItem('ESP');
+      if (BLStoreDevice) {
+        const BLDevice = JSON.parse(BLStoreDevice);
+        await connectBLDevice(BLDevice);
+      } else {
+        //clear old data
+        setNearbyDevices([]);
+        let devices = [];
+        BSBlueToothRef.current.snapTo(0);
+        bleManagerEmitter.addListener('BleManagerStopScan', () => {
+          console.log('scan stopped');
+          setNearbyDevices(devices);
+        });
+        bleManagerEmitter.addListener(
+          'BleManagerDiscoverPeripheral',
+          (device) => {
+            let duplicateDevice = devices.filter(
+              (item) => item.id === device.id,
+            );
+            if (duplicateDevice.length === 0) {
+              devices.push(device);
+            }
+          },
+        );
+        BLEManager.scan([], 15, false).then(() =>
+          console.log('start scanning'),
+        );
+      }
+    } else {
+      BSBlueToothRef.current.snapTo(1);
+      Alert.alert('Cảnh Báo', 'Vui lòng kiểm tra kết nối bluetooth');
+    }
   };
 
   const connectBLDevice = async (device) => {
-    // try {
-    //   console.log(device.id);
-    //   await BLEManager.connect(device.id);
-    //   const DeviceData = JSON.stringify(device);
-    //   await AsyncStorage.setItem('ESP', DeviceData);
-    //   showNotification('Kết nối thành công');
-    //   setDeviceID(device.id);
-    //   BLEManager.retrieveServices(
-    //     device.id,
-    //     device.advertising.serviceUUIDs,
-    //   ).then((peripheralInfo) => {
-    //     setDeviceData(peripheralInfo);
-    //     setShowUID(true);
-    //   });
-    //   BSBlueToothRef.current.snapTo(0);
-    // } catch (error) {
-    //   console.log('connect fail', error);
-    //   showNotification('Kết nối thất bại');
-    // }
+    try {
+      await BLEManager.connect(device.id);
+      const DeviceData = JSON.stringify(device);
+      await AsyncStorage.setItem('ESP', DeviceData);
+      showNotification('Kết nối thành công');
+      BSBlueToothRef.current.snapTo(0);
+    } catch (error) {
+      console.log('connect fail', error);
+      showNotification('Kết nối thất bại');
+    }
   };
 
-  const sendData = async () => {
-    // const peripheralInfo = await BLEManager.retrieveServices(deviceID);
-    // console.log('peripheralInfo first for writing', peripheralInfo);
-    // let str = 'test';
-    // let bytes = bytesCounter.count(str); // count the number of bytes
-    // let data = stringToBytes(str);
-    // if (!peripheralInfo) {
-    //   return;
-    // }
-    // try {
-    //   await BLEManager.write(
-    //     deviceID,
-    //     '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-    //     'beb5483e-36e1-4688-b7f5-ea07361b26a8',
-    //     data,
-    //     bytes,
-    //   );
-    //   Alert.alert('Kết Quả', 'Thành Công');
-    //   // console.log(`Settings written on device ${DEVICE_UUID}`);
-    //   // this.setState({ settings: [...settingsArray] });
-    // } catch (error) {
-    //   Alert.alert('Kết Quả', error);
-    // }
+  const handleStopScan = () => {
+    BLEManager.stopScan();
   };
 
   const showNotification = (notitfy) => {
@@ -223,13 +163,11 @@ export default function HomeScreen({navigation}) {
         />
       </SafeAreaView>
       {/* BSBlueTooth */}
-      <BSBlueToothSearching
+      <BSBlueTooth
         ref={BSBlueToothRef}
         listDevice={nearbyDevices}
         connectDevice={connectBLDevice}
-        showUID={showUID}
-        deviceData={deviceData}
-        sendData={sendData}
+        handleStopScan={handleStopScan}
       />
       <BSVoice ref={BSVoiceRef} />
       <LoadingModal isVisible={isLoading} />

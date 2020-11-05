@@ -28,8 +28,8 @@ export default function MemberLoginScreen({navigation, route}) {
   useEffect(() => {
     inputRef.current.focus();
     if (route.params?.qrcode) {
-      console.log(route.params.qrcode, 'qrcode');
       setHomeID(route.params.qrcode);
+      setloginError('');
     } else {
       getHomeIDFromStorage();
     }
@@ -78,15 +78,21 @@ export default function MemberLoginScreen({navigation, route}) {
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
-            // const response = await handleMemberLogin(phoneNumber, homeID);
-            // if (!response.result) {
-            //   setloginError(
-            //     `Đăng nhập không thành công, ${response.message} !`,
-            //   );
-            // } else {
-            // navigation.navigate('otp', {confirmation: response.data});
-            // }
-            navigation.navigate('otp');
+            if (!phoneNumber) {
+              setloginError('Số điện thoại không được để trống');
+            } else if (!homeID) {
+              setloginError('Mã xác nhận không tồn tại');
+            } else {
+              const response = await handleMemberLogin(phoneNumber, homeID);
+              console.log(response.message);
+              if (!response.result) {
+                setloginError(
+                  `Đăng nhập không thành công, ${response.message} !`,
+                );
+              } else {
+                navigation.navigate('otp', {confirmation: response.data});
+              }
+            }
           }}
         />
       </View>

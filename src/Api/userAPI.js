@@ -69,6 +69,7 @@ export const handleMasterForgotPassword = async (email) => {
 };
 
 export const handleMemberLogin = async (phoneNumber, homeID) => {
+  console.log(homeID);
   let phone = phoneNumber.slice(1);
   const User = await firestore()
     .collection('Home')
@@ -120,21 +121,37 @@ export const handleLogout = () => {
 };
 
 export const getMasterProfile = async (userID) => {
-  const User = await firestore()
-    .collection('Home')
-    .where('id', '==', userID)
-    .get();
-  if (User.docs.length > 0) {
-    const UserData = User.docs[0];
-    await AsyncStorage.setItem('homeID', UserData.id);
-    const rooms = await database().ref(UserData.id).once('value');
-
+  try {
+    const User = await firestore()
+      .collection('Home')
+      .where('id', '==', userID)
+      .get();
+    if (User.docs.length > 0) {
+      const UserData = User.docs[0];
+      await AsyncStorage.setItem('homeID', UserData.id);
+      const rooms = await database().ref(UserData.id).once('value');
+      return {
+        result: true,
+        message: 'Lấy dữ liệu chủ nhà thành công',
+        data: {
+          name: UserData.data().name,
+          phone: UserData.data().phone,
+          email: UserData.data().email,
+          avatar: UserData.data().avatar,
+          availableRooms: Object.values(rooms.val()),
+        },
+      };
+    } else {
+      return {
+        result: false,
+        message: 'Không tồn tại tài khoản chủ nhà',
+      };
+    }
+  } catch (error) {
+    console.log(error);
     return {
-      name: UserData.data().name,
-      phone: UserData.data().phone,
-      email: UserData.data().email,
-      avatar: UserData.data().avatar,
-      availableRooms: Object.values(rooms.val()),
+      result: false,
+      message: 'Lấy dữ liệu chủ nhà thất bại',
     };
   }
 };
@@ -150,7 +167,7 @@ export const getMemberProfile = async (phone) => {
   if (User.docs.length > 0) {
     const result = [];
     const UserData = User.docs[0];
-    const userAvailableRooms = UserData.data().availableRoom;
+    const userAvailableRooms = UserData.data().availableRooms;
     const roomlist = await database().ref(homeID).once('value');
 
     userAvailableRooms.forEach((roomID) => {
@@ -162,10 +179,14 @@ export const getMemberProfile = async (phone) => {
     });
 
     return {
-      name: UserData.data().name,
-      phone: UserData.data().phone,
-      email: UserData.data().email,
-      availableRooms: result,
+      result: true,
+      message: 'Lấy dữ liệu thành viên thành công',
+      data: {
+        name: UserData.data().name,
+        phone: UserData.data().phone,
+        email: UserData.data().email,
+        availableRooms: result,
+      },
     };
   }
 };

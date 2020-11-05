@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 0.75 * height,
     justifyContent: 'space-around',
+    paddingHorizontal: 5,
   },
   BSTitle: {
     textAlign: 'center',

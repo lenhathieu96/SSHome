@@ -10,7 +10,7 @@ import {confirmOTP} from '../../../Api/userAPI';
 import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
-  // const {confirmation} = route.params;
+  const {confirmation} = route.params;
   const inputRef = useRef();
 
   const [OTP, setOTP] = useState('');
@@ -18,13 +18,7 @@ export default function MemberLoginScreen({navigation, route}) {
 
   useEffect(() => {
     inputRef.current.focus();
-    // if (route.params?.qrcode) {
-    //   console.log(route.params.qrcode, 'qrcode');
-    //   setHomeID(route.params.qrcode);
-    // } else {
-    //   getHomeIDFromStorage();
-    // }
-  }, [route.params?.qrcode]);
+  }, []);
 
   return (
     <RootContainer safeArea={true}>
@@ -48,7 +42,7 @@ export default function MemberLoginScreen({navigation, route}) {
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
-            // const response = await confirmOTP(confirmation, OTP);
+            const response = await confirmOTP(confirmation, OTP);
           }}
         />
       </View>

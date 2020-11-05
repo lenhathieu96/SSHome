@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText} from '../../../../Components/Text';
-import TextButton from '../../../../Components/TextButton';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -15,13 +20,14 @@ const BSBlueTooth = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
 
-  const {connectDevice, listDevice, showUID, deviceData, sendData} = props;
+  const {connectDevice, listDevice, handleStopScan} = props;
 
   return (
     <BottomSheet
       ref={ref}
       snapPoints={[BSHeight, 0]}
       initialSnap={1}
+      onCloseEnd={() => handleStopScan()}
       enabledInnerScrolling={true}
       enabledGestureInteraction={false}
       renderHeader={() => (
@@ -37,35 +43,10 @@ const BSBlueTooth = React.forwardRef((props, ref) => {
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText text="Các Thiết Bị Lân Cận" style={styles.title} />
-          {showUID ? (
-            <View>
-              <View>
-                <Text>CharUID: </Text>
-                <FlatList
-                  style={{height: 200, borderWidth: 1}}
-                  data={
-                    Object.keys(deviceData).length > 0
-                      ? deviceData.characteristics
-                      : []
-                  }
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({item}) => <Text>{item.characteristic}</Text>}
-                />
-              </View>
-              <View>
-                <Text>ServiceUID: </Text>
-                <FlatList
-                  style={{height: 200, borderWidth: 1}}
-                  data={
-                    Object.keys(deviceData).length > 0
-                      ? deviceData.services
-                      : []
-                  }
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({item}) => <Text>{item.uuid}</Text>}
-                />
-              </View>
-              <TextButton text="Gửi dữ liệu" onPress={() => sendData()} />
+          {listDevice.length === 0 ? (
+            <View style={styles.listContainer}>
+              <ActivityIndicator size={fontSize.biggest} color={Color.blue} />
+              <Text style={styles.txtInfo}>Đang quét thiết bị xung quanh</Text>
             </View>
           ) : (
             <FlatList

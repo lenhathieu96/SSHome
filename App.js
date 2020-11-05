@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
+import BLEManager from 'react-native-ble-manager';
 
 import {checkPermission} from './src/Utils/Permissions';
 import MainRoute from './src/Routes';
@@ -12,7 +13,7 @@ export default function App() {
   useEffect(() => {
     const result = checkPermission();
     if (result) {
-      // BLEManager.start({showAlert: false});
+      BLEManager.start({showAlert: false});
     }
   }, []);
 

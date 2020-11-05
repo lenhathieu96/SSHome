@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, View, TouchableOpacity} from 'react-native';
+import {Animated, View, TouchableWithoutFeedback} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -10,12 +10,11 @@ import styles from './styles/index.css';
 export default function RoomButton(props) {
   const {navigation, roomData, opacity, translateY, onLongPress} = props;
   return (
-    <Animated.View
-      style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
-      <TouchableOpacity
-        style={styles.BtnContainer}
-        onLongPress={() => onLongPress(roomData.id)}
-        onPress={() => navigation.navigate('Room', {room: roomData})}>
+    <TouchableWithoutFeedback
+      onLongPress={() => onLongPress(roomData.id)}
+      onPress={() => navigation.navigate('Room', {room: roomData})}>
+      <Animated.View
+        style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
         <FastImage
           source={{
             uri: roomData.background,
@@ -33,7 +32,7 @@ export default function RoomButton(props) {
               : 0
           } thiết bị`}</Text>
         </View>
-      </TouchableOpacity>
-    </Animated.View>
+      </Animated.View>
+    </TouchableWithoutFeedback>
   );
 }

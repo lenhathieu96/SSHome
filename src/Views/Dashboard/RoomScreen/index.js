@@ -4,12 +4,16 @@ import {
   SafeAreaView,
   FlatList,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
+import BLEManager from 'react-native-ble-manager';
+import {stringToBytes} from 'convert-string';
+import bytesCounter from 'bytes-counter';
 
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
@@ -27,7 +31,6 @@ import {
 } from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
 
-import Color from '../../../Utils/Color';
 import * as fontSize from '../../../Utils/FontSize';
 import styles from './styles/index.css';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -62,7 +65,7 @@ export default function RoomDetailScreen({navigation, route}) {
       });
     return () =>
       database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
-  }, [isBLController, homeID, room.id]);
+  }, [homeID, room.id]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
@@ -103,14 +106,57 @@ export default function RoomDetailScreen({navigation, route}) {
   };
 
   // Change status device
-  const onChangeStatus = async (deviceID, status) => {
-    const response = await updateStatusDevice(
-      homeID,
-      room.id,
-      deviceID,
-      status,
-    );
-    console.log(response.message);
+  const onChangeStatus = async (device, status) => {
+    //Bluetooth control
+    if (isBLController) {
+      const BLStoreDevice = await AsyncStorage.getItem('ESP');
+      const BLDevice = JSON.parse(BLStoreDevice);
+      BLEManager.isPeripheralConnected(BLDevice.id).then(
+        async (isConnected) => {
+          if (isConnected) {
+            const peripheralInfo = await BLEManager.retrieveServices(
+              BLDevice.id,
+              BLDevice.advertising.serviceUUIDs,
+            );
+            if (peripheralInfo) {
+              let str = `${device.port}-${status}`;
+              let bytes = bytesCounter.count(str); // count the number of bytes
+              let data = stringToBytes(str);
+              try {
+                await BLEManager.write(
+                  BLDevice.id,
+                  '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+                  'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+                  data,
+                  bytes,
+                );
+                Alert.alert('Kết Quả', 'Thành Công');
+                let tempDevice = [...device];
+                let index = tempDevice.findIndex(
+                  (devicedata) => devicedata.id === BLDevice.id,
+                );
+                if (index >= 0) {
+                  tempDevice[index].status = status;
+                }
+                setDevices(tempDevice);
+              } catch (error) {
+                Alert.alert('Kết Quả', error);
+              }
+            }
+          } else {
+            console.log('Peripheral is NOT connected!');
+          }
+        },
+      );
+    } else {
+      const response = await updateStatusDevice(
+        homeID,
+        room.id,
+        device.id,
+        status,
+      );
+      console.log(response.message);
+    }
   };
 
   const onDeleteDevice = async () => {
