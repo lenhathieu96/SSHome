@@ -8,11 +8,11 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function RoomButton(props) {
-  const {navigation, roomData, opacity, translateY, onLongPress} = props;
+  const {onPress, onLongPress, roomData, opacity, translateY} = props;
   return (
     <TouchableWithoutFeedback
       onLongPress={() => onLongPress(roomData.id)}
-      onPress={() => navigation.navigate('Room', {room: roomData})}>
+      onPress={() => onPress(roomData)}>
       <Animated.View
         style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
         <FastImage

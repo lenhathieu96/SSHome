@@ -4,16 +4,16 @@ import {
   SafeAreaView,
   FlatList,
   TouchableWithoutFeedback,
-  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {stringToBytes} from 'convert-string';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
-import {stringToBytes} from 'convert-string';
 import bytesCounter from 'bytes-counter';
+import {useAlert} from '../../../Hooks/useModal';
 
 import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
@@ -37,34 +37,51 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
-
   const BSRef = useRef();
+  const alert = useAlert();
 
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
   const [chosenDevice, chooseDevice] = useState({});
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const dispatch = useDispatch();
-  const isBLController = useSelector((state) => state.hardware.BLController);
+  const hardware = useSelector((state) => state.hardware);
+  const localRooms = useSelector((state) => state.user.availableRooms);
 
   useEffect(() => {
     getHomeID();
     //Wifi control
-    const onValueChange = database()
-      .ref(`${homeID}/${room.id}`)
-      .on('value', (snapshot) => {
+    if (hardware.WFConnection) {
+      const onValueChange = database()
+        .ref(`${homeID}/${room.id}`)
+        .on('value', (snapshot) => {
+          let result = [{}];
+          let deviceList = snapshot.val().devices;
+          for (let device in deviceList) {
+            result.unshift(deviceList[device]);
+          }
+          setLoading(false);
+          setDevices(result);
+        });
+      return () =>
+        database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
+    }
+    //get local rooms devices
+    else {
+      let index = localRooms.findIndex((localRoom) => localRoom.id === room.id);
+      if (index >= 0) {
         let result = [{}];
-        let deviceList = snapshot.val().devices;
+        let deviceList = localRooms[index].devices;
         for (let device in deviceList) {
           result.unshift(deviceList[device]);
         }
+        setLoading(false);
         setDevices(result);
-      });
-    return () =>
-      database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
-  }, [homeID, room.id]);
+      }
+    }
+  }, [homeID, localRooms, room.id, hardware.WFConnection]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
@@ -107,7 +124,7 @@ export default function RoomDetailScreen({navigation, route}) {
   // Change status device
   const onChangeStatus = async (device, status) => {
     //Bluetooth control
-    if (isBLController) {
+    if (hardware.isBLController) {
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
       const BLDevice = JSON.parse(BLStoreDevice);
       BLEManager.isPeripheralConnected(BLDevice.id).then(
@@ -129,21 +146,22 @@ export default function RoomDetailScreen({navigation, route}) {
                   data,
                   bytes,
                 );
-                Alert.alert('Kết Quả', 'Thành Công');
-                let tempDevice = [...devices];
-                let index = tempDevice.findIndex(
-                  (devicedata) => devicedata.id === device.id,
-                );
-                if (index >= 0) {
-                  tempDevice[index].status = status;
-                }
-                setDevices(tempDevice);
+
+                // let tempDevice = [...devices];
+                // let index = tempDevice.findIndex(
+                //   (devicedata) => devicedata.id === device.id,
+                // );
+                // if (index >= 0) {
+                //   tempDevice[index].status = status;
+                // }
+                // setDevices(tempDevice);
               } catch (error) {
-                Alert.alert('Kết Quả', error);
+                console.log(error);
+                // Alert.alert('Kết Quả', error);
               }
             }
           } else {
-            Alert.alert('Kết Quả', 'Thiết bị chưa được kết nối');
+            alert('Thiết bị chưa được kết nối');
           }
         },
       );
@@ -200,7 +218,20 @@ export default function RoomDetailScreen({navigation, route}) {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               if (index === devices.length - 1) {
-                return <AddButton onPress={() => BSRef.current.snapTo(0)} />;
+                return (
+                  <AddButton
+                    onPress={() => {
+                      if (hardware.WFConnection) {
+                        BSRef.current.snapTo(0);
+                      } else {
+                        BSRef.current.snapTo(1);
+                        alert(
+                          'Bạn cần kết nối wifi để thực hiện chức năng này',
+                        );
+                      }
+                    }}
+                  />
+                );
               }
               return (
                 <DeviceButton

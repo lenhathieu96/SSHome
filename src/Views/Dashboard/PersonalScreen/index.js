@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
 
-import {useNotify} from '../../../Hooks/useNotify';
+import {useNotify} from '../../../Hooks/useModal';
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
 import LoadingModal from '../../../Components/Modal/LoadingModal';

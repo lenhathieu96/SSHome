@@ -29,7 +29,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   const [txtError, setTxtError] = useState('');
 
   useEffect(() => {
-    const allPorts = Array.from(Array(15).keys()).map((number) => number + 1);
+    const allPorts = Array.from(Array(20).keys()).map((number) => number + 1);
     const usedPorts = devices.map((device) => device.port).slice(0, -1);
     const emptyPorts = allPorts.filter(
       (port) => usedPorts.indexOf(port) < 0,
@@ -64,7 +64,8 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
       ref={ref}
       snapPoints={[BSHeight, 0]}
       initialSnap={1}
-      enabledInnerScrolling={false}
+      enabledGestureInteraction={false}
+      enabledInnerScrolling={true}
       renderHeader={() => (
         <View style={styles.Header}>
           <TouchableOpacity
@@ -83,14 +84,10 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
             onChangeText={(text) => setDeviceName(text)}
             label="Tên Thiết Bị"
             placeholder="Nhập tên thiết bị"
-            style={{flex: 0.2}}
           />
-          <View style={styles.textContainer}>
-            <Text>Chọn cổng kết nối:</Text>
-          </View>
+          <Text style={{marginVertical: 10}}>Chọn cổng kết nối:</Text>
           <FlatList
-            styl
-            contentContainerStyle={styles.listPorts}
+            style={styles.listPorts}
             showsVerticalScrollIndicator={false}
             numColumns={3}
             data={portList}

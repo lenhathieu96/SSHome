@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 0.75 * height,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: fontSize.larger,
@@ -30,19 +30,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
   },
   radioButton: {
-    flex: 0.4,
+    flex: 0.33,
+    alignSelf: 'flex-start', 
   },
   listPorts: {
     flex: 0.6,
     paddingHorizontal: 5,
   },
-  textContainer: {
-    flex: 0.2,
-    padding: 5,
-    justifyContent: 'center',
-  },
   btnContainer: {
-    flex: 0.4,
+    flex: 0.3,
     justifyContent: 'center',
   },
 });

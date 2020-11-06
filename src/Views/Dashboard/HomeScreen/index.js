@@ -1,16 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  SafeAreaView,
-  Alert,
-  NativeModules,
-  NativeEventEmitter,
-} from 'react-native';
+import {SafeAreaView, NativeModules, NativeEventEmitter} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import BleManager from 'react-native-ble-manager';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-import {useNotify} from '../../../Hooks/useNotify';
+import {useNotify, useAlert} from '../../../Hooks/useModal';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {getMasterProfile, getMemberProfile} from '../../../Api/userAPI';
@@ -34,11 +29,12 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const notify = useNotify();
+  const alert = useAlert();
 
   const BSBlueToothRef = useRef();
   const BSVoiceRef = useRef();
 
-  const hardwareController = useSelector((state) => state.hardware);
+  const hardware = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
 
   const [isLoading, setLoading] = useState(true);
@@ -46,20 +42,19 @@ export default function HomeScreen({navigation}) {
   const [isScanning, setScanning] = useState(false);
 
   useEffect(() => {
-    if (hardwareController.WFConnection) {
+    if (hardware.WFConnection) {
       getUserProflie();
-      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hardwareController.WFConnection]);
+  }, [hardware.WFConnection]);
 
   useEffect(() => {
-    if (hardwareController.BLController) {
+    if (hardware.BLController) {
       BleManager.start({showAlert: false});
       setUpBLConnection();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hardwareController.BLConnection, hardwareController.BLController]);
+  }, [hardware.BLConnection, hardware.BLController]);
 
   const getUserProflie = async () => {
     const currentUser = auth().currentUser;
@@ -76,9 +71,8 @@ export default function HomeScreen({navigation}) {
   };
 
   const setUpBLConnection = async () => {
-    if (hardwareController.BLConnection) {
+    if (hardware.BLConnection) {
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
-      console.log(BLStoreDevice, 'store');
       if (BLStoreDevice) {
         const BLDevice = JSON.parse(BLStoreDevice);
         await connectBLDevice(BLDevice);
@@ -95,7 +89,6 @@ export default function HomeScreen({navigation}) {
         bleManagerEmitter.addListener(
           'BleManagerDiscoverPeripheral',
           (device) => {
-            console.log(device);
             let duplicateDevice = devices.filter(
               (item) => item.id === device.id,
             );
@@ -111,7 +104,7 @@ export default function HomeScreen({navigation}) {
       }
     } else {
       BSBlueToothRef.current.snapTo(1);
-      Alert.alert('Cảnh Báo', 'Vui lòng kiểm tra kết nối bluetooth');
+      alert('Vui lòng kiểm tra trạng thái bluetooth');
     }
   };
 
@@ -135,12 +128,22 @@ export default function HomeScreen({navigation}) {
     BleManager.stopScan();
   };
 
-  const onLongPressRoom = async (roomID) => {
+  const onRoomLongPress = async (roomID) => {
     // const homeID = await AsyncStorage.getItem('homeID');
     // const userRole = await AsyncStorage.getItem('userRole');
     // if(userRole==='Master'){
     //   const response = await deleteRoom(homeID, roomID);
     // }
+  };
+
+  const onRoomPress = (roomData) => {
+    if (!hardware.WFConnection && !hardware.BLController) {
+      alert('Vui lòng kiểm tra trạng thái wifi');
+    } else if (!hardware.BLConnection && hardware.BLController) {
+      alert('Vui lòng kiểm tra trạng thái bluetooth');
+    } else {
+      navigation.navigate('Room', {room: roomData});
+    }
   };
 
   return (
@@ -151,9 +154,9 @@ export default function HomeScreen({navigation}) {
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
         <RoomList
-          navigation={navigation}
+          onRoomPress={onRoomPress}
           data={userProfile.availableRooms}
-          onLongPress={onLongPressRoom}
+          onRoomLongPress={onRoomLongPress}
         />
 
         <IconButton

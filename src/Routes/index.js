@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {NativeModules, NativeEventEmitter} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
-import BleManager from 'react-native-ble-manager';
+import BLEManager from 'react-native-ble-manager';
 import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 
@@ -35,8 +35,8 @@ export default function MainRoute() {
   }
 
   const listenConnection = () => {
-    BleManager.start({showAlert: false});
-    BleManager.checkState();
+    BLEManager.start({showAlert: false});
+    BLEManager.checkState();
     bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
       let status = args.state;
       switch (status) {

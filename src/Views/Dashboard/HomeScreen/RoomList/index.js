@@ -6,7 +6,7 @@ import RoomButton from './RoomButton';
 import styles from './styles/index.css';
 
 export default function RoomList(props) {
-  const {navigation, data, onLongPress} = props;
+  const {onRoomPress, onRoomLongPress, data} = props;
   const {width} = Dimensions.get('window');
 
   const ITEM_SIZE = 0.8 * width;
@@ -64,11 +64,11 @@ export default function RoomList(props) {
         }
         return (
           <RoomButton
-            navigation={navigation}
             roomData={item}
             opacity={opacity}
             translateY={translateY}
-            onLongPress={onLongPress}
+            onPress={onRoomPress}
+            onLongPress={onRoomLongPress}
           />
         );
       }}

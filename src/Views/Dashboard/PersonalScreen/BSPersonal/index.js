@@ -121,7 +121,6 @@ const BSPersonal = React.forwardRef((props, ref) => {
           </BoldText>
           <View style={styles.radioButtonContainer}>
             <FlatList
-              contentContainerStyle={styles.listRoom}
               showsVerticalScrollIndicator={false}
               numColumns={2}
               data={roomList}

@@ -35,9 +35,6 @@ const styles = StyleSheet.create({
     flex: 0.7,
     marginHorizontal: 5,
   },
-  listRoom: {
-    justifyContent: 'space-between',
-  },
   radioButton: {
     flex: 0.5,
     marginVertical: 5,
