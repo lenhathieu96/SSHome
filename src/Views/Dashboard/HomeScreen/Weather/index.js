@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 import Text, {BoldText} from '../../../../Components/Text';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -9,9 +9,20 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 export default function Weather() {
-  const headerHeight = useHeaderHeight();
-  return (
-    <View style={[styles.infoContainer, {marginTop: headerHeight}]}>
+  const hardware = useSelector((state) => state.hardware);
+
+  return !hardware.WFEnabled ? (
+    <View style={styles.iconContainer}>
+      <Icon
+        name="wifi-off"
+        size={fontSize.biggest}
+        color={Color.background}
+        style={{alignSelf: 'center'}}
+      />
+      <Text style={styles.txtInfo}>Không có kết nối Internet</Text>
+    </View>
+  ) : (
+    <View style={styles.infoContainer}>
       <View style={styles.weatherContainer}>
         <Icon
           name="cloud-drizzle"

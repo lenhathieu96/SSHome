@@ -25,16 +25,17 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
     borderRadius: 10,
+    padding: 5,
     height: 0.1 * width,
-    backgroundColor: Color.red,
+    backgroundColor: Color.blue,
   },
   icon: {
     position: 'relative',
     alignSelf: 'center',
     zIndex: 1,
-    marginTop: -fontSize.biggest,
     backgroundColor: 'white',
-    borderRadius: 30,
+    marginTop: -fontSize.biggest,
+    borderRadius: 50,
     padding: 5,
   },
 });

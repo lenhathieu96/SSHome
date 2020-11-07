@@ -8,17 +8,7 @@ const styles = StyleSheet.create({
   imgBg: {
     width: '100%',
     height: '100%',
-    position: 'relative',
-    zIndex: 0,
-    opacity: 1,
-  },
-  contentContainer: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    zIndex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent:'space-between',
   },
   headerContainer: {
     height: Platform.OS === 'android' ? 60 : 120,
@@ -32,7 +22,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.bigger,
   },
   bodyContainer: {
-    flex: 0.8,
+    flex: 0.9,
     padding: 5,
   },
   btnContainer: {

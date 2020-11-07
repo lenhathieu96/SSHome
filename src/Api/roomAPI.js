@@ -53,6 +53,27 @@ export const updateRoomBackground = async (homeID, imageURI, roomID) => {
   }
 };
 
+export const getUsedPorts = async (homeID) => {
+  const ports = [];
+  try {
+    let rooms = await (await database().ref(`/${homeID}`).once('value')).val();
+    for (let roomID in rooms) {
+      let deviceList = rooms[roomID].devices;
+      for (let device in deviceList) {
+        ports.push(deviceList[device].port);
+      }
+    }
+    return {
+      result: true,
+      message: 'Lấy danh sách cổng thành công',
+      data: ports,
+    };
+  } catch (error) {
+    console.log(error);
+    return {result: false, message: 'Lấy danh sách cổng thất bại'};
+  }
+};
+
 export const addNewDevice = async (homeID, roomID, device) => {
   try {
     let deviceID = `DV${homeID.slice(2, 5)}${createID()}`;

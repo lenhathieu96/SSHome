@@ -46,7 +46,7 @@ export default function RoomList(props) {
         ];
         const translateY = scrollX.interpolate({
           inputRange,
-          outputRange: [0, -(0.15 * ITEM_SIZE), 0],
+          outputRange: [0, -(0.1 * ITEM_SIZE), 0],
           extrapolate: 'clamp',
         });
         const opacity = scrollX.interpolate({

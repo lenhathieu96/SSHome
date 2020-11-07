@@ -21,8 +21,8 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
   const BSHeight = 0.8 * height;
 
-  const {devices, onAddNewDevice} = props;
-
+  const {ports, onAddNewDevice} = props;
+  console.log(ports, 'used port');
   const [deviceName, setDeviceName] = useState('');
   const [portList, setPortList] = useState([]);
   const [chosenPort, choosePort] = useState();
@@ -30,10 +30,9 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     const allPorts = Array.from(Array(20).keys()).map((number) => number + 1);
-    const usedPorts = devices.map((device) => device.port).slice(0, -1);
     const emptyPorts = allPorts.filter(
-      (port) => usedPorts.indexOf(port) < 0,
-      usedPorts,
+      (port) => ports.indexOf(port) < 0,
+      ports,
     );
     setPortList(emptyPorts);
     return () => {
@@ -41,7 +40,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
       setDeviceName('');
       setTxtError('');
     };
-  }, [devices]);
+  }, [ports]);
 
   const handleBtnAddPress = () => {
     if (!deviceName) {

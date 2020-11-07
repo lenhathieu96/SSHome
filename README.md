@@ -1,2 +1,2 @@
 # SSHome
-fix master phone
+room image on no internet

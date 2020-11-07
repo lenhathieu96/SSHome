@@ -1,4 +1,4 @@
-export const setBLConnection = (isConnect) => {
+export const setBLEnabled = (isConnect) => {
   return {
     type: 'SET BLUETOOTH CONNECTION',
     payload: isConnect,

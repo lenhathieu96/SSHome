@@ -13,10 +13,14 @@ export const ModalProvider = (props) => {
   const [modal, setModal] = useState(initialState);
 
   const notify = (text, status) => {
-    setModal({isVisible: true, title: text});
-    // setTimeout(() => {
-    //   setModal(initialState);
-    // }, 1000);
+    setModal({
+      isVisible: true,
+      title: text,
+      status: status ? 'success' : 'fail',
+    });
+    setTimeout(() => {
+      setModal(initialState);
+    }, 2000);
   };
 
   const alert = (text) => {
@@ -34,7 +38,7 @@ export const ModalProvider = (props) => {
         isVisible={modal.isVisible}
         title={modal.title}
         type={modal.type}
-        staus={modal.status}
+        status={modal.status}
         hideModal={hideModal}
       />
     </ModalContext.Provider>

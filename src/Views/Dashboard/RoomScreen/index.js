@@ -3,11 +3,11 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  ImageBackground,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {stringToBytes} from 'convert-string';
-import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
@@ -15,7 +15,6 @@ import BLEManager from 'react-native-ble-manager';
 import bytesCounter from 'bytes-counter';
 import {useAlert} from '../../../Hooks/useModal';
 
-import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
@@ -26,11 +25,13 @@ import BSAddNewDevice from './BSAddNewDevice';
 import {
   updateRoomBackground,
   updateStatusDevice,
+  getUsedPorts,
   addNewDevice,
   deleteDevice,
 } from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
 
+import roomBackground from '../../../Assets/Images/roomBackground1.jpg';
 import * as fontSize from '../../../Utils/FontSize';
 import styles from './styles/index.css';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -42,6 +43,7 @@ export default function RoomDetailScreen({navigation, route}) {
 
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
+  const [usedPort, setUsedPort] = useState([]);
   const [chosenDevice, chooseDevice] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -53,7 +55,8 @@ export default function RoomDetailScreen({navigation, route}) {
   useEffect(() => {
     getHomeID();
     //Wifi control
-    if (hardware.WFConnection) {
+    if (hardware.WFEnabled) {
+      getPorts();
       const onValueChange = database()
         .ref(`${homeID}/${room.id}`)
         .on('value', (snapshot) => {
@@ -81,7 +84,8 @@ export default function RoomDetailScreen({navigation, route}) {
         setDevices(result);
       }
     }
-  }, [homeID, localRooms, room.id, hardware.WFConnection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [homeID, localRooms, room.id, hardware.WFEnabled]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
@@ -90,6 +94,12 @@ export default function RoomDetailScreen({navigation, route}) {
     }
   };
 
+  const getPorts = async () => {
+    let response = await getUsedPorts(homeID);
+    if (response.data) {
+      setUsedPort(response.data);
+    }
+  };
   //Change room background
   const onChangeRoomBackground = () => {
     const options = {
@@ -120,7 +130,6 @@ export default function RoomDetailScreen({navigation, route}) {
       }
     });
   };
-
   // Change status device
   const onChangeStatus = async (device, status) => {
     //Bluetooth control
@@ -191,75 +200,68 @@ export default function RoomDetailScreen({navigation, route}) {
   };
 
   return (
-    <RootContainer safeArea={false}>
-      <FastImage
-        source={{uri: room.background}}
-        style={styles.imgBg}
-        resizeMode={FastImage.resizeMode.cover}
-      />
-
-      <View style={styles.contentContainer}>
-        <SafeAreaView style={styles.headerContainer}>
-          <IconButton
-            iconName="chevron-left"
-            onPress={() => navigation.goBack()}
-          />
-          <BoldText style={styles.roomTitle}>{room.name}</BoldText>
-          <IconButton
-            iconName="camera"
-            onPress={() => onChangeRoomBackground()}
-          />
-        </SafeAreaView>
-        <View style={styles.bodyContainer}>
-          <FlatList
-            data={devices}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item, index}) => {
-              if (index === devices.length - 1) {
-                return (
-                  <AddButton
-                    onPress={() => {
-                      if (hardware.WFConnection) {
-                        BSRef.current.snapTo(0);
-                      } else {
-                        BSRef.current.snapTo(1);
-                        alert(
-                          'Bạn cần kết nối wifi để thực hiện chức năng này',
-                        );
-                      }
-                    }}
-                  />
-                );
-              }
+    <ImageBackground
+      source={room.background ? {uri: room.background} : roomBackground}
+      style={styles.imgBg}
+      resizeMode="cover">
+      <SafeAreaView style={styles.headerContainer}>
+        <IconButton
+          iconName="chevron-left"
+          onPress={() => navigation.goBack()}
+        />
+        <BoldText style={styles.roomTitle}>{room.name}</BoldText>
+        <IconButton
+          iconName="camera"
+          onPress={() => onChangeRoomBackground()}
+        />
+      </SafeAreaView>
+      <View style={styles.bodyContainer}>
+        <FlatList
+          data={devices}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            if (index === devices.length - 1) {
               return (
-                <DeviceButton
-                  device={item}
-                  onChangeStatus={onChangeStatus}
-                  onDelete={(device) => {
-                    chooseDevice(device);
-                    setShowConfirm(true);
+                <AddButton
+                  onPress={() => {
+                    if (hardware.WFEnabled) {
+                      BSRef.current.snapTo(0);
+                    } else {
+                      BSRef.current.snapTo(1);
+                      alert('Bạn cần kết nối wifi để thực hiện chức năng này');
+                    }
                   }}
                 />
               );
-            }}
-          />
-        </View>
-        <LoadingModal isVisible={isLoading} />
-        <ConfirmModal
-          title={`${chosenDevice.name} sẽ bị xoá khỏi danh sách thiết bị`}
-          isVisible={showConfirm}
-          onAccept={onDeleteDevice}
-          toggleModal={() => setShowConfirm(false)}
-        />
-        <BSAddNewDevice
-          ref={BSRef}
-          devices={devices}
-          onAddNewDevice={onAddNewDevice}
+            }
+            return (
+              <DeviceButton
+                device={item}
+                onChangeStatus={onChangeStatus}
+                onDelete={(device) => {
+                  chooseDevice(device);
+                  setShowConfirm(true);
+                }}
+              />
+            );
+          }}
         />
       </View>
-    </RootContainer>
+      <LoadingModal isVisible={isLoading} />
+      <ConfirmModal
+        title={`${chosenDevice.name} sẽ bị xoá khỏi danh sách thiết bị`}
+        isVisible={showConfirm}
+        onAccept={onDeleteDevice}
+        toggleModal={() => setShowConfirm(false)}
+      />
+      <BSAddNewDevice
+        ref={BSRef}
+        ports={usedPort}
+        onAddNewDevice={onAddNewDevice}
+      />
+    </ImageBackground>
   );
 }
 

@@ -88,14 +88,14 @@ export default function Personal() {
     toogleConfirmModal(false);
     setLoading(true);
     const response = await deleteMember(chosenUser.id);
-    notify(response.message);
+    notify(response.message, response.result);
   };
 
   const onConfigMember = async (member, isUpdate) => {
     setLoading(true);
     const response = await configMember(member, isUpdate);
     BSPersonalRef.current.snapTo(1);
-    notify(response.message);
+    notify(response.message, response.result);
   };
 
   const selectPhotoTapped = () => {

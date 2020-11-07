@@ -3,13 +3,13 @@ import {NativeModules, NativeEventEmitter} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import BLEManager from 'react-native-ble-manager';
-import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
+import NetInfo from '@react-native-community/netinfo';
 
 import {setLoginStatus} from '../Redux/ActionCreators/userActions';
 import {
   setInternetConnection,
-  setBLConnection,
+  setBLEnabled,
 } from '../Redux/ActionCreators/hardwareActions';
 
 import LoginStack from './LoginStack';
@@ -41,17 +41,17 @@ export default function MainRoute() {
       let status = args.state;
       switch (status) {
         case 'off':
-          dispatch(setBLConnection(false));
+          dispatch(setBLEnabled(false));
           break;
         case 'on':
-          dispatch(setBLConnection(true));
+          dispatch(setBLEnabled(true));
           break;
         default:
           break;
       }
-      NetInfo.addEventListener((state) => {
-        dispatch(setInternetConnection(state.isConnected));
-      });
+    });
+    NetInfo.addEventListener((state) => {
+      dispatch(setInternetConnection(state.isConnected));
     });
   };
 

@@ -9,14 +9,9 @@ import MainRoute from './src/Routes';
 import store from './src/Redux/Store';
 
 export default function App() {
-  // const dispatch = useDispatch();
   useEffect(() => {
-    const result = checkPermission();
+    checkPermission();
   }, []);
-
-  // NetInfo.addEventListener((state) => {
-  //   dispatch(setInternetConnection(state.isConnected));
-  // });
 
   return (
     <Provider store={store}>

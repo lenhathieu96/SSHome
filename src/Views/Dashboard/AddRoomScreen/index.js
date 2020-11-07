@@ -4,13 +4,13 @@ import {
   View,
   KeyboardAvoidingView,
   ImageBackground,
+  Image,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
-import FastImage from 'react-native-fast-image';
 
 import Text, {ErrorText} from '../../../Components/Text';
 import TextInput from '../../../Components/TextInput';
@@ -145,7 +145,7 @@ export default function AddRoomScreen({navigation}) {
           onPress={() => {
             chooseImg(1);
           }}>
-          <FastImage
+          <Image
             source={{uri: BACKGROUND_1}}
             style={chosenImg === 1 ? styles.chosenImg : styles.defaultImg}
             resizeMode="contain"
@@ -153,7 +153,7 @@ export default function AddRoomScreen({navigation}) {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={() => chooseImg(2)}>
-          <FastImage
+          <Image
             source={{uri: BACKGROUND_2}}
             style={chosenImg === 2 ? styles.chosenImg : styles.defaultImg}
             resizeMode="contain"
