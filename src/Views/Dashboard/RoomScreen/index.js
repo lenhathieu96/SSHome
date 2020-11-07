@@ -144,7 +144,7 @@ export default function RoomDetailScreen({navigation, route}) {
               BLDevice.advertising.serviceUUIDs,
             );
             if (peripheralInfo) {
-              let str = `${device.port}-${status}`;
+              let str = `${room.id}-${device.id}-${device.port}-${status}`;
               let bytes = bytesCounter.count(str); // count the number of bytes
               let data = stringToBytes(str);
               try {
