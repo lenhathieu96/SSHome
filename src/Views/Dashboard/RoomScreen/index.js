@@ -133,7 +133,7 @@ export default function RoomDetailScreen({navigation, route}) {
   // Change status device
   const onChangeStatus = async (device, status) => {
     //Bluetooth control
-    if (hardware.isBLController) {
+    if (hardware.BLController) {
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
       const BLDevice = JSON.parse(BLStoreDevice);
       BLEManager.isPeripheralConnected(BLDevice.id).then(
@@ -145,7 +145,7 @@ export default function RoomDetailScreen({navigation, route}) {
             );
             if (peripheralInfo) {
               let str = `${room.id}-${device.id}-${device.port}-${status}`;
-              let bytes = bytesCounter.count(str); // count the number of bytes
+              let bytes = bytesCounter.count(str);
               let data = stringToBytes(str);
               try {
                 await BLEManager.write(
@@ -156,18 +156,21 @@ export default function RoomDetailScreen({navigation, route}) {
                   bytes,
                 );
 
-                // let tempDevice = [...devices];
-                // let index = tempDevice.findIndex(
-                //   (devicedata) => devicedata.id === device.id,
-                // );
-                // if (index >= 0) {
-                //   tempDevice[index].status = status;
-                // }
-                // setDevices(tempDevice);
+                let tempDevice = [...devices];
+                let index = tempDevice.findIndex(
+                  (devicedata) => devicedata.id === device.id,
+                );
+                if (index >= 0) {
+                  tempDevice[index].status = status;
+                }
+                setDevices(tempDevice);
+                alert('thành công')
               } catch (error) {
                 console.log(error);
-                // Alert.alert('Kết Quả', error);
+                alert(`Thất bại:${error}`);
               }
+            }else{
+              alert('Lỗi thông tin thiết bị')
             }
           } else {
             alert('Thiết bị chưa được kết nối');

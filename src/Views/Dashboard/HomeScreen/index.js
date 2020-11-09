@@ -110,7 +110,7 @@ export default function HomeScreen({navigation}) {
           clearTimeout(timeOut);
         },
       );
-    }, 10000);
+    }, 5000);
 
     //
     // setLoading(false);
