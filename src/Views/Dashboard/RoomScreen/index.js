@@ -164,13 +164,12 @@ export default function RoomDetailScreen({navigation, route}) {
                   tempDevice[index].status = status;
                 }
                 setDevices(tempDevice);
-                alert('thành công')
               } catch (error) {
                 console.log(error);
                 alert(`Thất bại:${error}`);
               }
-            }else{
-              alert('Lỗi thông tin thiết bị')
+            } else {
+              alert('Lỗi thông tin thiết bị');
             }
           } else {
             alert('Thiết bị chưa được kết nối');

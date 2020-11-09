@@ -180,7 +180,7 @@ export default function HomeScreen({navigation}) {
           iconName="mic"
           iconColor={Color.primary}
           onPress={() =>
-            !hardware.WFEnabled
+            hardware.WFEnabled
               ? BSVoiceRef.current.snapTo(0)
               : alert('Vui lòng kiểm tra trạng thái wifi')
           }
@@ -192,6 +192,7 @@ export default function HomeScreen({navigation}) {
         listDevice={nearbyDevices}
         isScanning={isScanning}
         connectDevice={connectBLDevice}
+        hanldeStartScan={hanldeStartScan}
         handleStopScan={handleStopScan}
       />
       <BSVoice ref={BSVoiceRef} />

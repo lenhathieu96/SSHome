@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     height: 0.05 * height,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   Body: {
     backgroundColor: 'white',
@@ -23,15 +21,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
   },
-  lines: {
-    width: 60,
-    height: 5,
-    borderRadius: 50,
-    backgroundColor: Color.primary,
+  timesBtn: {
+    alignSelf: 'flex-end',
   },
   radioButton: {
     flex: 0.33,
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
   },
   listPorts: {
     flex: 0.6,

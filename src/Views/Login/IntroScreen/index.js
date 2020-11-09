@@ -4,19 +4,14 @@ import {ImageBackground, View, Image} from 'react-native';
 import RootContainer from '../../../Components/RootContainer';
 import TextButton from '../../../Components/TextButton';
 
-import appLogo from '../../../Assets/Images/appLogo.png';
 import IntroBackground from '../../../Assets/Images/introBackground.jpg';
 import styles from './styles/index.css';
 import Color from '../../../Utils/Color';
 
-export default function LoginScreen({navigation}) {
+export default function IntroScreen({navigation}) {
   return (
     <ImageBackground source={IntroBackground} style={{flex: 1}}>
       <RootContainer safeArea={true}>
-        <View style={styles.headerContainer}>
-          <Image source={appLogo} />
-        </View>
-
         <View style={styles.btnContainer}>
           <TextButton
             style={styles.btn}

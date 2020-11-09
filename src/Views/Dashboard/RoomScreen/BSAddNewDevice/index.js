@@ -1,20 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  View,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-} from 'react-native';
+import {View, Dimensions, FlatList, SafeAreaView} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText, ErrorText} from '../../../../Components/Text';
 import RadioButton from '../../../../Components/RadioButton';
 import TextButton from '../../../../Components/TextButton';
+import IconButton from '../../../../Components/IconButton';
 import TextInput from '../../../../Components/TextInput';
 
+import Color from '../../../../Utils/Color';
+import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 const BSAddNewDevice = React.forwardRef((props, ref) => {
@@ -22,7 +19,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   const BSHeight = 0.8 * height;
 
   const {ports, onAddNewDevice} = props;
-  console.log(ports, 'used port');
+
   const [deviceName, setDeviceName] = useState('');
   const [portList, setPortList] = useState([]);
   const [chosenPort, choosePort] = useState();
@@ -67,8 +64,11 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
       enabledInnerScrolling={true}
       renderHeader={() => (
         <View style={styles.Header}>
-          <TouchableOpacity
-            style={styles.lines}
+          <IconButton
+            iconName="x"
+            iconColor={Color.primary}
+            iconSize={fontSize.biggest}
+            style={styles.timesBtn}
             onPress={() => {
               ref.current.snapTo(1);
             }}
@@ -124,6 +124,6 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
 export default BSAddNewDevice;
 
 BSAddNewDevice.propTypes = {
-  devices: PropTypes.array.isRequired,
+  ports: PropTypes.array.isRequired,
   onAddNewDevice: PropTypes.func,
 };

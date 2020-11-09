@@ -11,7 +11,6 @@ import {
 } from '../../../Api/userAPI';
 
 import styles from './styles/index.css';
-import appLogo from '../../../Assets/Images/appLogo.png';
 
 export default function MasterLoginScreen({navigation}) {
   const [email, setEmail] = useState('lenhathieu96@gmail.com');

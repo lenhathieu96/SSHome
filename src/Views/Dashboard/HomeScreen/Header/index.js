@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {SafeAreaView} from 'react-native';
 import {BoldText} from '../../../../Components/Text';
 import {useSelector} from 'react-redux';
+import {useAlert} from '../../../../Hooks/useModal';
 
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
@@ -11,6 +12,8 @@ import styles from './styles/index.css';
 export default function Header(props) {
   const {navigation, hanldeStartScan} = props;
   const hardware = useSelector((state) => state.hardware);
+  const alert = useAlert();
+
   return (
     <SafeAreaView style={styles.container}>
       <Icon.Button
