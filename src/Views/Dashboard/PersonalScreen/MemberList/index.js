@@ -1,180 +1,59 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   View,
-  Animated,
-  TouchableWithoutFeedback,
+  FlatList,
+  Image,
   TouchableOpacity,
-  ImageBackground,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import Text from '../../../../Components/Text';
+import Text, {BoldText} from '../../../../Components/Text';
 
-import userBlank from '../../../../Assets/Images/userBlank.png';
-import * as fontSize from '../../../../Utils/FontSize';
+import User from '../../../../Assets/Images/profile.png';
 import styles from './styles/index.css';
 
 export default function MemberList(props) {
   const {data, onPressMember, onLongPressMember} = props;
-  const scrollX = new Animated.Value(0);
-  const {width} = Dimensions.get('window');
-  // personal card container
-  const _card_width = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0.4 * width, 60],
-    extrapolate: 'clamp',
-  });
-  const _card_height = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0.6 * width, 60],
-    extrapolate: 'clamp',
-  });
-  const _card_position_top = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0, (0.5 * width) / 2],
-    extrapolate: 'clamp',
-  });
-  const _card_position_left = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [10, 0],
-    extrapolate: 'clamp',
-  });
-  const _card_border_left_radius = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [16, 0],
-    extrapolate: 'clamp',
-  });
+  const blankUser = {name: '', phone: '', availableRoom: []};
 
-  // image container
-  const _image_container_height = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0.4 * width, 50],
-    extrapolate: 'clamp',
-  });
-  const _image_container_margin = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0, 4],
-    extrapolate: 'clamp',
-  });
-  const _image_container_border_radius = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [0, 50],
-    extrapolate: 'clamp',
-  });
+  const [userList, setUserList] = useState([]);
 
-  // cta container
-  const _cta_container_padding_top = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [30, -30],
-    extrapolate: 'clamp',
-  });
-  const _cta_container_opacity = scrollX.interpolate({
-    inputRange: [0, 50],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
-  // icon
-  const _icon_scale = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [1, 0.6],
-    extrapolate: 'clamp',
-  });
-  const _icon_position_top = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [-15, -36],
-    extrapolate: 'clamp',
-  });
-  const _icon_position_right = scrollX.interpolate({
-    inputRange: [0, 0.4 * width],
-    outputRange: [(0.3 * width) / 2, -10],
-    extrapolate: 'clamp',
-  });
+  useEffect(() => {
+    let users = [...data];
+    users.unshift({});
+    setUserList(users);
+  }, [data]);
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback
-        onPress={() => onPressMember({name: '', phone: '', availableRoom: []})}>
-        <Animated.View
-          style={[
-            styles.personal_card_container,
-            {
-              width: _card_width,
-              height: _card_height,
-              top: _card_position_top,
-              left: _card_position_left,
-              borderTopLeftRadius: _card_border_left_radius,
-              borderBottomLeftRadius: _card_border_left_radius,
-            },
-          ]}>
-          {/* Image container */}
-          <Animated.View
-            style={[
-              styles.image_container,
-              {
-                height: _image_container_height,
-                margin: _image_container_margin,
-                borderRadius: _image_container_border_radius,
-              },
-            ]}
-          />
-          {/* Call to action */}
-          <Animated.View style={styles.cta_container}>
-            <Animated.Text
-              style={[
-                styles.text,
-                {
-                  paddingTop: _cta_container_padding_top,
-                  opacity: _cta_container_opacity,
-                },
-              ]}>
-              Thêm Thành Viên
-            </Animated.Text>
-            {/* Icon */}
-            <Animated.View
-              style={[
-                styles.icon_container,
-                {
-                  transform: [{scale: _icon_scale}],
-                  top: _icon_position_top,
-                  right: _icon_position_right,
-                },
-              ]}>
-              <Icon name="plus" size={fontSize.bigger} color="#ffffff" />
-            </Animated.View>
-          </Animated.View>
-        </Animated.View>
-      </TouchableWithoutFeedback>
-
-      <Animated.ScrollView
-        style={styles.scroll_view}
+      <FlatList
+        data={userList}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={5}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {contentOffset: {x: scrollX}},
-            },
-          ],
-          {useNativeDriver: false},
-        )}>
-        <View style={styles.fake_card_ghost} />
-        {data.map((item, index) => {
-          return (
-            <TouchableOpacity
-              onPress={() => onPressMember(item)}
-              onLongPress={() => onLongPressMember(item)}
-              key={index.toString()}>
-              <ImageBackground source={userBlank} style={styles.fake_card}>
-                <Text style={styles.txtUserName}>{item.name}</Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          );
-        })}
-        <View style={styles.column_spacer} />
-      </Animated.ScrollView>
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            onPress={() => onPressMember(index === 0 ? blankUser : item)}
+            onLongPress={() => {
+              if (index !== 0) {
+                onLongPressMember(item);
+              }
+            }}>
+            {index === 0 ? (
+              <View style={styles.itemContainer}>
+                <Image source={User} style={styles.userImage} />
+                <BoldText>Thêm thành viên</BoldText>
+              </View>
+            ) : (
+              <View style={styles.itemContainer}>
+                <Image source={User} style={styles.userImage} />
+                <BoldText>{item.name}</BoldText>
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 }

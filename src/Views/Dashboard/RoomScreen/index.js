@@ -13,7 +13,6 @@ import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
 import BLEManager from 'react-native-ble-manager';
 import bytesCounter from 'bytes-counter';
-import {useAlert} from '../../../Hooks/useModal';
 
 import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
@@ -22,6 +21,8 @@ import LoadingModal from '../../../Components/Modal/LoadingModal';
 import ConfirmModal from '../../../Components/Modal/ConfirmDelModal';
 import BSAddNewDevice from './BSAddNewDevice';
 
+import {useNotify} from '../../../Hooks/useModal';
+import {useAlert} from '../../../Hooks/useModal';
 import {
   updateRoomBackground,
   updateStatusDevice,
@@ -40,6 +41,7 @@ export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
   const BSRef = useRef();
   const alert = useAlert();
+  const notify = useNotify();
 
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
@@ -189,8 +191,10 @@ export default function RoomDetailScreen({navigation, route}) {
 
   const onDeleteDevice = async () => {
     const response = await deleteDevice(homeID, room.id, chosenDevice.id);
-    console.log(response.message);
     setShowConfirm(false);
+    if (!response.result) {
+      notify(response.message, false);
+    }
   };
 
   const onAddNewDevice = async (device) => {
@@ -198,6 +202,8 @@ export default function RoomDetailScreen({navigation, route}) {
     console.log(response.message);
     if (response.result) {
       BSRef.current.snapTo(1);
+    } else {
+      notify('Thêm thiết bị thất bại', false);
     }
   };
 

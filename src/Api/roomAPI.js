@@ -101,11 +101,16 @@ export const updateStatusDevice = async (homeID, roomID, deviceID, status) => {
 
 export const deleteDevice = async (homeID, roomID, deviceID) => {
   try {
+    const exits = await database()
+      .ref(`/${homeID}/${roomID}/devices/${deviceID}`)
+      .once('value');
+    if (!exits.val()) {
+      return {result: false, message: 'Thiết bị không tồn tại'};
+    }
     await database().ref(`/${homeID}/${roomID}/devices/${deviceID}`).remove();
-    return {result: true, message: 'Xoá Thiết Bi Thành công'};
+    return {result: true, message: 'Xoá thiết bị thành công'};
   } catch (error) {
-    console.log(error);
-    return {result: false, message: 'Xoá  Thiết Bị Thất bại'};
+    return {result: false, message: 'Xoá  thiết bị thất bại'};
   }
 };
 

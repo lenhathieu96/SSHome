@@ -29,11 +29,7 @@ export default function MasterLoginScreen({navigation}) {
   return (
     <RootContainer safeArea={true}>
       <View style={{flex: 0.25}}>
-        <Image
-          source={appLogo}
-          style={{alignSelf: 'center'}}
-          resizeMode="cover"
-        />
+        <Image style={{alignSelf: 'center'}} resizeMode="cover" />
       </View>
       <View style={styles.body}>
         <TextInput

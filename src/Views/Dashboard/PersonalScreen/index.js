@@ -129,12 +129,7 @@ export default function Personal() {
   };
 
   return (
-    <RootContainer
-      safeArea={false}
-      style={{
-        marginTop: headerHeight,
-        justifyContent: 'space-between',
-      }}>
+    <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Master Info */}
       <View style={styles.masterInfoContainer}>
         <View style={styles.avatarContainer}>
