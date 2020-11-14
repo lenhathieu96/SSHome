@@ -1,12 +1,10 @@
 const Color = {
-  primary: '#47634E',
-  secondary: '#eac3b0',
-  background: '#DDE1DD',
+  primary: '#317A45',
+  secondary: '#03B3E6',
+  background: '#D8DCE2',
   unactive: '#6e6e6e',
-  green: '#53CF8F',
+  green: '#64E886',
   red: '#F83F38',
-  borderHighLight: '#e8e8e8',
   blue: '#3260a8',
 };
-
 export default Color;

@@ -1,34 +1,31 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
+
+const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  masterInfoContainer: {
-    flex: 0.2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  userInfoContainer: {
+    flex: 0.4,
     padding: 5,
+    alignItems: 'center',
   },
 
   avatarContainer: {
-    flex: 0.3,
+    height: 0.5 * width,
+    width: 0.5 * width,
+    borderRadius: (0.5 * width) / 2,
+    overflow: 'hidden',
+    borderWidth: 5,
+    borderColor: Color.secondary,
   },
   avatar: {
     flex: 1,
     justifyContent: 'flex-end',
   },
-  btnCameraContainer: {
-    flex: 0.3,
-    backgroundColor: Color.background,
-    opacity: 0.7,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   infoContainer: {
-    flex: 0.7,
-    marginLeft: 10,
-    justifyContent: 'flex-end',
+    marginTop: 10,
+    alignItems: 'center',
   },
 
   txtInfoContainer: {
@@ -37,7 +34,7 @@ const styles = StyleSheet.create({
   },
 
   memberListContainer: {
-    flex: 0.4,
+    flex: 0.2,
   },
   btnAddContainer: {
     backgroundColor: '#ffffff',

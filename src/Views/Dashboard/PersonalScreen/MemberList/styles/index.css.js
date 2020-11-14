@@ -4,23 +4,36 @@ import Color from '../../../../../Utils/Color';
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    position: 'relative',
-  },
   itemContainer: {
     borderRadius: 10,
     width: 0.3 * width,
     height: 0.4 * width,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    position: 'relative',
   },
-  userImage: {
-    width: 0.2 * width,
-    height: 0.2 * width,
+  memberAvatar: {
+    width: 0.25 * width,
+    height: 0.25 * width,
     borderRadius: 50,
+    backgroundColor: Color.background,
+    overflow: 'hidden',
+    padding: 10,
+    borderWidth: 5,
+    borderColor: Color.secondary,
+  },
+  memberName: {
+    textAlign: 'center',
+  },
+  memberNameContainer: {
+    width: 0.3 * width,
+    padding: 5,
+    marginTop: -15,
+    alignItems: 'center',
     backgroundColor: Color.secondary,
+    borderRadius: 20,
+    borderColor: 'white',
+    borderWidth: 2,
   },
 });
 

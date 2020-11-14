@@ -1,20 +1,20 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {View, SafeAreaView, ImageBackground} from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import ImagePicker from 'react-native-image-picker';
 
-import {useNotify} from '../../../Hooks/useModal';
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
 import LoadingModal from '../../../Components/Modal/LoadingModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
+
 import BSPersonal from './BSPersonal';
 
+import {useNotify} from '../../../Hooks/useModal';
 import {
   uploadMasterAvatar,
   configMember,
@@ -30,7 +30,6 @@ import styles from './styles/index.css';
 import MemberList from './MemberList';
 
 export default function Personal() {
-  const headerHeight = useHeaderHeight();
   const dispatch = useDispatch();
   const notify = useNotify();
   const masterInfo = useSelector((state) => state.user);
@@ -76,7 +75,7 @@ export default function Personal() {
 
   const onPressMember = (user) => {
     setChosenUser(user);
-    BSPersonalRef.current.snapTo(0);
+    BSPersonalRef.current.open();
   };
 
   const onLongPressMember = (user) => {
@@ -131,7 +130,7 @@ export default function Personal() {
   return (
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       {/* Master Info */}
-      <View style={styles.masterInfoContainer}>
+      <View style={styles.userInfoContainer}>
         <View style={styles.avatarContainer}>
           <ImageBackground
             source={
@@ -139,16 +138,15 @@ export default function Personal() {
                 ? {uri: masterInfo.avatar}
                 : profileAvatar
             }
+            resizeMode="cover"
             style={styles.avatar}>
-            <View style={styles.btnCameraContainer}>
-              <IconButton
-                iconName="camera"
-                onPress={() => selectPhotoTapped()}
-                style={styles.btnCamera}
-                iconSize={fontSize.biggest}
-                iconColor={Color.primary}
-              />
-            </View>
+            <IconButton
+              iconName="camera"
+              onPress={() => selectPhotoTapped()}
+              style={styles.btnCamera}
+              iconSize={fontSize.biggest}
+              iconColor={Color.primary}
+            />
           </ImageBackground>
         </View>
         <View style={styles.infoContainer}>
@@ -157,12 +155,12 @@ export default function Personal() {
             <Text>{masterInfo.name}</Text>
           </View>
           <View style={styles.txtInfoContainer}>
-            <BoldText>Email: </BoldText>
-            <Text>{masterInfo.email}</Text>
-          </View>
-          <View style={styles.txtInfoContainer}>
             <BoldText>Số thành viên: </BoldText>
             <Text>{memberList.length}</Text>
+          </View>
+          <View style={styles.txtInfoContainer}>
+            <BoldText>Email: </BoldText>
+            <Text>{masterInfo.email}</Text>
           </View>
         </View>
       </View>

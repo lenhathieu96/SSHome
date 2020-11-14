@@ -1,14 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Dimensions,
-  Keyboard,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Keyboard, FlatList, KeyboardAvoidingView} from 'react-native';
 
-import BottomSheet from 'reanimated-bottom-sheet';
+import BottomSheet from '../../../../Components/Modal/BottomSheet';
 import RadioButton from '../../../../Components/RadioButton';
 import {BoldText, ErrorText} from '../../../../Components/Text';
 import TextInput from '../../../../Components/TextInput';
@@ -18,8 +11,6 @@ import styles from './styles/index.css';
 
 const BSPersonal = React.forwardRef((props, ref) => {
   const {onConfigMember, roomList, memberProfile} = props;
-  const {height} = Dimensions.get('window');
-  const BSHeight = 0.8 * height;
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -84,25 +75,10 @@ const BSPersonal = React.forwardRef((props, ref) => {
   return (
     <BottomSheet
       ref={ref}
-      onCloseStart={() => Keyboard.dismiss()}
-      enabledInnerScrolling={true}
-      snapPoints={[BSHeight, 0]}
-      initialSnap={1}
-      renderHeader={() => (
-        <View style={styles.Header}>
-          <TouchableOpacity
-            style={styles.lines}
-            onPress={() => {
-              Keyboard.dismiss();
-              ref.current.snapTo(1);
-            }}
-          />
-        </View>
-      )}
+      swipeable={true}
       renderContent={() => (
-        <SafeAreaView style={styles.Body}>
+        <KeyboardAvoidingView style={styles.container}>
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>
-
           <TextInput
             value={name}
             onChangeText={(text) => setName(text)}
@@ -150,7 +126,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
             text={isUpdate ? 'Cập Nhập' : 'Thêm Mới'}
             onPress={() => handleOnClickAdd()}
           />
-        </SafeAreaView>
+        </KeyboardAvoidingView>
       )}
     />
   );

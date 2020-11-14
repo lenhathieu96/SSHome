@@ -7,7 +7,6 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
 import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -31,7 +30,6 @@ const BACKGROUND_2 =
   'https://firebasestorage.googleapis.com/v0/b/sshome-6d962.appspot.com/o/EjAcqoniSmyL2Iu4wkjR%2FRooms%2FBg2.jpg?alt=media&token=b23dd9e7-26bf-4351-b49b-0ac174ba5df1';
 
 export default function AddRoomScreen({navigation}) {
-  const headerHeight = useHeaderHeight();
   const dispatch = useDispatch();
 
   const [roomName, setRoomName] = useState('');

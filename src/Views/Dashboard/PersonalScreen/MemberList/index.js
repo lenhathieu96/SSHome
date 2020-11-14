@@ -8,12 +8,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import Text, {BoldText} from '../../../../Components/Text';
+import {BoldText} from '../../../../Components/Text';
 
 import User from '../../../../Assets/Images/profile.png';
+import * as fontSize from '../../../../Utils/FontSize';
+import Color from '../../../../Utils/Color';
 import styles from './styles/index.css';
 
 export default function MemberList(props) {
+  const {width} = Dimensions.get('window');
   const {data, onPressMember, onLongPressMember} = props;
   const blankUser = {name: '', phone: '', availableRoom: []};
 
@@ -28,6 +31,7 @@ export default function MemberList(props) {
   return (
     <View style={styles.container}>
       <FlatList
+        style={{padding: 10}}
         data={userList}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -41,14 +45,24 @@ export default function MemberList(props) {
               }
             }}>
             {index === 0 ? (
-              <View style={styles.itemContainer}>
-                <Image source={User} style={styles.userImage} />
-                <BoldText>Thêm thành viên</BoldText>
+              <View style={[styles.itemContainer, {marginHorizontal: 15}]}>
+                <Icon
+                  name="user-plus"
+                  style={[styles.memberAvatar]}
+                  size={1.7 * fontSize.biggest}
+                  color={Color.secondary}
+                />
+                <View
+                  style={[styles.memberNameContainer, {width: 0.4 * width}]}>
+                  <BoldText style={styles.memberName}>Thêm thành viên</BoldText>
+                </View>
               </View>
             ) : (
               <View style={styles.itemContainer}>
-                <Image source={User} style={styles.userImage} />
-                <BoldText>{item.name}</BoldText>
+                <Image source={User} style={styles.memberAvatar} />
+                <View style={styles.memberNameContainer}>
+                  <BoldText style={styles.memberName}>{item.name}</BoldText>
+                </View>
               </View>
             )}
           </TouchableOpacity>

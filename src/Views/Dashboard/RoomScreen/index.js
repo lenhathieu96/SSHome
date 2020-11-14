@@ -137,47 +137,59 @@ export default function RoomDetailScreen({navigation, route}) {
     //Bluetooth control
     if (hardware.BLController) {
       const BLStoreDevice = await AsyncStorage.getItem('ESP');
-      const BLDevice = JSON.parse(BLStoreDevice);
-      BLEManager.isPeripheralConnected(BLDevice.id).then(
-        async (isConnected) => {
-          if (isConnected) {
-            const peripheralInfo = await BLEManager.retrieveServices(
-              BLDevice.id,
-              BLDevice.advertising.serviceUUIDs,
-            );
-            if (peripheralInfo) {
-              let str = `${room.id}-${device.id}-${device.port}-${status}`;
-              let bytes = bytesCounter.count(str);
-              let data = stringToBytes(str);
-              try {
-                await BLEManager.write(
-                  BLDevice.id,
-                  '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-                  'beb5483e-36e1-4688-b7f5-ea07361b26a8',
-                  data,
-                  bytes,
-                );
+      if (BLStoreDevice) {
+        const BLDevice = JSON.parse(BLStoreDevice);
+        BLEManager.isPeripheralConnected(BLDevice.id)
+          .then(async (isConnected) => {
+            if (isConnected) {
+              const peripheralInfo = await BLEManager.retrieveServices(
+                BLDevice.id,
+                BLDevice.advertising.serviceUUIDs,
+              );
+              if (peripheralInfo) {
+                let serviceUID = peripheralInfo.services.filter(
+                  (item) => item.length > 10,
+                )[0];
+                let charUID = peripheralInfo.characteristics.filter(
+                  (item) => item.length > 10,
+                )[0];
+                let str = `${room.id}-${device.id}-${device.port}-${status}`;
+                let bytes = bytesCounter.count(str);
+                let data = stringToBytes(str);
+                try {
+                  await BLEManager.write(
+                    BLDevice.id,
+                    serviceUID, // '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+                    charUID, // 'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+                    data,
+                    bytes,
+                  );
 
-                let tempDevice = [...devices];
-                let index = tempDevice.findIndex(
-                  (devicedata) => devicedata.id === device.id,
-                );
-                if (index >= 0) {
-                  tempDevice[index].status = status;
+                  let tempDevice = [...devices];
+                  let index = tempDevice.findIndex(
+                    (devicedata) => devicedata.id === device.id,
+                  );
+                  if (index >= 0) {
+                    tempDevice[index].status = status;
+                  }
+                  setDevices(tempDevice);
+                } catch (error) {
+                  console.log(error);
+                  alert(`Thất bại:${error}`);
                 }
-                setDevices(tempDevice);
-              } catch (error) {
-                console.log(error);
-                alert(`Thất bại:${error}`);
+              } else {
+                alert('Lỗi thông tin thiết bị');
               }
             } else {
-              alert('Lỗi thông tin thiết bị');
+              alert('Thiết bị chưa được kết nối');
             }
-          } else {
+          })
+          .catch(() => {
             alert('Thiết bị chưa được kết nối');
-          }
-        },
-      );
+          });
+      } else {
+        alert('Không tồn tại thiết bị');
+      }
     } else {
       const response = await updateStatusDevice(
         homeID,
@@ -201,7 +213,7 @@ export default function RoomDetailScreen({navigation, route}) {
     const response = await addNewDevice(homeID, room.id, device);
     console.log(response.message);
     if (response.result) {
-      BSRef.current.snapTo(1);
+      BSRef.current.close();
     } else {
       notify('Thêm thiết bị thất bại', false);
     }
@@ -235,9 +247,9 @@ export default function RoomDetailScreen({navigation, route}) {
                 <AddButton
                   onPress={() => {
                     if (hardware.WFEnabled) {
-                      BSRef.current.snapTo(0);
+                      BSRef.current.open();
                     } else {
-                      BSRef.current.snapTo(1);
+                      BSRef.current.close();
                       alert('Bạn cần kết nối wifi để thực hiện chức năng này');
                     }
                   }}

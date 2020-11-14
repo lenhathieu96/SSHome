@@ -2,13 +2,13 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import {View, Dimensions, FlatList, SafeAreaView} from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText, ErrorText} from '../../../../Components/Text';
 import RadioButton from '../../../../Components/RadioButton';
 import TextButton from '../../../../Components/TextButton';
 import IconButton from '../../../../Components/IconButton';
 import TextInput from '../../../../Components/TextInput';
+import BottomSheet from '../../../../Components/Modal/BottomSheet';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -58,23 +58,8 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   return (
     <BottomSheet
       ref={ref}
+      swipeable={false}
       snapPoints={[BSHeight, 0]}
-      initialSnap={1}
-      enabledGestureInteraction={false}
-      enabledInnerScrolling={true}
-      renderHeader={() => (
-        <View style={styles.Header}>
-          <IconButton
-            iconName="x"
-            iconColor={Color.primary}
-            iconSize={fontSize.biggest}
-            style={styles.timesBtn}
-            onPress={() => {
-              ref.current.snapTo(1);
-            }}
-          />
-        </View>
-      )}
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText text="Thiết Bị Mới" style={styles.title} />

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Color.borderHighLight,
+    borderBottomColor: Color.background,
   },
   avatar: {
     width: 64,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   drawerBodyContainer: {
     height: 0.7 * height,
     borderBottomWidth: 1,
-    borderColor: Color.borderHighLight,
+    borderColor: Color.background,
   },
   txtVersion: {
     marginTop: 10,

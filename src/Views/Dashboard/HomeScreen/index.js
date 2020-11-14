@@ -82,12 +82,12 @@ export default function HomeScreen({navigation}) {
       if (BLStoreDevice) {
         const BLDevice = JSON.parse(BLStoreDevice);
         await connectBLDevice(BLDevice);
-        BSBlueToothRef.current.snapTo(1);
+        BSBlueToothRef.current.close();
       } else {
         hanldeStartScan();
       }
     } else {
-      BSBlueToothRef.current.snapTo(1);
+      BSBlueToothRef.current.close();
       alert('Vui lòng kiểm tra trạng thái bluetooth');
     }
   };
@@ -103,7 +103,7 @@ export default function HomeScreen({navigation}) {
             const DeviceData = JSON.stringify(device);
             await AsyncStorage.setItem('ESP', DeviceData);
             notify('Kết nối thành công', true);
-            BSBlueToothRef.current.snapTo(1);
+            BSBlueToothRef.current.close();
           } else {
             notify('Kết nối thất bại', false);
           }
@@ -121,7 +121,7 @@ export default function HomeScreen({navigation}) {
 
   const hanldeStartScan = () => {
     let devices = [];
-    BSBlueToothRef.current.snapTo(0);
+    BSBlueToothRef.current.open();
     bleManagerEmitter.addListener('BleManagerStopScan', () => {
       console.log('scan stopped');
       setNearbyDevices(devices);
@@ -181,7 +181,7 @@ export default function HomeScreen({navigation}) {
           iconColor={Color.primary}
           onPress={() =>
             hardware.WFEnabled
-              ? BSVoiceRef.current.snapTo(0)
+              ? BSVoiceRef.current.open()
               : alert('Vui lòng kiểm tra trạng thái wifi')
           }
         />

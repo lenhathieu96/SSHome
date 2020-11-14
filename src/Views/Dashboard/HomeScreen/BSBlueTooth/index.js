@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
-  Dimensions,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
   Image,
 } from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
 
 import Text, {BoldText} from '../../../../Components/Text';
-import IconButton from '../../../../Components/IconButton';
+import TextButton from '../../../../Components/TextButton';
+import BottomSheet from '../../../../Components/Modal/BottomSheet';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -19,9 +18,6 @@ import device_icon from '../../../../Assets/Images/device_icon.jpg';
 import styles from './styles/index.css';
 
 const BSBlueTooth = React.forwardRef((props, ref) => {
-  const {height} = Dimensions.get('window');
-  const BSHeight = 0.8 * height;
-
   const {
     connectDevice,
     listDevice,
@@ -32,32 +28,23 @@ const BSBlueTooth = React.forwardRef((props, ref) => {
 
   return (
     <BottomSheet
+      swipeable={false}
       ref={ref}
-      snapPoints={[BSHeight, 0]}
-      initialSnap={1}
-      onCloseEnd={() => handleStopScan()}
-      enabledInnerScrolling={true}
-      enabledGestureInteraction={false}
-      renderHeader={() => (
-        <View style={styles.Header}>
-          <IconButton
-            iconName="x"
-            iconColor={Color.primary}
-            iconSize={fontSize.biggest}
-            style={styles.timesBtn}
-            onPress={() => {
-              ref.current.snapTo(1);
-            }}
-          />
-        </View>
-      )}
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText text="Các Thiết Bị Lân Cận" style={styles.title} />
+          <TextButton
+            text={isScanning ? 'Dừng quét' : 'Quét lại'}
+            onPress={() => (isScanning ? handleStopScan() : hanldeStartScan())}
+            style={styles.btnScan}
+            textStyle={{color: isScanning ? Color.primary : Color.secondary}}
+          />
           {isScanning ? (
             <View style={styles.listContainer}>
               <ActivityIndicator size={fontSize.biggest} color={Color.blue} />
-              <Text style={styles.txtInfo}>Đang quét thiết bị xung quanh</Text>
+              <Text style={styles.txtInfo}>
+                Đang tìm kiếm các thiết bị xung quanh
+              </Text>
             </View>
           ) : listDevice.length === 0 ? (
             <View style={styles.listContainer}>

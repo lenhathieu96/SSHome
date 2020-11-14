@@ -1,25 +1,16 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../../Utils/FontSize';
-import Color from '../../../../../Utils/Color';
 
-const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  Header: {
-    backgroundColor: 'white',
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
-    height: 0.05 * height,
-  },
   Body: {
-    backgroundColor: 'white',
+    flex: 1,
     padding: 10,
-    height: 0.75 * height,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   title: {
     fontSize: fontSize.larger,
     alignSelf: 'center',
-    marginVertical: 10,
+    marginBottom: 20,
   },
   timesBtn: {
     alignSelf: 'flex-end',

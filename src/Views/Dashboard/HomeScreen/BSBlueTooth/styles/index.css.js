@@ -1,21 +1,10 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../../Utils/FontSize';
 import Color from '../../../../../Utils/Color';
 
-const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  Header: {
-    backgroundColor: 'white',
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    borderColor: Color.secondary,
-    height: 0.05 * height,
-  },
   Body: {
-    backgroundColor: 'white',
-    height: 0.75 * height,
+    flex: 1,
     justifyContent: 'flex-start',
   },
   title: {
@@ -23,8 +12,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
   },
-  timesBtn: {
-    alignSelf: 'flex-end',
+  btnScan: {
+    width: 100,
+    alignSelf: 'center',
+    padding: 5,
+    backgroundColor: 'transparent',
   },
   listContainer: {
     flex: 0.9,

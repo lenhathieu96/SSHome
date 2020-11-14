@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import {View, Dimensions, TouchableOpacity, FlatList} from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
+import {View, Dimensions} from 'react-native';
+
 import Voice from '@react-native-community/voice';
 
 import Text, {BoldText} from '../../../../Components/Text';
-import NotifyModal from '../../../../Components/Modal/NotificationModal';
+import BottomSheet from '../../../../Components/Modal/BottomSheet';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -14,7 +14,6 @@ import styles from './styles/index.css';
 
 const BSVoice = React.forwardRef((props, ref) => {
   const {height} = Dimensions.get('window');
-  const BSHeight = 0.3 * height;
   let stopListenTimeOut;
   let listeningInterval;
   const initDelay = 10000;
@@ -71,25 +70,9 @@ const BSVoice = React.forwardRef((props, ref) => {
 
   return (
     <BottomSheet
+      modalHeight={0.3 * height}
+      swipeable={true}
       ref={ref}
-      snapPoints={[BSHeight, 0]}
-      initialSnap={1}
-      onOpenEnd={() => startListening()}
-      onCloseEnd={() => {
-        Voice.stop();
-        Voice.destroy().then(Voice.removeAllListeners());
-      }}
-      enabledInnerScrolling={true}
-      renderHeader={() => (
-        <View style={styles.Header}>
-          <TouchableOpacity
-            style={styles.lines}
-            onPress={() => {
-              ref.current.snapTo(1);
-            }}
-          />
-        </View>
-      )}
       renderContent={() => (
         <View style={styles.Body}>
           <BoldText style={styles.title}>
