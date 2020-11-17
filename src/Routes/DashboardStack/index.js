@@ -6,12 +6,11 @@ import {
   DrawerItem,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {handleLogout} from '../../Api/userAPI';
-import {setController} from '../../Redux/ActionCreators/hardwareActions';
 
 import Text, {BoldText} from '../../Components/Text';
 
@@ -27,10 +26,7 @@ import Color from '../../Utils/Color';
 const DashboardDrawer = createDrawerNavigator();
 
 export default function DashboardStack() {
-  const dispatch = useDispatch();
   const UserProfile = useSelector((state) => state.user);
-  const BlController = useSelector((state) => state.hardware.BLController);
-
   const [userRole, setUserRole] = useState();
 
   useEffect(() => {
@@ -68,21 +64,6 @@ export default function DashboardStack() {
             {/* Body */}
             <View style={styles.drawerBodyContainer}>
               <DrawerItemList {...props} />
-              <DrawerItem
-                label={BlController ? 'Chế độ Wifi' : 'Chế độ BlueTooth'}
-                labelStyle={styles.label}
-                icon={({focused}) => (
-                  <Icon
-                    color={'black'}
-                    size={fontSize.bigger}
-                    name="bluetooth"
-                  />
-                )}
-                onPress={() => {
-                  dispatch(setController());
-                  props.navigation.closeDrawer();
-                }}
-              />
               <DrawerItem
                 label="Trợ Giúp"
                 labelStyle={styles.label}

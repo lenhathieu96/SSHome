@@ -7,12 +7,9 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {stringToBytes} from 'convert-string';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
-import BLEManager from 'react-native-ble-manager';
-import bytesCounter from 'bytes-counter';
 
 import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
@@ -52,7 +49,6 @@ export default function RoomDetailScreen({navigation, route}) {
 
   const dispatch = useDispatch();
   const hardware = useSelector((state) => state.hardware);
-  const localRooms = useSelector((state) => state.user.availableRooms);
 
   useEffect(() => {
     getHomeID();
@@ -73,21 +69,8 @@ export default function RoomDetailScreen({navigation, route}) {
       return () =>
         database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
     }
-    //get local rooms devices
-    else {
-      let index = localRooms.findIndex((localRoom) => localRoom.id === room.id);
-      if (index >= 0) {
-        let result = [{}];
-        let deviceList = localRooms[index].devices;
-        for (let device in deviceList) {
-          result.unshift(deviceList[device]);
-        }
-        setLoading(false);
-        setDevices(result);
-      }
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [homeID, localRooms, room.id, hardware.WFEnabled]);
+  }, [homeID, , room.id, hardware.WFEnabled]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
@@ -134,73 +117,13 @@ export default function RoomDetailScreen({navigation, route}) {
   };
   // Change status device
   const onChangeStatus = async (device, status) => {
-    //Bluetooth control
-    if (hardware.BLController) {
-      const BLStoreDevice = await AsyncStorage.getItem('ESP');
-      if (BLStoreDevice) {
-        const BLDevice = JSON.parse(BLStoreDevice);
-        BLEManager.isPeripheralConnected(BLDevice.id)
-          .then(async (isConnected) => {
-            if (isConnected) {
-              const peripheralInfo = await BLEManager.retrieveServices(
-                BLDevice.id,
-                BLDevice.advertising.serviceUUIDs,
-              );
-              if (peripheralInfo) {
-                let serviceUID = peripheralInfo.services.filter(
-                  (item) => item.length > 10,
-                )[0];
-                alert(serviceUID);
-                let charUID = peripheralInfo.characteristics.filter(
-                  (item) => item.length > 10,
-                )[0];
-                alert(charUID);
-                let str = `${room.id}-${device.id}-${device.port}-${status}`;
-                let bytes = bytesCounter.count(str);
-                let data = stringToBytes(str);
-                try {
-                  await BLEManager.write(
-                    BLDevice.id,
-                    '4fafc201-1fb5-459e-8fcc-c5c9c331914b', // serviceUID,  ,
-                    'beb5483e-36e1-4688-b7f5-ea07361b26a8', // 'charUID',
-                    data,
-                    bytes,
-                  );
-
-                  let tempDevice = [...devices];
-                  let index = tempDevice.findIndex(
-                    (devicedata) => devicedata.id === device.id,
-                  );
-                  if (index >= 0) {
-                    tempDevice[index].status = status;
-                  }
-                  setDevices(tempDevice);
-                } catch (error) {
-                  console.log(error);
-                  alert(`Thất bại:${error}`);
-                }
-              } else {
-                alert('Lỗi thông tin thiết bị');
-              }
-            } else {
-              alert('Thiết bị chưa được kết nối');
-            }
-          })
-          .catch(() => {
-            alert('Thiết bị chưa được kết nối');
-          });
-      } else {
-        alert('Không tồn tại thiết bị');
-      }
-    } else {
-      const response = await updateStatusDevice(
-        homeID,
-        room.id,
-        device.id,
-        status,
-      );
-      console.log(response.message);
-    }
+    const response = await updateStatusDevice(
+      homeID,
+      room.id,
+      device.id,
+      status,
+    );
+    console.log(response.message);
   };
 
   const onDeleteDevice = async () => {

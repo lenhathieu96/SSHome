@@ -4,6 +4,15 @@ import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-community/async-storage';
 
+export const getCurrentWeather = async (lat, long) => {
+  const location = `${lat},${long}`;
+  const URL = `api.openweathermap.org/data/2.5/weather?${location}&appid=a371328f96334bba637293161587dfc9`;
+  fetch(URL)
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((e) => console.log(e, 'error'));
+};
+
 //Auth Management===================================================================================
 export const handleMasterSignUp = async (signupForm) => {
   const userDBRef = firestore().collection('Home');
@@ -115,9 +124,7 @@ export const confirmOTP = async (confirmation, OTPCode) => {
 
 export const handleLogout = () => {
   AsyncStorage.clear();
-  auth()
-    .signOut()
-    .then(() => true);
+  auth().signOut();
 };
 
 export const getMasterProfile = async (userID) => {

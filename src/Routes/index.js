@@ -1,23 +1,16 @@
 import React, {useEffect} from 'react';
-import {NativeModules, NativeEventEmitter} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
-import BLEManager from 'react-native-ble-manager';
 import auth from '@react-native-firebase/auth';
 import NetInfo from '@react-native-community/netinfo';
 
 import {setLoginStatus} from '../Redux/ActionCreators/userActions';
-import {
-  setInternetConnection,
-  setBLEnabled,
-} from '../Redux/ActionCreators/hardwareActions';
+import {setInternetConnection} from '../Redux/ActionCreators/hardwareActions';
 
 import LoginStack from './LoginStack';
 import DashBoardStack from './DashboardStack';
 
 const AuthStack = createStackNavigator();
-const BleManagerModule = NativeModules.BleManager;
-const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function MainRoute() {
   const dispatch = useDispatch();
@@ -35,21 +28,6 @@ export default function MainRoute() {
   }
 
   const listenConnection = () => {
-    BLEManager.start({showAlert: false});
-    BLEManager.checkState();
-    bleManagerEmitter.addListener('BleManagerDidUpdateState', (args) => {
-      let status = args.state;
-      switch (status) {
-        case 'off':
-          dispatch(setBLEnabled(false));
-          break;
-        case 'on':
-          dispatch(setBLEnabled(true));
-          break;
-        default:
-          break;
-      }
-    });
     NetInfo.addEventListener((state) => {
       dispatch(setInternetConnection(state.isConnected));
     });
@@ -73,8 +51,6 @@ export default function MainRoute() {
           options={{headerShown: false, ...TransitionPresets.SlideFromRightIOS}}
         />
       )}
-
-      {/*   */}
     </AuthStack.Navigator>
   );
 }
