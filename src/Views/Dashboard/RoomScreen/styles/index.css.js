@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   imgBg: {
     width: '100%',
     height: '100%',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
   headerContainer: {
     height: Platform.OS === 'android' ? 60 : 120,

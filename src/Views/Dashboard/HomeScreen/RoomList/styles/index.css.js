@@ -7,16 +7,16 @@ const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   roomlist: {
-    marginTop: 10,
+    marginBottom: -15,
   },
   BtnContainer: {
     height: 0.6 * height,
-    width: 0.8 * width,
+    width: 0.75 * width,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   imgBg: {
-    width: 0.75 * width,
+    width: 0.7 * width,
     height: 0.58 * height,
     borderRadius: 20,
     shadowColor: '#000',

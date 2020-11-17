@@ -1,12 +1,11 @@
 import React from 'react';
 
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-import {useSelector} from 'react-redux';
 import HomeScreen from '../../../Views/Dashboard/HomeScreen';
 import RoomScreen from '../../../Views/Dashboard/RoomScreen';
 
-const HomeStacks = createStackNavigator();
+const HomeStacks = createSharedElementStackNavigator();
 
 export default function HomeStack() {
   return (
@@ -15,7 +14,6 @@ export default function HomeStack() {
         name="Home"
         component={HomeScreen}
         options={() => ({
-          ...TransitionPresets.SlideFromRightIOS,
           headerShown: false,
         })}
       />
@@ -23,7 +21,6 @@ export default function HomeStack() {
         name="Room"
         component={RoomScreen}
         options={() => ({
-          ...TransitionPresets.SlideFromRightIOS,
           headerShown: false,
         })}
       />

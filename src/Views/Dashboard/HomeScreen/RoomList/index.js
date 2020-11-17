@@ -8,8 +8,9 @@ import styles from './styles/index.css';
 export default function RoomList(props) {
   const {onRoomPress, onRoomLongPress, data} = props;
   const {width} = Dimensions.get('window');
+  const listRef = useRef();
 
-  const ITEM_SIZE = 0.8 * width;
+  const ITEM_SIZE = 0.75 * width;
   const SPACER_SIZE = (width - ITEM_SIZE) / 2;
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -24,16 +25,14 @@ export default function RoomList(props) {
 
   return (
     <Animated.FlatList
+      ref={listRef}
       style={styles.roomlist}
       contentContainerStyle={{alignItems: 'flex-end'}}
       data={rooms}
       keyExtractor={(item, index) => index.toString()}
       snapToInterval={ITEM_SIZE}
-      //speed of scroll, normal is 0.9
-      // decelerationRate={1}
       bounces={false}
       horizontal
-      snapToAlignment="start"
       showsHorizontalScrollIndicator={false}
       onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX}}}], {
         useNativeDriver: true,
@@ -46,7 +45,7 @@ export default function RoomList(props) {
         ];
         const translateY = scrollX.interpolate({
           inputRange,
-          outputRange: [0, -(0.1 * ITEM_SIZE), 0],
+          outputRange: [0, -(0.15 * ITEM_SIZE), 0],
           extrapolate: 'clamp',
         });
         const opacity = scrollX.interpolate({

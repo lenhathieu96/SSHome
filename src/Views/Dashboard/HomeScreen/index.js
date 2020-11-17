@@ -94,15 +94,13 @@ export default function HomeScreen({navigation}) {
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-        {userProfile ? (
-          <RoomList
+       
+          {/* <RoomList
             onRoomPress={onRoomPress}
             data={userProfile.availableRooms}
             onRoomLongPress={onRoomLongPress}
-          />
-        ) : (
-          <LoadingRoom />
-        )}
+          /> */}
+          <LoadingRoom/>
         <IconButton
           style={styles.floatButton}
           iconName="mic"

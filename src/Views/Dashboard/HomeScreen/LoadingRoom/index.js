@@ -1,10 +1,27 @@
-import React from 'react';
-import {Placeholder, PlaceholderMedia, Shine} from 'rn-placeholder';
+import React, {useState, useEffect} from 'react';
+import {Animated} from 'react-native';
 import styles from './styles/index.css';
+
 export default function LoadingRoom() {
-  return (
-    <Placeholder Animation={Shine}>
-      <PlaceholderMedia style={styles.container} />
-    </Placeholder>
-  );
+  const [opacity, setOpactiy] = useState(new Animated.Value(1));
+
+  useEffect(() => {
+    fadeEffect();
+  });
+
+  const fadeEffect = () => {
+    Animated.timing(opacity, {
+      toValue: 0.7,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => fadeEffect());
+    });
+  };
+
+  return <Animated.View style={[styles.container, {opacity}]} />;
 }

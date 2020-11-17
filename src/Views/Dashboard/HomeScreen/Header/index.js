@@ -1,8 +1,8 @@
 import React from 'react';
-import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {SafeAreaView} from 'react-native';
 import {BoldText} from '../../../../Components/Text';
+import {useSelector} from 'react-redux';
 
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
@@ -10,6 +10,7 @@ import styles from './styles/index.css';
 
 export default function Header(props) {
   const {navigation} = props;
+  const hardware = useSelector((state) => state.hardware);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,7 +26,15 @@ export default function Header(props) {
         activeOpacity={0.4}
       />
       <BoldText style={styles.headerTitle}>SSHOME</BoldText>
-      <View style={{flex: 0.2}} />
+      <Icon.Button
+        name="wifi"
+        color={hardware.WFEnabled ? Color.primary : Color.background}
+        size={fontSize.bigger}
+        backgroundColor="transparent"
+        borderRadius={10}
+        underlayColor="transparent"
+        activeOpacity={0.4}
+      />
     </SafeAreaView>
   );
 }
