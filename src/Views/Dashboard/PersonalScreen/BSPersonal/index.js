@@ -42,20 +42,26 @@ const BSPersonal = React.forwardRef((props, ref) => {
   };
 
   const updatememberRooms = (roomID) => {
-    let rooms = [...memberRooms];
-    const existsRoom = rooms.find((room) => roomID === room);
-
-    if (existsRoom) {
-      if (rooms.length === 1) {
-        setTxtError('Thành viên phải có tối thiểu 1 phòng được phép truy cập');
+    if (!memberRooms) {
+      let rooms = [roomID];
+      setmemberRooms(rooms);
+    } else {
+      let rooms = [...memberRooms];
+      const existsRoom = rooms.find((room) => roomID === room);
+      if (existsRoom) {
+        if (rooms.length === 1) {
+          setTxtError(
+            'Thành viên phải có tối thiểu 1 phòng được phép truy cập',
+          );
+        } else {
+          setmemberRooms(rooms.filter((room) => room !== roomID));
+          setTxtError('');
+        }
       } else {
-        setmemberRooms(rooms.filter((room) => room !== roomID));
+        rooms.push(roomID);
+        setmemberRooms(rooms);
         setTxtError('');
       }
-    } else {
-      rooms.push(roomID);
-      setmemberRooms(rooms);
-      setTxtError('');
     }
   };
 

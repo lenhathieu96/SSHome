@@ -150,17 +150,19 @@ export default function RoomDetailScreen({navigation, route}) {
                 let serviceUID = peripheralInfo.services.filter(
                   (item) => item.length > 10,
                 )[0];
+                alert(serviceUID);
                 let charUID = peripheralInfo.characteristics.filter(
                   (item) => item.length > 10,
                 )[0];
+                alert(charUID);
                 let str = `${room.id}-${device.id}-${device.port}-${status}`;
                 let bytes = bytesCounter.count(str);
                 let data = stringToBytes(str);
                 try {
                   await BLEManager.write(
                     BLDevice.id,
-                    serviceUID, // '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-                    charUID, // 'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+                    '4fafc201-1fb5-459e-8fcc-c5c9c331914b', // serviceUID,  ,
+                    'beb5483e-36e1-4688-b7f5-ea07361b26a8', // 'charUID',
                     data,
                     bytes,
                   );

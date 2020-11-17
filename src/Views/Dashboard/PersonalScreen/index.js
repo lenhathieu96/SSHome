@@ -93,7 +93,7 @@ export default function Personal() {
   const onConfigMember = async (member, isUpdate) => {
     setLoading(true);
     const response = await configMember(member, isUpdate);
-    BSPersonalRef.current.snapTo(1);
+    BSPersonalRef.current.close();
     notify(response.message, response.result);
   };
 
