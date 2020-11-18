@@ -8,16 +8,17 @@ const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 export const getCurrentWeather = async (lat, long) => {
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
   try {
+    const homeID = await AsyncStorage.getItem('homeID');
     const response = await fetch(URL);
     const weatherData = await response.json();
-    console.log(weatherData)
     return {
       result: true,
       message: 'Lấy dữ liệu thời tiết thành công',
       data: {
         temp: weatherData.main.temp,
         icon: weatherData.weather[0].icon,
-        desc: weatherData.weather[0].description,
+        main: weatherData.weather[0].main,
+        desc: weatherData.weather[0].descriptiton,
       },
     };
   } catch (error) {

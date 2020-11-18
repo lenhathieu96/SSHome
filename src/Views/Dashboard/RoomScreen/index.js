@@ -152,9 +152,9 @@ export default function RoomDetailScreen({navigation, route}) {
   return (
     <RootContainer safeArea={false}>
       <SharedElement id={`item.${room.id}.photo`}>
-        <Image
+        <FastImage
           source={{uri: room.background}}
-          resizeMode="cover"
+          resizeMode={FastImage.resizeMode.cover}
           style={styles.imgBg}
         />
       </SharedElement>

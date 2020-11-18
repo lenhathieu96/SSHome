@@ -18,9 +18,9 @@ export default function RoomButton(props) {
       <Animated.View
         style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
         <SharedElement id={`item.${roomData.id}.photo`}>
-          <Image
+          <FastImage
             source={{uri: roomData.background}}
-            resizeMode="cover"
+            resizeMode={FastImage.resizeMode.cover}
             style={styles.imgBg}
           />
         </SharedElement>

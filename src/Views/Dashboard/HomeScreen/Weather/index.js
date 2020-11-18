@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import Text, {BoldText} from '../../../../Components/Text';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -14,24 +14,45 @@ export default function Weather(props) {
 
   const translate = (input) => {
     switch (input) {
-      case 'clear sky':
+      case 'Clear':
         return 'Quang Đãng';
-      case 'few clouds':
-        return 'Ít Mây';
-      case 'scattered clouds':
-        return 'Mây Rải Rác';
-      case 'broken clouds':
-        return 'Nhiều Mây';
-      case 'shower rain':
-        return 'Mưa Phùn';
-      case 'rain':
+      case 'Clouds':
+        switch (weather.desc) {
+          case 'few clouds':
+            return 'Ít Mây';
+          case 'scattered clouds':
+            return 'Mây Rải Rác';
+          case 'broken clouds':
+            return 'Nhiều Mây';
+        }
+        break;
+      case 'Rain':
         return 'Mưa';
-      case 'thunderstorm':
+      case 'Thunderstorm':
         return 'Sấm Chớp';
-      case 'snow':
+      case 'Snow':
         return 'Tuyết';
-      case 'mist':
+      case 'Mist':
         return 'Sương Mù';
+      default:
+        break;
+    }
+  };
+
+  const setIconName = (input) => {
+    switch (input) {
+      case 'Clear':
+        return 'circle';
+      case 'Clouds':
+        return 'cloud';
+      case 'Rain':
+        return 'cloud-rain';
+      case 'Thunderstorm':
+        return 'bolt';
+      case 'Snow':
+        return 'Tuyết';
+      case 'Mist':
+        return 'smog';
       default:
         break;
     }
@@ -50,13 +71,8 @@ export default function Weather(props) {
   ) : (
     <View style={styles.infoContainer}>
       <View style={styles.weatherContainer}>
-        <Image
-          source={{
-            uri: `http://openweathermap.org/img/wn/${weather.icon}@4x.png`,
-          }}
-          style={styles.weatherIcon}
-        />
-        <Text> {translate(weather.desc)}</Text>
+        <Icon name={setIconName(weather.main)} size={fontSize.bigger} />
+        <Text> {translate(weather.main)}</Text>
       </View>
       <View style={styles.weatherContainer}>
         <View style={styles.txtWeatherContainer}>
@@ -69,7 +85,7 @@ export default function Weather(props) {
       </View>
       <View style={styles.weatherContainer}>
         <View style={styles.txtWeatherContainer}>
-          <BoldText style={styles.txtWeather}>{26}</BoldText>
+          <BoldText style={styles.txtWeather}>{weather.indoorTemp}</BoldText>
           <Text>°C</Text>
         </View>
         <Text> Trong Nhà</Text>

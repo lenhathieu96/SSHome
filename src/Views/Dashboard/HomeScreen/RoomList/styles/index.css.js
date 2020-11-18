@@ -14,6 +14,14 @@ const styles = StyleSheet.create({
     width: 0.75 * width,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   imgBg: {
     width: 0.7 * width,
