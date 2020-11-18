@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-import {useNotify, useAlert} from '../../../Hooks/useModal';
+import {useAlert} from '../../../Hooks/useModal';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {
@@ -38,6 +38,7 @@ export default function HomeScreen({navigation}) {
   const userProfile = useSelector((state) => state.user);
 
   const [isLoading, setLoading] = useState(false);
+  const [weather, setWeather] = useState({});
 
   useEffect(() => {
     if (hardware.WFEnabled) {
@@ -79,10 +80,13 @@ export default function HomeScreen({navigation}) {
 
   const getWeather = () => {
     Geolocation.getCurrentPosition(async (position) => {
-      const result = await getCurrentWeather(
+      const response = await getCurrentWeather(
         position.coords.latitude,
         position.coords.longitude,
       );
+      if (response.result) {
+        setWeather(response.data);
+      }
     });
   };
 
@@ -90,17 +94,19 @@ export default function HomeScreen({navigation}) {
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       <Header navigation={navigation} />
       {/* Info Container */}
-      <Weather />
+      <Weather weather={weather} />
       {/* Room List */}
       <SafeAreaView style={styles.bodyContainer}>
         <BoldText style={styles.listTitle}>Danh Sách Phòng</BoldText>
-       
-          {/* <RoomList
+        {userProfile.availableRooms && userProfile.availableRooms.length > 0 ? (
+          <RoomList
             onRoomPress={onRoomPress}
             data={userProfile.availableRooms}
             onRoomLongPress={onRoomLongPress}
-          /> */}
-          <LoadingRoom/>
+          />
+        ) : (
+          <LoadingRoom />
+        )}
         <IconButton
           style={styles.floatButton}
           iconName="mic"

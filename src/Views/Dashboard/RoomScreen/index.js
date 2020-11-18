@@ -3,14 +3,18 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  ImageBackground,
+  Image,
+  Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
+import {SharedElement} from 'react-navigation-shared-element';
 
+import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
@@ -29,13 +33,14 @@ import {
 } from '../../../Api/roomAPI';
 import {updateRoomAvatar} from '../../../Redux/ActionCreators/userActions';
 
-import roomBackground from '../../../Assets/Images/roomBackground1.jpg';
 import * as fontSize from '../../../Utils/FontSize';
 import styles from './styles/index.css';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
+  const {width, height} = Dimensions.get('window');
+
   const BSRef = useRef();
   const alert = useAlert();
   const notify = useNotify();
@@ -44,7 +49,7 @@ export default function RoomDetailScreen({navigation, route}) {
   const [devices, setDevices] = useState([]);
   const [usedPort, setUsedPort] = useState([]);
   const [chosenDevice, chooseDevice] = useState({});
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const dispatch = useDispatch();
@@ -145,54 +150,62 @@ export default function RoomDetailScreen({navigation, route}) {
   };
 
   return (
-    <ImageBackground
-      source={room.background ? {uri: room.background} : roomBackground}
-      style={styles.imgBg}
-      resizeMode="cover">
-      <SafeAreaView style={styles.headerContainer}>
-        <IconButton
-          iconName="chevron-left"
-          onPress={() => navigation.goBack()}
+    <RootContainer safeArea={false}>
+      <SharedElement id={`item.${room.id}.photo`}>
+        <Image
+          source={{uri: room.background}}
+          resizeMode="cover"
+          style={styles.imgBg}
         />
-        <BoldText style={styles.roomTitle}>{room.name}</BoldText>
-        <IconButton
-          iconName="camera"
-          onPress={() => onChangeRoomBackground()}
-        />
-      </SafeAreaView>
-      <View style={styles.bodyContainer}>
-        <FlatList
-          data={devices}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            if (index === devices.length - 1) {
+      </SharedElement>
+      <View style={styles.contentContainer}>
+        <SafeAreaView style={styles.headerContainer}>
+          <IconButton
+            iconName="chevron-left"
+            onPress={() => navigation.goBack()}
+          />
+          <BoldText style={styles.roomTitle}>{room.name}</BoldText>
+          <IconButton
+            iconName="camera"
+            onPress={() => onChangeRoomBackground()}
+          />
+        </SafeAreaView>
+        <View style={styles.bodyContainer}>
+          <FlatList
+            data={devices}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => {
+              if (index === devices.length - 1) {
+                return (
+                  <AddButton
+                    onPress={() => {
+                      if (hardware.WFEnabled) {
+                        BSRef.current.open();
+                      } else {
+                        BSRef.current.close();
+                        alert(
+                          'Bạn cần kết nối wifi để thực hiện chức năng này',
+                        );
+                      }
+                    }}
+                  />
+                );
+              }
               return (
-                <AddButton
-                  onPress={() => {
-                    if (hardware.WFEnabled) {
-                      BSRef.current.open();
-                    } else {
-                      BSRef.current.close();
-                      alert('Bạn cần kết nối wifi để thực hiện chức năng này');
-                    }
+                <DeviceButton
+                  device={item}
+                  onChangeStatus={onChangeStatus}
+                  onDelete={(device) => {
+                    chooseDevice(device);
+                    setShowConfirm(true);
                   }}
                 />
               );
-            }
-            return (
-              <DeviceButton
-                device={item}
-                onChangeStatus={onChangeStatus}
-                onDelete={(device) => {
-                  chooseDevice(device);
-                  setShowConfirm(true);
-                }}
-              />
-            );
-          }}
-        />
+            }}
+          />
+        </View>
       </View>
       <LoadingModal isVisible={isLoading} />
       <ConfirmModal
@@ -206,7 +219,7 @@ export default function RoomDetailScreen({navigation, route}) {
         ports={usedPort}
         onAddNewDevice={onAddNewDevice}
       />
-    </ImageBackground>
+    </RootContainer>
   );
 }
 

@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-  Animated,
-  View,
-  TouchableWithoutFeedback,
-  ImageBackground,
-} from 'react-native';
+import {Animated, View, TouchableWithoutFeedback, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import FastImage from 'react-native-fast-image';
+import {SharedElement} from 'react-navigation-shared-element';
 
-import roomBackground from '../../../../Assets/Images/roomBackground1.jpg';
 import Text, {BoldText} from '../../../../Components/Text';
 import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
@@ -21,31 +17,13 @@ export default function RoomButton(props) {
       onPress={() => onPress(roomData)}>
       <Animated.View
         style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
-        <ImageBackground
-          source={
-            roomData.background
-              ? {
-                  uri: roomData.background,
-                }
-              : roomBackground
-          }
-          borderRadius={30}
-          style={styles.imgBg}
-          resizeMode="cover">
-          <BoldText style={styles.roomTitle}>{roomData.name}</BoldText>
-          <View style={styles.descContainer}>
-            <Icon
-              name="activity"
-              size={fontSize.normal}
-              color={Color.secondary}
-            />
-            <Text style={{color: Color.secondary}}>{`${
-              roomData.hasOwnProperty('devices')
-                ? Object.keys(roomData.devices).length
-                : 0
-            } thiết bị`}</Text>
-          </View>
-        </ImageBackground>
+        <SharedElement id={`item.${roomData.id}.photo`}>
+          <Image
+            source={{uri: roomData.background}}
+            resizeMode="cover"
+            style={styles.imgBg}
+          />
+        </SharedElement>
       </Animated.View>
     </TouchableWithoutFeedback>
   );

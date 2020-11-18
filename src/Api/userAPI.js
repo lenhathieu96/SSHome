@@ -3,14 +3,26 @@ import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-community/async-storage';
+const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 
 export const getCurrentWeather = async (lat, long) => {
-  const location = `${lat},${long}`;
-  const URL = `api.openweathermap.org/data/2.5/weather?${location}&appid=a371328f96334bba637293161587dfc9`;
-  fetch(URL)
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((e) => console.log(e, 'error'));
+  const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
+  try {
+    const response = await fetch(URL);
+    const weatherData = await response.json();
+    console.log(weatherData)
+    return {
+      result: true,
+      message: 'Lấy dữ liệu thời tiết thành công',
+      data: {
+        temp: weatherData.main.temp,
+        icon: weatherData.weather[0].icon,
+        desc: weatherData.weather[0].description,
+      },
+    };
+  } catch (error) {
+    return {result: false, message: 'Lỗi khi lấy dữ liệu thời tiết'};
+  }
 };
 
 //Auth Management===================================================================================

@@ -23,6 +23,10 @@ export default function HomeStack() {
         options={() => ({
           headerShown: false,
         })}
+        sharedElements={(route, otherRoute, showing) => {
+          const {room} = route.params;
+          return [`item.${room.id}.photo`];
+        }}
       />
     </HomeStacks.Navigator>
   );

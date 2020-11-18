@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
     flex: 0.15,
     justifyContent: 'center',
   },
+  weatherIcon: {
+    alignSelf: 'center',
+    width: fontSize.biggest,
+    height: fontSize.biggest,
+  },
   weatherContainer: {
     flex: 0.3,
     alignItems: 'center',

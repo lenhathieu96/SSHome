@@ -19,14 +19,6 @@ const styles = StyleSheet.create({
     width: 0.7 * width,
     height: 0.58 * height,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 2,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 8,
   },
   roomTitle: {
     marginTop: 0.1 * height,

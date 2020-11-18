@@ -11,13 +11,13 @@ export default function LoadingRoom() {
 
   const fadeEffect = () => {
     Animated.timing(opacity, {
-      toValue: 0.7,
-      duration: 300,
+      toValue: 0.5,
+      duration: 400,
       useNativeDriver: true,
     }).start(() => {
       Animated.timing(opacity, {
         toValue: 1,
-        duration: 300,
+        duration: 400,
         useNativeDriver: true,
       }).start(() => fadeEffect());
     });

@@ -1,13 +1,21 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
-import Color from '../../../../Utils/Color';
-
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   imgBg: {
     width: '100%',
     height: '100%',
+    position: 'relative',
+    zIndex: 0,
+  },
+
+  contentContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 1,
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
   headerContainer: {
