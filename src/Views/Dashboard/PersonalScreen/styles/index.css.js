@@ -34,15 +34,17 @@ const styles = StyleSheet.create({
   },
 
   memberListContainer: {
-    flex: 0.2,
+    flex: 0.25,
+    justifyContent: 'space-between',
   },
 
   //place holder
   placeholderContainer: {
+    padding: 15,
     borderRadius: 10,
     width: 0.3 * width,
     height: 0.4 * width,
-    marginHorizontal: 5,
+    marginLeft: 20,
     alignItems: 'center',
     position: 'relative',
   },
@@ -51,11 +53,10 @@ const styles = StyleSheet.create({
     height: 0.25 * width,
     borderRadius: 50,
     overflow: 'hidden',
-    padding: 10,
   },
   placeholderNameContainer: {
-    width: 0.3 * width,
-    height: 0.05 * width,
+    width: 0.4 * width,
+    height: fontSize.normal,
     padding: 5,
     marginTop: -15,
     alignItems: 'center',

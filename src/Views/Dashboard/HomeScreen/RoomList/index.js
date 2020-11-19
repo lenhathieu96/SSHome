@@ -32,7 +32,7 @@ export default function RoomList(props) {
       keyExtractor={(item, index) => index.toString()}
       snapToInterval={ITEM_SIZE}
       bounces={false}
-      horizontal
+      horizontal={true}
       showsHorizontalScrollIndicator={false}
       onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX}}}], {
         useNativeDriver: true,

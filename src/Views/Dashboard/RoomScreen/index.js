@@ -16,7 +16,6 @@ import RootContainer from '../../../Components/RootContainer';
 import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
-import LoadingModal from '../../../Components/Modal/LoadingModal';
 import ConfirmModal from '../../../Components/Modal/ConfirmDelModal';
 import BSAddNewDevice from './BSAddNewDevice';
 
@@ -46,7 +45,6 @@ export default function RoomDetailScreen({navigation, route}) {
   const [devices, setDevices] = useState([]);
   const [usedPort, setUsedPort] = useState([]);
   const [chosenDevice, chooseDevice] = useState({});
-  const [isLoading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const dispatch = useDispatch();
@@ -67,7 +65,6 @@ export default function RoomDetailScreen({navigation, route}) {
           for (let device in deviceList) {
             result.unshift(deviceList[device]);
           }
-          setLoading(false);
           setDevices(result);
         });
       return () =>
@@ -107,7 +104,6 @@ export default function RoomDetailScreen({navigation, route}) {
       if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        setLoading(true);
         let source = {uri: response.uri};
         const res = await updateRoomBackground(homeID, source.uri, room.id);
         if (res.result) {
@@ -115,7 +111,6 @@ export default function RoomDetailScreen({navigation, route}) {
           dispatch(updateRoomAvatar(room.id, res.uri));
           navigation.goBack();
         }
-        setLoading(false);
       }
     });
   };
@@ -206,7 +201,6 @@ export default function RoomDetailScreen({navigation, route}) {
           />
         </View>
       </View>
-      <LoadingModal isVisible={isLoading} />
       <ConfirmModal
         title={`${chosenDevice.name} sẽ bị xoá khỏi danh sách thiết bị`}
         isVisible={showConfirm}

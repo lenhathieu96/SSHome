@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, SafeAreaView, ImageBackground} from 'react-native';
+import {View, SafeAreaView, ImageBackground, Dimensions} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -16,7 +16,7 @@ import {
 } from '../../../Components/PlaceHolder';
 import BSPersonal from './BSPersonal';
 
-import {useNotify} from '../../../Hooks/useModal';
+import {useNotify, useAlert} from '../../../Hooks/useModal';
 import {
   uploadMasterAvatar,
   configMember,
@@ -32,8 +32,11 @@ import styles from './styles/index.css';
 import MemberList from './MemberList';
 
 export default function Personal() {
+  const {width} = Dimensions.get('window');
+
   const dispatch = useDispatch();
   const notify = useNotify();
+  const alert = useAlert();
   const masterInfo = useSelector((state) => state.user);
   const hardware = useSelector((state) => state.hardware);
 
@@ -96,10 +99,13 @@ export default function Personal() {
   };
 
   const onConfigMember = async (member, isUpdate) => {
-    setLoading(true);
-    const response = await configMember(member, isUpdate);
-    BSPersonalRef.current.close();
-    notify(response.message, response.result);
+    if (hardware.WFEnabled) {
+      const response = await configMember(member, isUpdate);
+      BSPersonalRef.current.close();
+      notify(response.message, response.result);
+    } else {
+      alert('Bạn cần kết nối wifi để thực hiện chức năng này');
+    }
   };
 
   const changeUserAvatar = () => {
@@ -116,8 +122,8 @@ export default function Personal() {
       },
     };
     ImagePicker.showImagePicker(options, async (response) => {
-      console.log('Response = ', response);
       if (response.error) {
+        alert('Lỗi trong quá trình lấy ảnh');
         console.log('ImagePicker Error: ', response.error);
       } else {
         let source = {uri: response.uri};
@@ -145,27 +151,56 @@ export default function Personal() {
             style={styles.avatar}>
             <IconButton
               iconName="camera"
-              onPress={() => changeUserAvatar()}
+              onPress={() => {
+                if (hardware.WFEnabled) {
+                  changeUserAvatar();
+                } else {
+                  alert('Bạn cần kết nối wifi để thực hiện chức năng này');
+                }
+              }}
               style={styles.btnCamera}
               iconSize={fontSize.biggest}
               iconColor={Color.primary}
             />
           </ImageBackground>
         </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Tên: </BoldText>
-            <Text>{masterInfo.name}</Text>
+        {isLoading ? (
+          <View style={styles.infoContainer}>
+            <PlaceholderLine
+              style={[
+                styles.txtInfoContainer,
+                {width: 0.5 * width, height: fontSize.normal},
+              ]}
+            />
+            <PlaceholderLine
+              style={[
+                styles.txtInfoContainer,
+                {width: 0.5 * width, height: fontSize.normal},
+              ]}
+            />
+            <PlaceholderLine
+              style={[
+                styles.txtInfoContainer,
+                {width: 0.5 * width, height: fontSize.normal},
+              ]}
+            />
           </View>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Số thành viên: </BoldText>
-            <Text>{memberList.length}</Text>
+        ) : (
+          <View style={styles.infoContainer}>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Tên: </BoldText>
+              <Text>{masterInfo.name}</Text>
+            </View>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Số thành viên: </BoldText>
+              <Text>{memberList.length}</Text>
+            </View>
+            <View style={styles.txtInfoContainer}>
+              <BoldText>Email: </BoldText>
+              <Text>{masterInfo.email}</Text>
+            </View>
           </View>
-          <View style={styles.txtInfoContainer}>
-            <BoldText>Email: </BoldText>
-            <Text>{masterInfo.email}</Text>
-          </View>
-        </View>
+        )}
       </View>
       {/* Member List */}
       <View style={styles.memberListContainer}>

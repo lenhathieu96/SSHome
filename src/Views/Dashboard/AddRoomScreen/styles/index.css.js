@@ -2,12 +2,20 @@ import {StyleSheet, Dimensions} from 'react-native';
 import Color from '../../../../Utils/Color';
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    paddingTop: 10,
+    backgroundColor: 'white',
+  },
   formController: {
     marginHorizontal: 10,
     justifyContent: 'center',
-    flex: 0.2,
   },
-
+  textContainer: {
+    flex: 0.1,
+    justifyContent: 'center',
+    padding: 5,
+  },
   groupImageContainer: {
     flex: 0.4,
     flexDirection: 'row',

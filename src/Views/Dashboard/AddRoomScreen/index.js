@@ -4,12 +4,12 @@ import {
   View,
   KeyboardAvoidingView,
   ImageBackground,
-  Image,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
+import FastImage from 'react-native-fast-image';
 
 import Text, {ErrorText} from '../../../Components/Text';
 import TextInput from '../../../Components/TextInput';
@@ -119,23 +119,14 @@ export default function AddRoomScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{
-        flex: 1,
-        paddingTop: 10,
-        backgroundColor: 'white',
-      }}>
+    <KeyboardAvoidingView style={styles.root}>
       <TextInput
         value={roomName}
         onChangeText={(text) => setRoomName(text)}
         label="Tên Phòng"
-        mode="outlined"
-        style={[styles.formController, {flex: 0.1}]}
-        theme={{
-          colors: {primary: Color.primary, underlineColor: 'transparent'},
-        }}
+        style={styles.formController}
       />
-      <View style={{flex: 0.1, justifyContent: 'center', padding: 5}}>
+      <View style={styles.textContainer}>
         <Text>Chọn ảnh mặc định</Text>
       </View>
       <View style={styles.groupImageContainer}>
@@ -143,7 +134,7 @@ export default function AddRoomScreen() {
           onPress={() => {
             chooseImg(1);
           }}>
-          <Image
+          <FastImage
             source={{uri: BACKGROUND_1}}
             style={chosenImg === 1 ? styles.chosenImg : styles.defaultImg}
             resizeMode="cover"
@@ -151,7 +142,7 @@ export default function AddRoomScreen() {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={() => chooseImg(2)}>
-          <Image
+          <FastImage
             source={{uri: BACKGROUND_2}}
             style={chosenImg === 2 ? styles.chosenImg : styles.defaultImg}
             resizeMode="cover"

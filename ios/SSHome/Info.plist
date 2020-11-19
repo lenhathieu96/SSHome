@@ -37,16 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string></string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>SSHOME cần truy cập camera để thay đổi ảnh đại diện</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>SSHOME cần truy cập vị trí để dự báo thời tiết</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>SSHOME cần truy cập microphone để nhận diện giọng nói</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string></string>
+	<string>SSHOME cần để sử dụng chức năng nhận diện giọng nói</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>

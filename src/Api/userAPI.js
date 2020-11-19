@@ -154,7 +154,9 @@ export const getMasterProfile = async (userID) => {
     if (User.docs.length > 0) {
       const UserData = User.docs[0];
       await AsyncStorage.setItem('homeID', UserData.id);
-      const rooms = await database().ref(UserData.id).once('value');
+      const homeData = await database().ref(UserData.id).once('value');
+      const rooms = homeData.val();
+      delete rooms.DHT22;
       return {
         result: true,
         message: 'Lấy dữ liệu chủ nhà thành công',
@@ -163,7 +165,7 @@ export const getMasterProfile = async (userID) => {
           phone: UserData.data().phone,
           email: UserData.data().email,
           avatar: UserData.data().avatar,
-          availableRooms: Object.values(rooms.val()),
+          availableRooms: Object.values(rooms),
         },
       };
     } else {

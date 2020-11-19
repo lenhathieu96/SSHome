@@ -29,45 +29,42 @@ export default function MemberList(props) {
   }, [data]);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        style={{padding: 10}}
-        data={userList}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            onPress={() => onPressMember(index === 0 ? blankUser : item)}
-            onLongPress={() => {
-              if (index !== 0) {
-                onLongPressMember(item);
-              }
-            }}>
-            {index === 0 ? (
-              <View style={[styles.itemContainer, {marginHorizontal: 15}]}>
-                <Icon
-                  name="user-plus"
-                  style={styles.memberAvatar}
-                  size={1.7 * fontSize.biggest}
-                  color={Color.secondary}
-                />
-                <View
-                  style={[styles.memberNameContainer, {width: 0.4 * width}]}>
-                  <BoldText style={styles.memberName}>Thêm thành viên</BoldText>
-                </View>
+    <FlatList
+      style={{padding: 10}}
+      data={userList}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({item, index}) => (
+        <TouchableOpacity
+          onPress={() => onPressMember(index === 0 ? blankUser : item)}
+          onLongPress={() => {
+            if (index !== 0) {
+              onLongPressMember(item);
+            }
+          }}>
+          {index === 0 ? (
+            <View style={[styles.itemContainer, {marginHorizontal: 15}]}>
+              <Icon
+                name="user-plus"
+                style={styles.memberAvatar}
+                size={1.7 * fontSize.biggest}
+                color={Color.secondary}
+              />
+              <View style={[styles.memberNameContainer, {width: 0.4 * width}]}>
+                <BoldText style={styles.memberName}>Thêm thành viên</BoldText>
               </View>
-            ) : (
-              <View style={styles.itemContainer}>
-                <Image source={User} style={styles.memberAvatar} />
-                <View style={styles.memberNameContainer}>
-                  <BoldText style={styles.memberName}>{item.name}</BoldText>
-                </View>
+            </View>
+          ) : (
+            <View style={styles.itemContainer}>
+              <Image source={User} style={styles.memberAvatar} />
+              <View style={styles.memberNameContainer}>
+                <BoldText style={styles.memberName}>{item.name}</BoldText>
               </View>
-            )}
-          </TouchableOpacity>
-        )}
-      />
-    </View>
+            </View>
+          )}
+        </TouchableOpacity>
+      )}
+    />
   );
 }

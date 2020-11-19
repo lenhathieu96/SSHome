@@ -16,7 +16,7 @@ export default function PlaceHolderLine(props) {
   const slideAnimation = () => {
     Animated.loop(
       Animated.timing(translateX, {
-        toValue: style.height ? style.height : 50,
+        toValue: style ? (style.height ? style.height : 50) : 50,
         duration: 550,
         useNativeDriver: true,
       }),
