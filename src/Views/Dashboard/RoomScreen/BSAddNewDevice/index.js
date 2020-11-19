@@ -6,12 +6,9 @@ import {View, Dimensions, FlatList, SafeAreaView} from 'react-native';
 import Text, {BoldText, ErrorText} from '../../../../Components/Text';
 import RadioButton from '../../../../Components/RadioButton';
 import TextButton from '../../../../Components/TextButton';
-import IconButton from '../../../../Components/IconButton';
 import TextInput from '../../../../Components/TextInput';
 import BottomSheet from '../../../../Components/Modal/BottomSheet';
 
-import Color from '../../../../Utils/Color';
-import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 const BSAddNewDevice = React.forwardRef((props, ref) => {
@@ -26,7 +23,26 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   const [txtError, setTxtError] = useState('');
 
   useEffect(() => {
-    const allPorts = Array.from(Array(20).keys()).map((number) => number + 1);
+    const allPorts = [
+      2,
+      4,
+      5,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      21,
+      22,
+      23,
+      25,
+      26,
+      27,
+      32,
+      33,
+    ];
     const emptyPorts = allPorts.filter(
       (port) => ports.indexOf(port) < 0,
       ports,

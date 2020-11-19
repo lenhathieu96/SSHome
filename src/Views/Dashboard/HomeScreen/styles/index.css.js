@@ -20,6 +20,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
+  placeHolder: {
+    marginBottom: -15,
+    alignSelf: 'center',
+    width: 0.7 * width,
+    height: 0.58 * height,
+    borderRadius: 20,
+  },
+
   floatButton: {
     alignSelf: 'center',
     backgroundColor: 'white',

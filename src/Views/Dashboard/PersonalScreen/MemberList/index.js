@@ -48,7 +48,7 @@ export default function MemberList(props) {
               <View style={[styles.itemContainer, {marginHorizontal: 15}]}>
                 <Icon
                   name="user-plus"
-                  style={[styles.memberAvatar]}
+                  style={styles.memberAvatar}
                   size={1.7 * fontSize.biggest}
                   color={Color.secondary}
                 />

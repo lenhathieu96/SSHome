@@ -36,6 +36,33 @@ const styles = StyleSheet.create({
   memberListContainer: {
     flex: 0.2,
   },
+
+  //place holder
+  placeholderContainer: {
+    borderRadius: 10,
+    width: 0.3 * width,
+    height: 0.4 * width,
+    marginHorizontal: 5,
+    alignItems: 'center',
+    position: 'relative',
+  },
+  placeholderAvatar: {
+    width: 0.25 * width,
+    height: 0.25 * width,
+    borderRadius: 50,
+    overflow: 'hidden',
+    padding: 10,
+  },
+  placeholderNameContainer: {
+    width: 0.3 * width,
+    height: 0.05 * width,
+    padding: 5,
+    marginTop: -15,
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+
+  //
   btnAddContainer: {
     backgroundColor: '#ffffff',
     borderTopRightRadius: 16,

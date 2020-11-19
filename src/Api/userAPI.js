@@ -10,17 +10,22 @@ export const getCurrentWeather = async (lat, long) => {
   try {
     const homeID = await AsyncStorage.getItem('homeID');
     const response = await fetch(URL);
+    const indoorTemp = await database()
+      .ref(`/${homeID}/DHT22/Temperature`)
+      .once('value');
     const weatherData = await response.json();
-    return {
-      result: true,
-      message: 'Lấy dữ liệu thời tiết thành công',
-      data: {
-        temp: weatherData.main.temp,
-        icon: weatherData.weather[0].icon,
-        main: weatherData.weather[0].main,
-        desc: weatherData.weather[0].descriptiton,
-      },
-    };
+    if (weatherData && indoorTemp.val()) {
+      return {
+        result: true,
+        message: 'Lấy dữ liệu thời tiết thành công',
+        data: {
+          indoorTemp: Math.floor(indoorTemp.val()),
+          temp: weatherData.main.temp,
+          main: weatherData.weather[0].main,
+          desc: weatherData.weather[0].description,
+        },
+      };
+    }
   } catch (error) {
     return {result: false, message: 'Lỗi khi lấy dữ liệu thời tiết'};
   }
@@ -222,10 +227,14 @@ export const uploadMasterAvatar = async (imageURI) => {
     await reference.putFile(imageURI);
     const URL = await reference.getDownloadURL();
     await firestore().collection('Home').doc(homeID).update({avatar: URL});
-    return {result: true, uri: URL};
+    return {
+      result: true,
+      message: 'Cập nhập ảnh đại diện thành công',
+      uri: URL,
+    };
   } catch (error) {
     console.log(error);
-    return {result: false};
+    return {result: false, mesage: 'Cập Nhập ảnh đại diện thất bại'};
   }
 };
 

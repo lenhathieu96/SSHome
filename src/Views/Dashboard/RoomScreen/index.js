@@ -3,8 +3,6 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Image,
-  Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -39,7 +37,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
-  const {width, height} = Dimensions.get('window');
 
   const BSRef = useRef();
   const alert = useAlert();
@@ -57,8 +54,10 @@ export default function RoomDetailScreen({navigation, route}) {
 
   useEffect(() => {
     getHomeID();
-    //Wifi control
-    if (hardware.WFEnabled) {
+  }, []);
+
+  useEffect(() => {
+    if (homeID) {
       getPorts();
       const onValueChange = database()
         .ref(`${homeID}/${room.id}`)
@@ -75,7 +74,7 @@ export default function RoomDetailScreen({navigation, route}) {
         database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [homeID, , room.id, hardware.WFEnabled]);
+  }, [homeID]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');

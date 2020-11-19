@@ -1,12 +1,7 @@
 import React from 'react';
 import {View, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
-
-RootContainer.propTypes = {
-  safeArea: PropTypes.bool,
-  style: PropTypes.object,
-  children: PropTypes.node,
-};
+import styles from './styles/index.css';
 
 export default function RootContainer({
   safeArea = false,
@@ -15,14 +10,18 @@ export default function RootContainer({
   ...otherProps
 }) {
   return safeArea ? (
-    <SafeAreaView
-      style={[{flex: 1, backgroundColor: 'white'}, style]}
-      {...otherProps}>
+    <SafeAreaView style={[styles.root, style]} {...otherProps}>
       {children}
     </SafeAreaView>
   ) : (
-    <View style={[{flex: 1, backgroundColor: 'white'}, style]} {...otherProps}>
+    <View style={[styles.root, style]} {...otherProps}>
       {children}
     </View>
   );
 }
+
+RootContainer.propTypes = {
+  safeArea: PropTypes.bool,
+  style: PropTypes.object,
+  children: PropTypes.node,
+};

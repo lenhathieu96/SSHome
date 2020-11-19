@@ -8,10 +8,12 @@ import ImagePicker from 'react-native-image-picker';
 
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
-import LoadingModal from '../../../Components/Modal/LoadingModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
-
+import {
+  PlaceholderLine,
+  PlaceholderMedia,
+} from '../../../Components/PlaceHolder';
 import BSPersonal from './BSPersonal';
 
 import {useNotify} from '../../../Hooks/useModal';
@@ -33,34 +35,37 @@ export default function Personal() {
   const dispatch = useDispatch();
   const notify = useNotify();
   const masterInfo = useSelector((state) => state.user);
+  const hardware = useSelector((state) => state.hardware);
 
   const [homeID, setHomeID] = useState();
   const [memberList, setMemberList] = useState([]);
-  const [chosenUser, setChosenUser] = useState({});
   const [isLoading, setLoading] = useState(true);
+  const [chosenUser, setChosenUser] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
 
   const BSPersonalRef = useRef();
 
   useEffect(() => {
     getHomeID();
-    const subscriber = firestore()
-      .collection('Home')
-      .doc(homeID)
-      .collection('Member')
-      .onSnapshot((querySnapshot) => {
-        const users = [];
-        querySnapshot.forEach((documentSnapshot) => {
-          users.push({
-            ...documentSnapshot.data(),
-            id: documentSnapshot.id,
+    if (hardware.WFEnabled) {
+      const subscriber = firestore()
+        .collection('Home')
+        .doc(homeID)
+        .collection('Member')
+        .onSnapshot((querySnapshot) => {
+          const users = [];
+          querySnapshot.forEach((documentSnapshot) => {
+            users.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
           });
+          setMemberList(users);
+          setLoading(false);
         });
-        setMemberList(users);
-        setLoading(false);
-      });
-    return () => subscriber();
-  }, [homeID]);
+      return () => subscriber();
+    }
+  }, [homeID, hardware.WFEnabled]);
 
   const getHomeID = async () => {
     const homeIDStorage = await AsyncStorage.getItem('homeID');
@@ -97,7 +102,7 @@ export default function Personal() {
     notify(response.message, response.result);
   };
 
-  const selectPhotoTapped = () => {
+  const changeUserAvatar = () => {
     const options = {
       title: 'Chọn Hình',
       takePhotoButtonTitle: 'Chụp ảnh',
@@ -118,11 +123,9 @@ export default function Personal() {
         let source = {uri: response.uri};
         const res = await uploadMasterAvatar(source.uri);
         if (res.result) {
-          console.log('upload success');
           dispatch(updateAvatar(res.uri));
-        } else {
-          console.log('upload failed');
         }
+        notify(res.message, res.result);
       }
     });
   };
@@ -142,7 +145,7 @@ export default function Personal() {
             style={styles.avatar}>
             <IconButton
               iconName="camera"
-              onPress={() => selectPhotoTapped()}
+              onPress={() => changeUserAvatar()}
               style={styles.btnCamera}
               iconSize={fontSize.biggest}
               iconColor={Color.primary}
@@ -167,11 +170,18 @@ export default function Personal() {
       {/* Member List */}
       <View style={styles.memberListContainer}>
         <BoldText style={styles.title}>Danh sách thành viên</BoldText>
-        <MemberList
-          data={memberList}
-          onPressMember={onPressMember}
-          onLongPressMember={onLongPressMember}
-        />
+        {isLoading ? (
+          <View style={styles.placeholderContainer}>
+            <PlaceholderMedia style={styles.placeholderAvatar} />
+            <PlaceholderLine style={styles.placeholderNameContainer} />
+          </View>
+        ) : (
+          <MemberList
+            data={memberList}
+            onPressMember={onPressMember}
+            onLongPressMember={onLongPressMember}
+          />
+        )}
       </View>
       {/* Home ID */}
       <SafeAreaView style={styles.QRCodeContainer}>
@@ -193,7 +203,6 @@ export default function Personal() {
         } sẽ bị xoá khỏi danh sách thành viên`}
         onAccept={onDelMember}
       />
-      <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );
 }

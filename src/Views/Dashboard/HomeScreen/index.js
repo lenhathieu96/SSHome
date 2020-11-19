@@ -17,8 +17,7 @@ import {
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
-import LoadingRoom from './LoadingRoom';
-import LoadingModal from '../../../Components/Modal/LoadingModal';
+import {PlaceholderMedia} from '../../../Components/PlaceHolder';
 
 import Header from './Header';
 import Weather from './Weather';
@@ -37,7 +36,6 @@ export default function HomeScreen({navigation}) {
   const hardware = useSelector((state) => state.hardware);
   const userProfile = useSelector((state) => state.user);
 
-  const [isLoading, setLoading] = useState(false);
   const [weather, setWeather] = useState({});
 
   useEffect(() => {
@@ -59,7 +57,6 @@ export default function HomeScreen({navigation}) {
     if (response.result) {
       dispatch(setUserProfile(response.data));
     }
-    setLoading(false);
   };
 
   const onRoomLongPress = async (roomID) => {
@@ -105,7 +102,7 @@ export default function HomeScreen({navigation}) {
             onRoomLongPress={onRoomLongPress}
           />
         ) : (
-          <LoadingRoom />
+          <PlaceholderMedia style={styles.placeHolder} />
         )}
         <IconButton
           style={styles.floatButton}
@@ -120,7 +117,6 @@ export default function HomeScreen({navigation}) {
       </SafeAreaView>
       {/* BSBlueTooth */}
       <BSVoice ref={BSVoiceRef} />
-      <LoadingModal isVisible={isLoading} />
     </RootContainer>
   );
 }

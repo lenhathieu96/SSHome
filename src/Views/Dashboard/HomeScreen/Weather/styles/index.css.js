@@ -22,6 +22,20 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: 'center',
   },
+
+  placeHolderMedia: {
+    alignSelf: 'center',
+    borderRadius: 50,
+    width: fontSize.biggest,
+    height: fontSize.biggest,
+  },
+  placeHolderLine: {
+    width: 80,
+    alignSelf: 'center',
+    marginTop: 5,
+    borderRadius: 20,
+  },
+
   txtWeatherContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

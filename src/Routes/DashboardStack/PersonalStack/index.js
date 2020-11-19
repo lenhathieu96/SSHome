@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { Platform } from 'react-native';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
 import PersonalScreen from '../../../Views/Dashboard/PersonalScreen';
@@ -18,7 +18,6 @@ export default function PersonalStack() {
     name="Personal"
     component={PersonalScreen}
     options={({navigation}) => ({
-      ...TransitionPresets.SlideFromRightIOS,
       headerTitle: 'Thông Tin Cá Nhân',
       headerTitleStyle:{
         marginLeft: Platform.OS === 'android' ? 20 : 0,
@@ -26,9 +25,9 @@ export default function PersonalStack() {
         fontSize: fontSize.huge,
         alignSelf: 'flex-start',
         fontFamily:'MavenPro-Bold',
-        backgroundColor: 'white',
       },
       headerStyle:{
+        backgroundColor: 'transparent',
         elevation: 0,
         shadowOpacity: 0,
       },
