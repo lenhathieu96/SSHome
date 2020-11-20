@@ -10,7 +10,7 @@ IconButton.propTypes = {
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
   onPress: PropTypes.func.isRequired,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   disabled: PropTypes.bool,
 };
 

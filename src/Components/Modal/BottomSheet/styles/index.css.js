@@ -13,11 +13,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    flex: 0.1,
   },
   body: {
     backgroundColor: 'white',
-    flex: 0.9,
+    flexGrow: 1,
     paddingHorizontal: 5,
   },
 });

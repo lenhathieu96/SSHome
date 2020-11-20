@@ -17,6 +17,7 @@ import Text, {BoldText} from '../../../Components/Text';
 import DeviceButton from './DeviceButton';
 import IconButton from '../../../Components/IconButton';
 import ConfirmModal from '../../../Components/Modal/ConfirmDelModal';
+import BSUploadImage from '../../../Components/Modal/BSUploadImage';
 import BSAddNewDevice from './BSAddNewDevice';
 
 import {useNotify} from '../../../Hooks/useModal';
@@ -38,12 +39,14 @@ export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
 
   const BSRef = useRef();
+  const BSChangeImageRef = useRef();
   const alert = useAlert();
   const notify = useNotify();
 
   const [homeID, setHomeID] = useState('');
   const [devices, setDevices] = useState([]);
   const [usedPort, setUsedPort] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const [chosenDevice, chooseDevice] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -87,32 +90,14 @@ export default function RoomDetailScreen({navigation, route}) {
     }
   };
   //Change room background
-  const onChangeRoomBackground = () => {
-    const options = {
-      title: 'Chọn Hình',
-      takePhotoButtonTitle: 'Chụp ảnh',
-      chooseFromLibraryButtonTitle: 'Chọn từ thư viện ảnh',
-      cancelButtonTitle: 'Hủy',
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
-      storageOptions: {
-        skipBackup: true,
-      },
-    };
-    ImagePicker.showImagePicker(options, async (response) => {
-      if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        let source = {uri: response.uri};
-        const res = await updateRoomBackground(homeID, source.uri, room.id);
-        if (res.result) {
-          console.log('upload success');
-          dispatch(updateRoomAvatar(room.id, res.uri));
-          navigation.goBack();
-        }
-      }
-    });
+  const uploadImage = async (imageURI) => {
+    setLoading(true);
+    const res = await updateRoomBackground(homeID, imageURI, room.id);
+    if (res.result) {
+      setLoading(false);
+      dispatch(updateRoomAvatar(room.id, res.uri));
+      navigation.goBack();
+    }
   };
   // Change status device
   const onChangeStatus = async (device, status) => {
@@ -161,7 +146,7 @@ export default function RoomDetailScreen({navigation, route}) {
           <BoldText style={styles.roomTitle}>{room.name}</BoldText>
           <IconButton
             iconName="camera"
-            onPress={() => onChangeRoomBackground()}
+            onPress={() => BSChangeImageRef.current.open()}
           />
         </SafeAreaView>
         <View style={styles.bodyContainer}>
@@ -211,6 +196,11 @@ export default function RoomDetailScreen({navigation, route}) {
         ref={BSRef}
         ports={usedPort}
         onAddNewDevice={onAddNewDevice}
+      />
+      <BSUploadImage
+        ref={BSChangeImageRef}
+        uploadImage={uploadImage}
+        isLoading={isLoading}
       />
     </RootContainer>
   );

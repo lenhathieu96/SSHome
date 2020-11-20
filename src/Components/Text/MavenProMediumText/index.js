@@ -5,7 +5,7 @@ import styles from './Styles/index.css';
 
 MavenProText.propTypes = {
   text: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   children: PropTypes.node,
 };
 

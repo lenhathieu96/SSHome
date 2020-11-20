@@ -4,12 +4,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
-import ImagePicker from 'react-native-image-picker';
 
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
 import IconButton from '../../../Components/IconButton';
 import RootContainer from '../../../Components/RootContainer';
+import BSUploadImage from '../../../Components/Modal/BSUploadImage';
+
 import {
   PlaceholderLine,
   PlaceholderMedia,
@@ -47,6 +48,7 @@ export default function Personal() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const BSPersonalRef = useRef();
+  const BSChangeImageRef = useRef();
 
   useEffect(() => {
     getHomeID();
@@ -108,32 +110,15 @@ export default function Personal() {
     }
   };
 
-  const changeUserAvatar = () => {
-    const options = {
-      title: 'Chọn Hình',
-      takePhotoButtonTitle: 'Chụp ảnh',
-      chooseFromLibraryButtonTitle: 'Chọn từ thư viện ảnh',
-      cancelButtonTitle: 'Hủy',
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
-      storageOptions: {
-        skipBackup: true,
-      },
-    };
-    ImagePicker.showImagePicker(options, async (response) => {
-      if (response.error) {
-        alert('Lỗi trong quá trình lấy ảnh');
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        let source = {uri: response.uri};
-        const res = await uploadMasterAvatar(source.uri);
-        if (res.result) {
-          dispatch(updateAvatar(res.uri));
-        }
-        notify(res.message, res.result);
-      }
-    });
+  const uploadImage = async (imageURI) => {
+    setLoading(true);
+    const res = await uploadMasterAvatar(imageURI);
+    if (res.result) {
+      setLoading(false);
+      dispatch(updateAvatar(res.uri));
+    }
+    BSChangeImageRef.current.close();
+    notify(res.message, res.result);
   };
 
   return (
@@ -153,7 +138,7 @@ export default function Personal() {
               iconName="camera"
               onPress={() => {
                 if (hardware.WFEnabled) {
-                  changeUserAvatar();
+                  BSChangeImageRef.current.open();
                 } else {
                   alert('Bạn cần kết nối wifi để thực hiện chức năng này');
                 }
@@ -206,9 +191,11 @@ export default function Personal() {
       <View style={styles.memberListContainer}>
         <BoldText style={styles.title}>Danh sách thành viên</BoldText>
         {isLoading ? (
-          <View style={styles.placeholderContainer}>
-            <PlaceholderMedia style={styles.placeholderAvatar} />
-            <PlaceholderLine style={styles.placeholderNameContainer} />
+          <View style={styles.loadingContainer}>
+            <View style={styles.placeholderContainer}>
+              <PlaceholderMedia style={styles.placeholderAvatar} />
+              <PlaceholderLine style={styles.placeholderNameContainer} />
+            </View>
           </View>
         ) : (
           <MemberList
@@ -237,6 +224,11 @@ export default function Personal() {
           chosenUser ? chosenUser.name : ''
         } sẽ bị xoá khỏi danh sách thành viên`}
         onAccept={onDelMember}
+      />
+      <BSUploadImage
+        ref={BSChangeImageRef}
+        uploadImage={uploadImage}
+        isLoading={isLoading}
       />
     </RootContainer>
   );

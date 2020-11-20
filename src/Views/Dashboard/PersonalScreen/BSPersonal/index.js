@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Keyboard, FlatList, KeyboardAvoidingView} from 'react-native';
+import {
+  View,
+  Keyboard,
+  FlatList,
+  KeyboardAvoidingView,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 
 import BottomSheet from '../../../../Components/Modal/BottomSheet';
 import RadioButton from '../../../../Components/RadioButton';
@@ -11,7 +18,7 @@ import styles from './styles/index.css';
 
 const BSPersonal = React.forwardRef((props, ref) => {
   const {onConfigMember, roomList, memberProfile} = props;
-
+  const {height} = Dimensions.get('window');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [memberRooms, setmemberRooms] = useState([]);
@@ -81,9 +88,10 @@ const BSPersonal = React.forwardRef((props, ref) => {
   return (
     <BottomSheet
       ref={ref}
-      swipeable={true}
+      swipeable={false}
+      modalHeight={height}
       renderContent={() => (
-        <KeyboardAvoidingView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>
           <TextInput
             value={name}
@@ -132,7 +140,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
             text={isUpdate ? 'Cập Nhập' : 'Thêm Mới'}
             onPress={() => handleOnClickAdd()}
           />
-        </KeyboardAvoidingView>
+        </ScrollView>
       )}
     />
   );

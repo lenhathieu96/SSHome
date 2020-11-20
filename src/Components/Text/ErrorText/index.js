@@ -5,7 +5,7 @@ import styles from './styles/index.css';
 
 ErrorText.propTypes = {
   text: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   children: PropTypes.node,
 };
 

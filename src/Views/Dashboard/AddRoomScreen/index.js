@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import FastImage from 'react-native-fast-image';
 
@@ -15,8 +14,9 @@ import Text, {ErrorText} from '../../../Components/Text';
 import TextInput from '../../../Components/TextInput';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
-import NotifyModal from '../../../Components/Modal/NotificationModal';
+import BSUploadImage from '../../../Components/Modal/BSUploadImage';
 
+import {useNotify} from '../../../Hooks/useModal';
 import {addRoom} from '../../../Api/roomAPI';
 import {updateNewRoom} from '../../../Redux/ActionCreators/userActions';
 
@@ -32,45 +32,18 @@ const BACKGROUND_2 =
 export default function AddRoomScreen() {
   const dispatch = useDispatch();
 
+  const notify = useNotify();
+  const BSChangeImageRef = useRef();
+
   const [roomName, setRoomName] = useState('');
   const [chosenImg, chooseImg] = useState(0);
   const [customImg, setCustomImg] = useState();
   const [txtError, setTxtError] = useState('');
 
-  const [apiResponse, setApiResponse] = useState('');
-  const [showNotify, setShowNotify] = useState(false);
-
-  const takeCustomImg = () => {
-    const options = {
-      title: 'Chọn Hình',
-      takePhotoButtonTitle: 'Chụp ảnh',
-      chooseFromLibraryButtonTitle: 'Chọn từ thư viện ảnh',
-      cancelButtonTitle: 'Hủy',
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
-      storageOptions: {
-        skipBackup: true,
-      },
-    };
-    ImagePicker.showImagePicker(options, async (response) => {
-      if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        let source = {uri: response.uri};
-        setCustomImg(source.uri);
-        chooseImg(3);
-      }
-    });
-  };
-
-  const showNotifyModal = (response) => {
-    setApiResponse(response.message);
-    setShowNotify(true);
-    setTimeout(() => {
-      setShowNotify(false);
-      setApiResponse('');
-    }, 2000);
+  const uploadImage = (imageURI) => {
+    setCustomImg(imageURI);
+    chooseImg(3);
+    BSChangeImageRef.current.close();
   };
 
   const onAddRoom = async () => {
@@ -89,10 +62,10 @@ export default function AddRoomScreen() {
               BACKGROUND_1,
               false,
             );
-            showNotifyModal(response_1);
             if (response_1.result) {
-              dispatch(updateNewRoom(response_1.room));
+              dispatch(updateNewRoom(response_1.data));
             }
+            notify(response_1.message, response_1.result);
             break;
           case 2:
             const response_2 = await addRoom(
@@ -101,17 +74,17 @@ export default function AddRoomScreen() {
               BACKGROUND_2,
               false,
             );
-            showNotifyModal(response_2);
             if (response_2.result) {
-              dispatch(updateNewRoom(response_2.room));
+              dispatch(updateNewRoom(response_2.data));
             }
+            notify(response_2.message, response_2.result);
             break;
           case 3:
             const response_3 = await addRoom(homeID, roomName, customImg, true);
-            showNotifyModal(response_3);
             if (response_3.result) {
-              dispatch(updateNewRoom(response_3.room));
+              dispatch(updateNewRoom(response_3.data));
             }
+            notify(response_3.message, response_3.result);
             break;
         }
       }
@@ -151,18 +124,21 @@ export default function AddRoomScreen() {
       </View>
       <View style={styles.customImgContainer}>
         <Text>Chọn ảnh của riêng bạn</Text>
-        <ImageBackground
-          style={styles.customImg}
-          borderRadius={20}
-          source={{uri: customImg}}>
-          <IconButton
-            style={styles.cameraBtn}
-            iconName="camera"
-            iconColor={Color.primary}
-            iconSize={fontSize.bigger}
-            onPress={() => takeCustomImg()}
-          />
-        </ImageBackground>
+        <View style={styles.customImg}>
+          <ImageBackground
+            style={styles.img}
+            resizeMode="cover"
+            borderRadius={20}
+            source={{uri: customImg}}>
+            <IconButton
+              style={styles.cameraBtn}
+              iconName="camera"
+              iconColor={Color.primary}
+              iconSize={fontSize.bigger}
+              onPress={() => BSChangeImageRef.current.open()}
+            />
+          </ImageBackground>
+        </View>
       </View>
       <SafeAreaView style={styles.btnAddContainer}>
         <ErrorText>{txtError}</ErrorText>
@@ -172,7 +148,12 @@ export default function AddRoomScreen() {
           onPress={() => onAddRoom()}
         />
       </SafeAreaView>
-      <NotifyModal isVisible={showNotify} title={apiResponse} />
+
+      <BSUploadImage
+        ref={BSChangeImageRef}
+        uploadImage={uploadImage}
+        isLoading={false}
+      />
     </KeyboardAvoidingView>
   );
 }

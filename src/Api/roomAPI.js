@@ -23,7 +23,7 @@ export const addRoom = async (homeID, name, imageURI, isCustomImage) => {
     return {
       result: true,
       message: 'Tạo phòng thành công',
-      room: roomData[roomID],
+      data: roomData[roomID],
     };
   } catch (error) {
     console.log(error);

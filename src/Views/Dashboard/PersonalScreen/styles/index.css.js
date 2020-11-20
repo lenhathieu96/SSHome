@@ -39,14 +39,13 @@ const styles = StyleSheet.create({
   },
 
   //place holder
-  placeholderContainer: {
+  loadingContainer: {
     padding: 15,
-    borderRadius: 10,
-    width: 0.3 * width,
-    height: 0.4 * width,
-    marginLeft: 20,
     alignItems: 'center',
-    position: 'relative',
+  },
+  placeholderContainer: {
+    alignSelf: 'flex-start',
+    alignItems: 'center',
   },
   placeholderAvatar: {
     width: 0.25 * width,
@@ -56,10 +55,9 @@ const styles = StyleSheet.create({
   },
   placeholderNameContainer: {
     width: 0.4 * width,
-    height: fontSize.normal,
+    height: fontSize.huge,
     padding: 5,
     marginTop: -15,
-    alignItems: 'center',
     borderRadius: 20,
   },
 

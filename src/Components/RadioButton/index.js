@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Text from '../Text';
 
 import styles from './styles/index.css';
-import Color from '../../Utils/Color';
 
 export default function RadioButton(props) {
   const {title, status, onPress, style} = props;
@@ -15,13 +14,9 @@ export default function RadioButton(props) {
       <View style={[styles.radioBtnContainer, style]}>
         <View style={styles.dotContainer}>
           <View
-            style={[
-              styles.dot,
-              {
-                backgroundColor:
-                  status === 'checked' ? Color.primary : 'transparent',
-              },
-            ]}
+            style={
+              status === 'checked' ? styles.dotChecked : styles.dotUnChecked
+            }
           />
         </View>
         <Text>{title}</Text>
@@ -34,5 +29,5 @@ RadioButton.propTypes = {
   title: PropTypes.string,
   status: PropTypes.string,
   onPress: PropTypes.func.isRequired,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

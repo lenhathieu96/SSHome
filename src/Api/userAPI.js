@@ -231,12 +231,12 @@ export const uploadMasterAvatar = async (imageURI) => {
     await firestore().collection('Home').doc(homeID).update({avatar: URL});
     return {
       result: true,
-      message: 'Cập nhập ảnh đại diện thành công',
+      message: 'Cập nhập thành công',
       uri: URL,
     };
   } catch (error) {
     console.log(error);
-    return {result: false, mesage: 'Cập Nhập ảnh đại diện thất bại'};
+    return {result: false, mesage: 'Cập Nhập thất bại'};
   }
 };
 

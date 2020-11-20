@@ -26,7 +26,7 @@ const TextField = React.forwardRef((props, ref) => {
       <TextInput
         ref={ref}
         {...otherProps}
-        style={{flex: 1}}
+        style={styles.root}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
       />
@@ -46,5 +46,5 @@ export default TextField;
 
 TextField.propTypes = {
   label: PropTypes.string,
-  style: PropTypes.object || PropTypes.array,
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };

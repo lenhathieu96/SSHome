@@ -38,5 +38,5 @@ export default function PlaceHolderLine(props) {
 }
 
 PlaceHolderLine.propTypes = {
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

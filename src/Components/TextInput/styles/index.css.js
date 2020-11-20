@@ -3,6 +3,9 @@ import {StyleSheet} from 'react-native';
 import Color from '../../../Utils/Color';
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   inputContainer_Focus: {
     borderWidth: 1,
     flexDirection: 'row',

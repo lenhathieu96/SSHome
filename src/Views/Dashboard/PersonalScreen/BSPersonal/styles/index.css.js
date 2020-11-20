@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   radioButtonContainer: {
-    flex: 0.7,
     marginHorizontal: 5,
   },
   radioButton: {

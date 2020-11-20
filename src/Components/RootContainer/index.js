@@ -22,6 +22,6 @@ export default function RootContainer({
 
 RootContainer.propTypes = {
   safeArea: PropTypes.bool,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   children: PropTypes.node,
 };

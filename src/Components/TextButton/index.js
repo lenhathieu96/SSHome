@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 TextButton.propTypes = {
   text: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   textStyle: PropTypes.object,
   disabled: PropTypes.bool,
 };
