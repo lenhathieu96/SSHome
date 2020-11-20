@@ -89,7 +89,7 @@ const BSPersonal = React.forwardRef((props, ref) => {
     <BottomSheet
       ref={ref}
       swipeable={false}
-      modalHeight={height}
+      modalHeight={0.8 * height}
       renderContent={() => (
         <ScrollView contentContainerStyle={styles.container}>
           <BoldText style={styles.BSTitle}>Thành Viên</BoldText>

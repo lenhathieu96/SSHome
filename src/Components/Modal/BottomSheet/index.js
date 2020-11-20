@@ -1,5 +1,13 @@
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
-import {View, Dimensions, Keyboard, SafeAreaView} from 'react-native';
+import {
+  View,
+  Dimensions,
+  Keyboard,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import IconButton from '../../IconButton';
@@ -35,25 +43,31 @@ const BottomSheet = forwardRef((props, ref) => {
         Keyboard.dismiss();
       }}
       style={styles.bsContainer}>
-      <View
-        style={[
-          styles.container,
-          {height: modalHeight ? modalHeight : 0.8 * height},
-        ]}>
-        <View style={styles.header}>
-          <IconButton
-            iconName={swipeable ? 'chevron-down' : 'x'}
-            iconSize={1.2 * fontSize.biggest}
-            iconColor={Color.secondary}
-            style={{alignSelf: swipeable ? 'center' : 'flex-end'}}
-            onPress={() => {
-              setVisible(false);
-              Keyboard.dismiss();
-            }}
-          />
-        </View>
-        <SafeAreaView style={styles.body}>{renderContent()}</SafeAreaView>
-      </View>
+      <KeyboardAvoidingView
+        enabled
+        behavior={Platform.OS === 'android' ? undefined : 'position'}>
+        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
+          <View
+            style={[
+              styles.container,
+              {height: modalHeight ? modalHeight : 0.8 * height},
+            ]}>
+            <View style={styles.header}>
+              <IconButton
+                iconName={swipeable ? 'chevron-down' : 'x'}
+                iconSize={1.2 * fontSize.biggest}
+                iconColor={Color.secondary}
+                style={{alignSelf: swipeable ? 'center' : 'flex-end'}}
+                onPress={() => {
+                  setVisible(false);
+                  Keyboard.dismiss();
+                }}
+              />
+            </View>
+            <SafeAreaView style={styles.body}>{renderContent()}</SafeAreaView>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 });
