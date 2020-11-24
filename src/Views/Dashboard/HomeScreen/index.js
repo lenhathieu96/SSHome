@@ -102,7 +102,6 @@ export default function HomeScreen({navigation}) {
           if (result.includes(room)) {
             isRoomExist = true;
             console.log('room found');
-
             const roomData = rooms.find(
               (item) => item.name.toLowerCase() === room,
             );
