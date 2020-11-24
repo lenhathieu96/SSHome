@@ -56,8 +56,6 @@ export default function HomeScreen({navigation}) {
         : await getMemberProfile(currentUser.phoneNumber);
     console.log(response.message);
     if (response.result) {
-      const roomResponse = [...response.data.availableRooms];
-      roomResponse.forEach((room) => rooms.push(room));
       dispatch(setUserProfile(response.data));
     }
   };
@@ -90,16 +88,59 @@ export default function HomeScreen({navigation}) {
     });
   };
 
-  const deviceVoiceControl = () => {};
-
-  const handleResult = (result) => {
+  const handleResult = (result, rooms) => {
     if (result === '') {
       BSVoiceRef.current.close();
       setListening(false);
     } else {
       BSVoiceRef.current.open();
-      deviceVoiceControl();
-      console.log(result);
+      if (rooms.length > 0) {
+        console.log(result);
+        const roomNames = rooms.map((room) => room.name.toLowerCase());
+        let isRoomExist = false;
+        roomNames.forEach((room) => {
+          if (result.includes(room)) {
+            isRoomExist = true;
+            console.log('room found');
+
+            const roomData = rooms.find(
+              (item) => item.name.toLowerCase() === room,
+            );
+            if (roomData.hasOwnProperty('devices')) {
+              let isDeviceExist = false;
+              for (const deviceID in roomData.devices) {
+                if (
+                  result.includes(roomData.devices[deviceID].name.toLowerCase())
+                ) {
+                  isDeviceExist = true;
+                  console.log('device found');
+                  if (result.includes('mở') || result.includes('bật')) {
+                    console.log('turn on device');
+                  } else if (
+                    result.includes('đóng') ||
+                    result.includes('tắt')
+                  ) {
+                    console.log('turn off device');
+                  } else {
+                    alert('Yêu cầu của bạn không hợp lệ');
+                    BSVoiceRef.current.close();
+                  }
+                  return;
+                }
+              }
+              if (!isDeviceExist) {
+                alert('Thiết bị không tồn tại');
+                BSVoiceRef.current.close();
+              }
+            }
+            return;
+          }
+        });
+        if (!isRoomExist) {
+          alert('Phòng bạn vừa yêu cầu không tồn tại');
+          BSVoiceRef.current.close();
+        }
+      }
     }
   };
 
@@ -136,12 +177,14 @@ export default function HomeScreen({navigation}) {
         />
       </SafeAreaView>
       {/* BSBlueTooth */}
-      <BSVoice
-        ref={BSVoiceRef}
-        isListening={isListening}
-        handleResult={handleResult}
-        availableRooms={userProfile.availableRooms}
-      />
+      {userProfile.availableRooms && userProfile.availableRooms.length > 0 ? (
+        <BSVoice
+          ref={BSVoiceRef}
+          isListening={isListening}
+          handleResult={handleResult}
+          availableRooms={userProfile.availableRooms}
+        />
+      ) : null}
     </RootContainer>
   );
 }

@@ -37,8 +37,6 @@ const BSVoice = React.forwardRef((props, ref) => {
   const startListening = () => {
     setMessage('');
     setTimeout(async () => await Voice.start('vi-VN'), 500);
-    // listeningInterval = setInterval(() => Voice.start('vi-VN'), 2500);
-    // stopListenTimeOut = setTimeout(() => stopListening(), 10000);
   };
 
   const stopListening = () => {
@@ -58,14 +56,13 @@ const BSVoice = React.forwardRef((props, ref) => {
 
   const _onSpeechEnd = () => {
     console.log('_onSpeechEnd');
-    handleResult(message);
+    handleResult(message, []);
   };
 
   const _onSpeechResults = (e) => {
     console.log('_onSpeechResults');
     setMessage(e.value[0]);
-    console.log(availableRooms, 'bsvoice');
-    handleResult(e.value[0]);
+    handleResult(e.value[0].toLowerCase(), availableRooms);
   };
 
   return (
