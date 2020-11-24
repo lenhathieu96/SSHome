@@ -15,6 +15,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
   },
+  voiceContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

@@ -27,6 +27,7 @@ export const getCurrentWeather = async (lat, long) => {
       };
     }
   } catch (error) {
+    console.log(error);
     return {result: false, message: 'Lỗi khi lấy dữ liệu thời tiết'};
   }
 };

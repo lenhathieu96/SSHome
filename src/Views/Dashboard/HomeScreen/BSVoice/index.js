@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
 
 import {View, Dimensions} from 'react-native';
 
@@ -13,41 +12,40 @@ import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 const BSVoice = React.forwardRef((props, ref) => {
+  const {isListening, handleResult, availableRooms} = props;
   const {height} = Dimensions.get('window');
-  let stopListenTimeOut;
-  let listeningInterval;
-  const initDelay = 10000;
-  const [messages, setMessages] = useState();
-  const [isListening, setListening] = useState();
-  const {} = props;
+
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     Voice.onSpeechStart = _onSpeechStart;
     Voice.onSpeechEnd = _onSpeechEnd;
     Voice.onSpeechResults = _onSpeechResults;
+
     return () => {
-      clearInterval(listeningInterval);
-      clearTimeout(stopListenTimeOut);
       Voice.destroy().then(Voice.removeAllListeners());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (isListening) {
+      startListening();
+    }
+  }, [isListening, availableRooms]);
+
   const startListening = () => {
-    setMessages('');
-    setListening(true);
-    Voice.start('vi-VN');
+    setMessage('');
+    setTimeout(async () => await Voice.start('vi-VN'), 500);
     // listeningInterval = setInterval(() => Voice.start('vi-VN'), 2500);
     // stopListenTimeOut = setTimeout(() => stopListening(), 10000);
   };
 
   const stopListening = () => {
+    setMessage('');
     Voice.stop()
       .then((res) => {
         console.log('stop listening');
-        setListening(false);
-        clearInterval(listeningInterval);
-        clearTimeout(stopListenTimeOut);
       })
       .catch((e) => {
         console.log(e.error);
@@ -60,12 +58,14 @@ const BSVoice = React.forwardRef((props, ref) => {
 
   const _onSpeechEnd = () => {
     console.log('_onSpeechEnd');
+    handleResult(message);
   };
 
   const _onSpeechResults = (e) => {
     console.log('_onSpeechResults');
-    setMessages(e.value[0]);
-    stopListening();
+    setMessage(e.value[0]);
+    console.log(availableRooms, 'bsvoice');
+    handleResult(e.value[0]);
   };
 
   return (
@@ -78,7 +78,12 @@ const BSVoice = React.forwardRef((props, ref) => {
           <BoldText style={styles.title}>
             {isListening ? 'Đang Lắng Nghe' : ''}
           </BoldText>
-          <Text>{messages}</Text>
+          {message !== '' ? (
+            <View style={styles.voiceContainer}>
+              <Text>Bạn vừa nói: </Text>
+              <BoldText style={styles.title}>{message}</BoldText>
+            </View>
+          ) : null}
         </View>
       )}
     />
