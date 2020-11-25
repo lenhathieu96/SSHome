@@ -8,23 +8,31 @@ const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 export const getCurrentWeather = async (lat, long) => {
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
   try {
-    const homeID = await AsyncStorage.getItem('@homeID');
-    const response = await fetch(URL);
-    const indoorTemp = await database()
-      .ref(`/${homeID}/DHT22/Temperature`)
-      .once('value');
-    const weatherData = await response.json();
-    if (weatherData && indoorTemp.val()) {
-      return {
-        result: true,
-        message: 'Lấy dữ liệu thời tiết thành công',
-        data: {
-          indoorTemp: Math.floor(indoorTemp.val()),
-          temp: weatherData.main.temp,
-          main: weatherData.weather[0].main,
-          desc: weatherData.weather[0].description,
-        },
-      };
+    const storageID = await AsyncStorage.getItem('@homeID');
+    const home = await firestore()
+      .collection('Home')
+      .where('id', '==', storageID)
+      .get();
+    if (home.docs[0]) {
+      const response = await fetch(URL);
+      const indoorTemp = await database()
+        .ref(`/${home.docs[0].id}/DHT22/Temperature`)
+        .once('value');
+      const weatherData = await response.json();
+      if (weatherData && indoorTemp.val()) {
+        return {
+          result: true,
+          message: 'Lấy dữ liệu thời tiết thành công',
+          data: {
+            indoorTemp: Math.floor(indoorTemp.val()),
+            temp: weatherData.main.temp,
+            main: weatherData.weather[0].main,
+            desc: weatherData.weather[0].description,
+          },
+        };
+      }
+    } else {
+      return {result: false, message: 'Lỗi khi lấy dữ liệu thời tiết'};
     }
   } catch (error) {
     console.log(error);
@@ -133,7 +141,7 @@ export const handleMemberLogin = async (phoneNumber, masterID) => {
       return {result: false, message: 'Tài khoản không tồn tại'};
     }
   } else {
-    return {result: false, message: 'Mã chủ nhà không tồn tại'};
+    return {result: false, message: 'Mã chủ căn hộ không tồn tại'};
   }
 };
 
@@ -167,7 +175,7 @@ export const getMasterProfile = async (userID) => {
       delete rooms.DHT22;
       return {
         result: true,
-        message: 'Lấy dữ liệu chủ nhà thành công',
+        message: 'Lấy dữ liệu chủ căn hộ thành công',
         data: {
           name: UserData.data().name,
           phone: UserData.data().phone,
@@ -179,14 +187,14 @@ export const getMasterProfile = async (userID) => {
     } else {
       return {
         result: false,
-        message: 'Không tồn tại tài khoản chủ nhà',
+        message: 'Không tồn tại tài khoản chủ căn hộ',
       };
     }
   } catch (error) {
     console.log(error);
     return {
       result: false,
-      message: 'Lấy dữ liệu chủ nhà thất bại',
+      message: 'Lấy dữ liệu chủ căn hộ thất bại',
     };
   }
 };
@@ -227,23 +235,30 @@ export const getMemberProfile = async (phone) => {
 };
 
 export const uploadMasterAvatar = async (imageURI) => {
-  const homeID = await AsyncStorage.getItem('@homeID');
-  // const filename = imageURI.substring(imageURI.lastIndexOf('/') + 1);
-  // const uploadUri =
-  //   Platform.OS === 'ios' ? imageURI.replace('file://', '') : imageURI;
-
-  const reference = storage().ref(`/${homeID}/Master`);
-  try {
-    await reference.putFile(imageURI);
-    const URL = await reference.getDownloadURL();
-    await firestore().collection('Home').doc(homeID).update({avatar: URL});
-    return {
-      result: true,
-      message: 'Cập nhập thành công',
-      uri: URL,
-    };
-  } catch (error) {
-    console.log(error);
+  const storageID = await AsyncStorage.getItem('@homeID');
+  const home = await firestore()
+    .collection('Home')
+    .where('id', '==', storageID)
+    .get();
+  if (home.docs[0]) {
+    const reference = storage().ref(`/${home.docs[0].id}/Master`);
+    try {
+      await reference.putFile(imageURI);
+      const URL = await reference.getDownloadURL();
+      await firestore()
+        .collection('Home')
+        .doc(home.docs[0].id)
+        .update({avatar: URL});
+      return {
+        result: true,
+        message: 'Cập nhập thành công',
+        uri: URL,
+      };
+    } catch (error) {
+      console.log(error);
+      return {result: false, mesage: 'Cập Nhập thất bại'};
+    }
+  } else {
     return {result: false, mesage: 'Cập Nhập thất bại'};
   }
 };
@@ -251,65 +266,79 @@ export const uploadMasterAvatar = async (imageURI) => {
 //Member Management===================================================================================
 
 export const configMember = async (member, isUpdate) => {
-  const homeID = await AsyncStorage.getItem('@homeID');
-  //Check user exists
-  const Member = await firestore()
+  const storageID = await AsyncStorage.getItem('@homeID');
+  const home = await firestore()
     .collection('Home')
-    .doc(homeID)
-    .collection('Member')
-    .doc(member.id)
+    .where('id', '==', storageID)
     .get();
-  if (isUpdate) {
-    if (Member.data()) {
-      try {
-        await firestore()
-          .collection('Home')
-          .doc(homeID)
-          .collection('Member')
-          .doc(member.id)
-          .update(member);
-        return {result: true, message: 'Cập Nhập thành viên thành công'};
-      } catch (error) {
-        console.log(error);
-        return {result: false, message: 'Cập Nhập thành viên thất bại'};
+  if (home.docs[0]) {
+    const Member = await firestore()
+      .collection('Home')
+      .doc(home.docs[0].id)
+      .collection('Member')
+      .doc(member.id)
+      .get();
+    if (isUpdate) {
+      if (Member.data()) {
+        try {
+          await firestore()
+            .collection('Home')
+            .doc(home.docs[0].id)
+            .collection('Member')
+            .doc(member.id)
+            .update(member);
+          return {result: true, message: 'Cập Nhập thành viên thành công'};
+        } catch (error) {
+          console.log(error);
+          return {result: false, message: 'Cập Nhập thành viên thất bại'};
+        }
+      }
+    } else {
+      //add new member
+      if (Member.data()) {
+        return {result: false, message: 'Số điện thoại đã tồn tại'};
+      } else {
+        let newMember = {
+          ...member,
+          phone: `+84${member.phone.slice(1)}`,
+        };
+        try {
+          await firestore()
+            .collection('Home')
+            .doc(home.docs[0].id)
+            .collection('Member')
+            .add(newMember);
+          return {result: true, message: 'Tạo thành viên thành công'};
+        } catch (error) {
+          console.log(error);
+          return {result: false, message: 'Tạo thành viên thất bại'};
+        }
       }
     }
   } else {
-    //add new member
-    if (Member.data()) {
-      return {result: false, message: 'Số điện thoại đã tồn tại'};
-    } else {
-      let newMember = {
-        ...member,
-        phone: `+84${member.phone.slice(1)}`,
-      };
-      try {
-        await firestore()
-          .collection('Home')
-          .doc(homeID)
-          .collection('Member')
-          .add(newMember);
-        return {result: true, message: 'Tạo thành viên thành công'};
-      } catch (error) {
-        console.log(error);
-        return {result: false, message: 'Tạo thành viên thất bại'};
-      }
-    }
+    return {result: false, message: 'Mã chủ căn hộ không tồn tại'};
   }
 };
 
 export const deleteMember = async (memberID) => {
-  const homeID = await AsyncStorage.getItem('@homeID');
-  console.log(memberID);
-  try {
-    await firestore()
-      .collection('Home')
-      .doc(homeID)
-      .collection('Member')
-      .doc(memberID)
-      .delete();
-    return {result: true, message: 'Xoá thành viên thành công'};
-  } catch (error) {
-    return {result: false, message: 'Xoá thành viên thất bại'};
+  const storageID = await AsyncStorage.getItem('@homeID');
+  const home = await firestore()
+    .collection('Home')
+    .where('id', '==', storageID)
+    .get();
+  if (home.docs[0]) {
+    try {
+      await firestore()
+        .collection('Home')
+        .doc(home.docs[0].id)
+        .collection('Member')
+        .doc(memberID)
+        .delete();
+      return {result: true, message: 'Xoá thành viên thành công'};
+    } catch (error) {
+      return {result: false, message: 'Xoá thành viên thất bại'};
+    }
+  } else {
+    return {result: false, message: 'Mã chủ căn hộ không tồn tại'};
   }
 };

@@ -7,8 +7,6 @@ import Voice from '@react-native-community/voice';
 import Text, {BoldText} from '../../../../Components/Text';
 import BottomSheet from '../../../../Components/Modal/BottomSheet';
 
-import Color from '../../../../Utils/Color';
-import * as fontSize from '../../../../Utils/FontSize';
 import styles from './styles/index.css';
 
 const BSVoice = React.forwardRef((props, ref) => {
@@ -37,17 +35,6 @@ const BSVoice = React.forwardRef((props, ref) => {
   const startListening = () => {
     setMessage('');
     setTimeout(async () => await Voice.start('vi-VN'), 500);
-  };
-
-  const stopListening = () => {
-    setMessage('');
-    Voice.stop()
-      .then((res) => {
-        console.log('stop listening');
-      })
-      .catch((e) => {
-        console.log(e.error);
-      });
   };
 
   const _onSpeechStart = () => {

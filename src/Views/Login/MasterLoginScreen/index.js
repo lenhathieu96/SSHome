@@ -56,7 +56,7 @@ export default function MasterLoginScreen({navigation}) {
       <View style={styles.optionContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('signup')}>
           <Text style={{alignSelf: 'center', color: 'black'}}>
-            Đăng Ký Chủ Nhà
+            Đăng Ký Chủ Hộ
           </Text>
         </TouchableOpacity>
 

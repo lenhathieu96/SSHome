@@ -50,7 +50,7 @@ export default function MemberLoginScreen({navigation, route}) {
 
         <View>
           <Text style={styles.txtInfo}>
-            {homeID ? 'Bạn đã có mã xác nhận' : 'Quét mã xác nhận từ chủ nhà'}
+            {homeID ? 'Bạn đã có mã xác nhận' : 'Quét mã xác nhận từ chủ hộ'}
           </Text>
           <Icon.Button
             name="qrcode"

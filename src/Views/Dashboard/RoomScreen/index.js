@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
-import ImagePicker from 'react-native-image-picker';
+
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/Feather';
 import {SharedElement} from 'react-navigation-shared-element';
@@ -23,6 +23,7 @@ import BSAddNewDevice from './BSAddNewDevice';
 import {useNotify} from '../../../Hooks/useModal';
 import {useAlert} from '../../../Hooks/useModal';
 import {
+  findRealRoomID,
   updateRoomBackground,
   updateStatusDevice,
   getUsedPorts,
@@ -77,9 +78,12 @@ export default function RoomDetailScreen({navigation, route}) {
   }, [homeID]);
 
   const getHomeID = async () => {
-    const homeIDStorage = await AsyncStorage.getItem('@homeID');
-    if (homeIDStorage) {
-      setHomeID(homeIDStorage);
+    const storageID = await AsyncStorage.getItem('@homeID');
+    if (storageID) {
+      const response = await findRealRoomID(storageID);
+      if (response && response.result) {
+        setHomeID(response.data);
+      }
     }
   };
 

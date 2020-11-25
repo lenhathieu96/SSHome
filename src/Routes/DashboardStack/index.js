@@ -57,7 +57,7 @@ export default function DashboardStack() {
                 <BoldText style={styles.userName}>{UserProfile.name}</BoldText>
                 <Text style={styles.userInfo}>(+84) {UserProfile.phone}</Text>
                 <Text style={styles.userInfo}>
-                  {userRole === 'Master' ? 'Chủ Nhà' : 'Thành Viên'}
+                  {userRole === 'Master' ? 'Chủ Hộ' : 'Thành Viên'}
                 </Text>
               </View>
             </View>

@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-import {useAlert} from '../../../Hooks/useModal';
+import {useAlert, useNotify} from '../../../Hooks/useModal';
 
 import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
 import {
@@ -13,6 +13,7 @@ import {
   getMemberProfile,
   getCurrentWeather,
 } from '../../../Api/userAPI';
+import {updateStatusDevice, findRealRoomID} from '../../../Api/roomAPI';
 
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
@@ -30,7 +31,7 @@ import styles from './styles/index.css';
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const alert = useAlert();
-  const rooms = [];
+  const notify = useNotify();
   const BSVoiceRef = useRef();
 
   const hardware = useSelector((state) => state.hardware);
@@ -38,14 +39,30 @@ export default function HomeScreen({navigation}) {
 
   const [weather, setWeather] = useState({});
   const [isListening, setListening] = useState(false);
+  const [homeID, setHomeID] = useState();
 
   useEffect(() => {
     if (hardware.WFEnabled) {
+      getHomeID();
       getUserProflie();
       getWeather();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hardware.WFEnabled]);
+
+  const getHomeID = async () => {
+    const storageID = await AsyncStorage.getItem('@homeID');
+    if (storageID) {
+      const response = await findRealRoomID(storageID);
+      if (response && response.result) {
+        setHomeID(response.data);
+      } else {
+        alert('Không xác minh được mã căn hộ');
+      }
+    } else {
+      alert('Không tồn tại mã căn hộ');
+    }
+  };
 
   const getUserProflie = async () => {
     const currentUser = auth().currentUser;
@@ -89,6 +106,25 @@ export default function HomeScreen({navigation}) {
     });
   };
 
+  const onChangeStatus = async (roomID, deviceID, status) => {
+    console.log(homeID);
+    if (homeID) {
+      const response = await updateStatusDevice(
+        homeID,
+        roomID,
+        deviceID,
+        status,
+      );
+      if (response && response.result) {
+        notify('Thành công', true);
+      } else {
+        notify('Thất bại', false);
+      }
+    } else {
+      notify('Lỗi không lấy được mã căn hộ', false);
+    }
+  };
+
   const handleResult = (result, rooms) => {
     if (result === '') {
       BSVoiceRef.current.close();
@@ -99,6 +135,8 @@ export default function HomeScreen({navigation}) {
         console.log(result);
         const roomNames = rooms.map((room) => room.name.toLowerCase());
         let isRoomExist = false;
+
+        //findRoom
         roomNames.forEach((room) => {
           if (result.includes(room)) {
             isRoomExist = true;
@@ -108,40 +146,43 @@ export default function HomeScreen({navigation}) {
             );
             if (roomData.hasOwnProperty('devices')) {
               let isDeviceExist = false;
+              const roomID = roomData.id;
+              //find Device
               for (const deviceID in roomData.devices) {
                 if (
                   result.includes(roomData.devices[deviceID].name.toLowerCase())
                 ) {
                   isDeviceExist = true;
+                  console.log(deviceID, 'device id');
                   console.log('device found');
                   if (result.includes('mở') || result.includes('bật')) {
-                    console.log('turn on device');
+                    onChangeStatus(roomID, deviceID, 'on');
                   } else if (
                     result.includes('đóng') ||
                     result.includes('tắt')
                   ) {
-                    console.log('turn off device');
+                    onChangeStatus(roomID, deviceID, 'off');
                   } else {
                     alert('Yêu cầu của bạn không hợp lệ');
-                    BSVoiceRef.current.close();
                   }
                   return;
                 }
               }
               if (!isDeviceExist) {
                 alert('Thiết bị không tồn tại');
-                BSVoiceRef.current.close();
               }
+            } else {
+              alert('Chưa có thiết bị nào được cài đặt tại phòng này');
             }
             return;
           }
         });
         if (!isRoomExist) {
           alert('Phòng bạn vừa yêu cầu không tồn tại');
-          BSVoiceRef.current.close();
         }
       }
     }
+    BSVoiceRef.current.close();
   };
 
   return (

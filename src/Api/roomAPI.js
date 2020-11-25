@@ -1,5 +1,22 @@
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
+
+export const findRealRoomID = async (storageID) => {
+  const home = await firestore()
+    .collection('Home')
+    .where('id', '==', storageID)
+    .get();
+  if (home.docs[0]) {
+    return {
+      result: true,
+      message: 'Lấy mã căn hộ thành công',
+      data: home.docs[0].id,
+    };
+  } else {
+    return {result: false, message: 'Lấy mã căn hộ thất bại'};
+  }
+};
 
 export const addRoom = async (homeID, name, imageURI, isCustomImage) => {
   const roomID = `R${homeID.slice(2, 5)}${createID()}`;

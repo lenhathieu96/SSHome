@@ -27,7 +27,7 @@ export default function LoginStacks() {
         component={MasterLoginScreen}
         options={({navigation}) => ({
           ...TransitionPresets.SlideFromRightIOS,
-          headerTitle: 'Đăng Nhập Chủ Nhà',
+          headerTitle: 'Đăng Nhập Chủ Hộ',
           headerTitleStyle: {
             color: Color.primary,
             fontSize: fontSize.huge,
