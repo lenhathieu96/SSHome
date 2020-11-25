@@ -77,7 +77,7 @@ export default function RoomDetailScreen({navigation, route}) {
   }, [homeID]);
 
   const getHomeID = async () => {
-    const homeIDStorage = await AsyncStorage.getItem('homeID');
+    const homeIDStorage = await AsyncStorage.getItem('@homeID');
     if (homeIDStorage) {
       setHomeID(homeIDStorage);
     }

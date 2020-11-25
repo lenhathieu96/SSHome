@@ -49,14 +49,15 @@ export default function HomeScreen({navigation}) {
 
   const getUserProflie = async () => {
     const currentUser = auth().currentUser;
-    const userRole = await AsyncStorage.getItem('userRole');
-    const response =
-      userRole === 'Master'
-        ? await getMasterProfile(currentUser.uid)
-        : await getMemberProfile(currentUser.phoneNumber);
-    console.log(response.message);
-    if (response.result) {
-      dispatch(setUserProfile(response.data));
+    const userRole = await AsyncStorage.getItem('@userRole');
+    if (userRole) {
+      const response =
+        userRole === 'Master'
+          ? await getMasterProfile(currentUser.uid)
+          : await getMemberProfile(currentUser.phoneNumber);
+      if (response && response.result) {
+        dispatch(setUserProfile(response.data));
+      }
     }
   };
 
@@ -82,7 +83,7 @@ export default function HomeScreen({navigation}) {
         position.coords.latitude,
         position.coords.longitude,
       );
-      if (response.result) {
+      if (response && response.result) {
         setWeather(response.data);
       }
     });

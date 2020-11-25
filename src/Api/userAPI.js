@@ -8,7 +8,7 @@ const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 export const getCurrentWeather = async (lat, long) => {
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
   try {
-    const homeID = await AsyncStorage.getItem('homeID');
+    const homeID = await AsyncStorage.getItem('@homeID');
     const response = await fetch(URL);
     const indoorTemp = await database()
       .ref(`/${homeID}/DHT22/Temperature`)
@@ -38,7 +38,7 @@ export const handleMasterSignUp = async (signupForm) => {
   const homeID = await userDBRef.doc(signupForm.homeID).get();
   if (homeID.data()) {
     try {
-      await AsyncStorage.setItem('userRole', 'Master');
+      await AsyncStorage.setItem('@userRole', 'Master');
       await auth().createUserWithEmailAndPassword(
         signupForm.email,
         signupForm.password,
@@ -74,7 +74,7 @@ export const handleMasterLogin = async (email, password) => {
     .get();
   if (userData.docs.length > 0) {
     try {
-      await AsyncStorage.setItem('userRole', 'Master');
+      await AsyncStorage.setItem('@userRole', 'Master');
       await auth().signInWithEmailAndPassword(email, password);
       return {result: true, message: 'Đăng nhập thành công'};
     } catch (error) {
@@ -96,37 +96,44 @@ export const handleMasterForgotPassword = async (email) => {
     .catch((error) => console.log(error));
 };
 
-export const handleMemberLogin = async (phoneNumber, homeID) => {
-  console.log(homeID);
+export const handleMemberLogin = async (phoneNumber, masterID) => {
   let phone = phoneNumber.slice(1);
-  const User = await firestore()
+  const home = await firestore()
     .collection('Home')
-    .doc(homeID)
-    .collection('Member')
-    .where('phone', '==', `+84${phone}`)
+    .where('id', '==', masterID)
     .get();
-  if (User.docs.length > 0) {
-    try {
-      await AsyncStorage.setItem('userRole', 'Member');
-      await AsyncStorage.setItem('homeID', homeID);
-      const confirmation = await auth().signInWithPhoneNumber(`+84${phone}`);
-      return {
-        result: true,
-        message: '',
-        data: confirmation ? confirmation : null,
-      };
-    } catch (error) {
-      if (error.code === 'auth/invalid-phone-number') {
-        return {result: false, message: 'Số điện thoại không hợp lệ'};
+  if (home.docs[0]) {
+    const User = await firestore()
+      .collection('Home')
+      .doc(home.docs[0].id)
+      .collection('Member')
+      .where('phone', '==', `+84${phone}`)
+      .get();
+    if (User.docs.length > 0) {
+      try {
+        await AsyncStorage.setItem('@userRole', 'Member');
+        await AsyncStorage.setItem('@homeID', home.docs[0].id);
+        const confirmation = await auth().signInWithPhoneNumber(`+84${phone}`);
+        return {
+          result: true,
+          message: '',
+          data: confirmation ? confirmation : null,
+        };
+      } catch (error) {
+        if (error.code === 'auth/invalid-phone-number') {
+          return {result: false, message: 'Số điện thoại không hợp lệ'};
+        }
+        if (error.code === 'auth/too-many-requests') {
+          return {result: false, message: 'Quá số lần quy định'};
+        }
+        console.log(error);
+        return {result: false, message: ''};
       }
-      if (error.code === 'auth/too-many-requests') {
-        return {result: false, message: 'Quá số lần quy định'};
-      }
-      console.log(error);
-      return {result: false, message: ''};
+    } else {
+      return {result: false, message: 'Tài khoản không tồn tại'};
     }
   } else {
-    return {result: false, message: 'Tài khoản không tồn tại'};
+    return {result: false, message: 'Mã chủ nhà không tồn tại'};
   }
 };
 
@@ -154,7 +161,7 @@ export const getMasterProfile = async (userID) => {
       .get();
     if (User.docs.length > 0) {
       const UserData = User.docs[0];
-      await AsyncStorage.setItem('homeID', UserData.id);
+      await AsyncStorage.setItem('@homeID', UserData.data().id);
       const homeData = await database().ref(UserData.id).once('value');
       const rooms = homeData.val();
       delete rooms.DHT22;
@@ -185,7 +192,7 @@ export const getMasterProfile = async (userID) => {
 };
 
 export const getMemberProfile = async (phone) => {
-  const homeID = await AsyncStorage.getItem('homeID');
+  const homeID = await AsyncStorage.getItem('@homeID');
   const User = await firestore()
     .collection('Home')
     .doc(homeID)
@@ -220,7 +227,7 @@ export const getMemberProfile = async (phone) => {
 };
 
 export const uploadMasterAvatar = async (imageURI) => {
-  const homeID = await AsyncStorage.getItem('homeID');
+  const homeID = await AsyncStorage.getItem('@homeID');
   // const filename = imageURI.substring(imageURI.lastIndexOf('/') + 1);
   // const uploadUri =
   //   Platform.OS === 'ios' ? imageURI.replace('file://', '') : imageURI;
@@ -244,7 +251,7 @@ export const uploadMasterAvatar = async (imageURI) => {
 //Member Management===================================================================================
 
 export const configMember = async (member, isUpdate) => {
-  const homeID = await AsyncStorage.getItem('homeID');
+  const homeID = await AsyncStorage.getItem('@homeID');
   //Check user exists
   const Member = await firestore()
     .collection('Home')
@@ -292,7 +299,7 @@ export const configMember = async (member, isUpdate) => {
 };
 
 export const deleteMember = async (memberID) => {
-  const homeID = await AsyncStorage.getItem('homeID');
+  const homeID = await AsyncStorage.getItem('@homeID');
   console.log(memberID);
   try {
     await firestore()

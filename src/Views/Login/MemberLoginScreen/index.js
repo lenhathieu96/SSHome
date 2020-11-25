@@ -20,18 +20,11 @@ export default function MemberLoginScreen({navigation, route}) {
   const [homeID, setHomeID] = useState();
   const [loginError, setloginError] = useState('');
 
-  const getHomeIDFromStorage = async () => {
-    const homeIDStorage = await AsyncStorage.getItem('homeID');
-    setHomeID(homeIDStorage);
-  };
-
   useEffect(() => {
     inputRef.current.focus();
     if (route.params?.qrcode) {
       setHomeID(route.params.qrcode);
       setloginError('');
-    } else {
-      getHomeIDFromStorage();
     }
   }, [route.params?.qrcode]);
 

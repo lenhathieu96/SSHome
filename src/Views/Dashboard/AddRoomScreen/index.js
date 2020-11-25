@@ -47,7 +47,7 @@ export default function AddRoomScreen() {
   };
 
   const onAddRoom = async () => {
-    const homeID = await AsyncStorage.getItem('homeID');
+    const homeID = await AsyncStorage.getItem('@homeID');
     if (homeID) {
       if (!roomName) {
         setTxtError('Tên phòng không đưọc để trống');

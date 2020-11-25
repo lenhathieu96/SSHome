@@ -34,7 +34,7 @@ export default function DashboardStack() {
   }, []);
 
   const getUserRole = async () => {
-    const userRoleStorage = await AsyncStorage.getItem('userRole');
+    const userRoleStorage = await AsyncStorage.getItem('@userRole');
     setUserRole(userRoleStorage);
   };
 
@@ -121,18 +121,17 @@ export default function DashboardStack() {
           }}
         />
       ) : null}
-      {userRole === 'Master' ? (
-        <DashboardDrawer.Screen
-          name="personal"
-          component={PersonalStack}
-          options={{
-            drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
-            drawerIcon: ({focused}) => (
-              <Icon color={'black'} size={fontSize.bigger} name="user" />
-            ),
-          }}
-        />
-      ) : null}
+
+      <DashboardDrawer.Screen
+        name="personal"
+        component={PersonalStack}
+        options={{
+          drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
+          drawerIcon: ({focused}) => (
+            <Icon color={'black'} size={fontSize.bigger} name="user" />
+          ),
+        }}
+      />
     </DashboardDrawer.Navigator>
   );
 }

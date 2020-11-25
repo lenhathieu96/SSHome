@@ -42,6 +42,7 @@ export default function Personal() {
   const hardware = useSelector((state) => state.hardware);
 
   const [homeID, setHomeID] = useState();
+  const [userRole, setUserRole] = useState();
   const [memberList, setMemberList] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [chosenUser, setChosenUser] = useState({});
@@ -51,8 +52,8 @@ export default function Personal() {
   const BSChangeImageRef = useRef();
 
   useEffect(() => {
-    getHomeID();
-    if (hardware.WFEnabled) {
+    getStorage();
+    if (hardware.WFEnabled && userRole === 'Master') {
       const subscriber = firestore()
         .collection('Home')
         .doc(homeID)
@@ -70,12 +71,21 @@ export default function Personal() {
         });
       return () => subscriber();
     }
-  }, [homeID, hardware.WFEnabled]);
+  }, [homeID, userRole, hardware.WFEnabled]);
 
-  const getHomeID = async () => {
-    const homeIDStorage = await AsyncStorage.getItem('homeID');
-    if (homeIDStorage) {
-      setHomeID(homeIDStorage);
+  const getStorage = async () => {
+    try {
+      const storage = await AsyncStorage.multiGet(['@homeID', '@userRole']);
+      const home = await firestore()
+        .collection('Home')
+        .where('id', '==', storage[0][1])
+        .get();
+      if (home.docs[0]) {
+        setHomeID(home.docs[0].id);
+      }
+      setUserRole(storage[1][1]);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -188,43 +198,54 @@ export default function Personal() {
         )}
       </View>
       {/* Member List */}
-      <View style={styles.memberListContainer}>
-        <BoldText style={styles.title}>Danh sách thành viên</BoldText>
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <View style={styles.placeholderContainer}>
-              <PlaceholderMedia style={styles.placeholderAvatar} />
-              <PlaceholderLine style={styles.placeholderNameContainer} />
+      {userRole === 'Master' ? (
+        <View style={styles.memberListContainer}>
+          <BoldText style={styles.title}>Danh sách thành viên</BoldText>
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <View style={styles.placeholderContainer}>
+                <PlaceholderMedia style={styles.placeholderAvatar} />
+                <PlaceholderLine style={styles.placeholderNameContainer} />
+              </View>
             </View>
-          </View>
-        ) : (
-          <MemberList
-            data={memberList}
-            onPressMember={onPressMember}
-            onLongPressMember={onLongPressMember}
-          />
-        )}
-      </View>
-      {/* Home ID */}
-      <SafeAreaView style={styles.QRCodeContainer}>
-        <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
-        <QRCode value={homeID} size={4 * fontSize.biggest} />
-      </SafeAreaView>
+          ) : (
+            <MemberList
+              data={memberList}
+              onPressMember={onPressMember}
+              onLongPressMember={onLongPressMember}
+            />
+          )}
+        </View>
+      ) : null}
 
-      <BSPersonal
-        ref={BSPersonalRef}
-        onConfigMember={onConfigMember}
-        roomList={masterInfo.availableRooms}
-        memberProfile={chosenUser}
-      />
-      <ConfirmDelModal
-        isVisible={showConfirm}
-        toggleModal={toogleConfirmModal}
-        title={`${
-          chosenUser ? chosenUser.name : ''
-        } sẽ bị xoá khỏi danh sách thành viên`}
-        onAccept={onDelMember}
-      />
+      {/* Home ID */}
+      {userRole === 'Master' ? (
+        <SafeAreaView style={styles.QRCodeContainer}>
+          <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
+          <QRCode value={homeID} size={4 * fontSize.biggest} />
+        </SafeAreaView>
+      ) : null}
+
+      {userRole === 'Master' ? (
+        <BSPersonal
+          ref={BSPersonalRef}
+          onConfigMember={onConfigMember}
+          roomList={masterInfo.availableRooms}
+          memberProfile={chosenUser}
+        />
+      ) : null}
+
+      {userRole === 'Master' ? (
+        <ConfirmDelModal
+          isVisible={showConfirm}
+          toggleModal={toogleConfirmModal}
+          title={`${
+            chosenUser ? chosenUser.name : ''
+          } sẽ bị xoá khỏi danh sách thành viên`}
+          onAccept={onDelMember}
+        />
+      ) : null}
+
       <BSUploadImage
         ref={BSChangeImageRef}
         uploadImage={uploadImage}
