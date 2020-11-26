@@ -3,6 +3,11 @@ import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: 10,
+  },
   formContainer: {
     padding: 5,
     flexGrow: 1,

@@ -10,6 +10,7 @@ import {
   handleMasterForgotPassword,
 } from '../../../Api/userAPI';
 
+import logoImg from '../../../Assets/Images/logo.jpg';
 import styles from './styles/index.css';
 
 export default function MasterLoginScreen({navigation}) {
@@ -27,9 +28,9 @@ export default function MasterLoginScreen({navigation}) {
   };
 
   return (
-    <RootContainer safeArea={true}>
-      <View style={{flex: 0.25}}>
-        <Image style={{alignSelf: 'center'}} resizeMode="cover" />
+    <RootContainer safeArea={true} style={styles.root}>
+      <View style={styles.imgContainer}>
+        <Image style={styles.img} source={logoImg} resizeMode="contain" />
       </View>
       <View style={styles.body}>
         <TextInput
@@ -55,16 +56,12 @@ export default function MasterLoginScreen({navigation}) {
       />
       <View style={styles.optionContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('signup')}>
-          <Text style={{alignSelf: 'center', color: 'black'}}>
-            Đăng Ký Chủ Hộ
-          </Text>
+          <Text style={styles.btnOption}>Đăng Ký Chủ Hộ</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => handleMasterForgotPassword('lenhathieu96@gmail.com')}>
-          <Text style={{alignSelf: 'center', color: 'black'}}>
-            Quên Mật Khẩu ?
-          </Text>
+          <Text style={styles.btnOption}>Quên Mật Khẩu ?</Text>
         </TouchableOpacity>
       </View>
     </RootContainer>

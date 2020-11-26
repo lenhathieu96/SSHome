@@ -27,7 +27,6 @@ export default function PersonalStack() {
         fontFamily:'MavenPro-Bold',
       },
       headerStyle:{
-        backgroundColor: 'transparent',
         elevation: 0,
         shadowOpacity: 0,
       },

@@ -21,6 +21,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
   const [portList, setPortList] = useState([]);
   const [chosenPort, choosePort] = useState();
   const [txtError, setTxtError] = useState('');
+  const [isMotionDevice, setMotionDevice] = useState(false);
 
   useEffect(() => {
     const allPorts = [
@@ -66,6 +67,7 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
         name: deviceName,
         port: chosenPort,
         status: false,
+        isMotion: isMotionDevice,
       };
       onAddNewDevice(device);
     }
@@ -109,6 +111,16 @@ const BSAddNewDevice = React.forwardRef((props, ref) => {
               );
             }}
           />
+          <View>
+            <Text style={styles.txtDesc}>
+              - Dành cho các thiết bị cần chuyển động như cửa, rèm ...
+            </Text>
+            <RadioButton
+              status={isMotionDevice ? 'checked' : 'unchecked'}
+              onPress={() => setMotionDevice(!isMotionDevice)}
+              title="Thiết bị chuyển động"
+            />
+          </View>
           <SafeAreaView style={styles.btnContainer}>
             <ErrorText>{txtError}</ErrorText>
             <TextButton

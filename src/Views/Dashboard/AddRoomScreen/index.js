@@ -37,6 +37,7 @@ export default function AddRoomScreen() {
   const notify = useNotify();
   const BSChangeImageRef = useRef();
 
+  const [isLoading, setLoading] = useState(false);
   const [roomName, setRoomName] = useState('');
   const [chosenImg, chooseImg] = useState(0);
   const [customImg, setCustomImg] = useState();
@@ -74,6 +75,7 @@ export default function AddRoomScreen() {
       } else if (!customImg && chosenImg === 0) {
         setTxtError('Bạn phải chọn ảnh đại diện cho phòng');
       } else {
+        setLoading(true);
         switch (chosenImg) {
           case 1:
             const response_1 = await addRoom(
@@ -107,6 +109,7 @@ export default function AddRoomScreen() {
             notify(response_3.message, response_3.result);
             break;
         }
+        setLoading(false);
       }
     }
   };
@@ -164,6 +167,7 @@ export default function AddRoomScreen() {
         <ErrorText>{txtError}</ErrorText>
         <TextButton
           text="Tạo Phòng"
+          isLoading={isLoading}
           style={styles.btnAddRoom}
           onPress={() => onAddRoom()}
         />

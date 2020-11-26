@@ -20,35 +20,48 @@ export const findRealRoomID = async (storageID) => {
 
 export const addRoom = async (homeID, name, imageURI, isCustomImage) => {
   const roomID = `R${homeID.slice(2, 5)}${createID()}`;
-  console.log(homeID)
-  const room = await database().ref(homeID).once('value')
-  console.log(room.val());
-  // try {
-  //   const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
-  //   let URL;
-  //   if (isCustomImage) {
-  //     await reference.putFile(imageURI);
-  //     URL = await reference.getDownloadURL();
-  //   } else {
-  //     URL = imageURI;
-  //   }
-  //   let roomData = {
-  //     [roomID]: {
-  //       name,
-  //       id: roomID,
-  //       background: URL,
-  //     },
-  //   };
-  //   await database().ref(homeID).update(roomData);
-  //   return {
-  //     result: true,
-  //     message: 'Tạo phòng thành công',
-  //     data: roomData[roomID],
-  //   };
-  // } catch (error) {
-  //   console.log(error);
-  //   return {result: false, message: 'Tạo phòng thất bại'};
-  // }
+  const homeData = await database().ref(homeID).once('value');
+  const rooms = homeData.val();
+  delete rooms.DHT22;
+  let isDuplicateName = false;
+  for (const room in rooms) {
+    if (
+      rooms[room].name.toLowerCase().replace(/\s/g, '') ===
+      name.toLowerCase().replace(/\s/g, '')
+    ) {
+      isDuplicateName = true;
+    }
+  }
+  if (isDuplicateName) {
+    return {result: false, message: 'Tên phòng đã tồn tại'};
+  } else {
+    try {
+      const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
+      let URL;
+      if (isCustomImage) {
+        await reference.putFile(imageURI);
+        URL = await reference.getDownloadURL();
+      } else {
+        URL = imageURI;
+      }
+      let roomData = {
+        [roomID]: {
+          name,
+          id: roomID,
+          background: URL,
+        },
+      };
+      await database().ref(homeID).update(roomData);
+      return {
+        result: true,
+        message: 'Tạo phòng thành công',
+        data: roomData[roomID],
+      };
+    } catch (error) {
+      console.log(error);
+      return {result: false, message: 'Tạo phòng thất bại'};
+    }
+  }
 };
 
 export const deleteRoom = async (homeID, roomID) => {
@@ -114,15 +127,34 @@ export const getUsedPorts = async (homeID) => {
   }
 };
 
-export const addNewDevice = async (homeID, roomID, device) => {
+export const addNewDevice = async (homeID, roomID, deviceData) => {
   try {
     let deviceID = `DV${homeID.slice(2, 5)}${createID()}`;
-    let uploadDevice = {...device, id: deviceID};
-    await database()
-      .ref(`/${homeID}/${roomID}/devices/${deviceID}`)
-      .set(uploadDevice);
-    return {result: true, message: 'Thêm Thành Công'};
+    const roomData = await database()
+      .ref(`/${homeID}/${roomID}/devices`)
+      .once('value');
+    const listDevice = roomData.val();
+    console.log(listDevice);
+    let isDuplicateName = false;
+    for (const device in listDevice) {
+      if (
+        listDevice[device].name.toLowerCase().replace(/\s/g, '') ===
+        deviceData.name.toLowerCase().replace(/\s/g, '')
+      ) {
+        isDuplicateName = true;
+      }
+    }
+    if (isDuplicateName) {
+      return {result: false, message: 'Tên thiết bị đã tồn tại'};
+    } else {
+      let uploadDevice = {...deviceData, id: deviceID};
+      await database()
+        .ref(`/${homeID}/${roomID}/devices/${deviceID}`)
+        .set(uploadDevice);
+      return {result: true, message: 'Thêm Thành Công'};
+    }
   } catch (error) {
+    console.log(error);
     return {result: false, message: 'Thêm Thất bại'};
   }
 };

@@ -4,13 +4,12 @@ const {width} = Dimensions.get('window');
 import Color from '../../../../Utils/Color';
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 0.4,
+  root: {
+    flex: 1,
     justifyContent: 'flex-end',
   },
   btnContainer: {
     justifyContent: 'flex-end',
-    flex: 0.6,
   },
   btnMember: {
     borderWidth: 1,

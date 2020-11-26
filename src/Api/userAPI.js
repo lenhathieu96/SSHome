@@ -5,34 +5,25 @@ import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-community/async-storage';
 const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 
-export const getCurrentWeather = async (lat, long) => {
+export const getCurrentWeather = async (homeID, lat, long) => {
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
   try {
-    const storageID = await AsyncStorage.getItem('@masterID');
-    const home = await firestore()
-      .collection('Home')
-      .where('id', '==', storageID)
-      .get();
-    if (home.docs[0]) {
-      const response = await fetch(URL);
-      const indoorTemp = await database()
-        .ref(`/${home.docs[0].id}/DHT22/Temperature`)
-        .once('value');
-      const weatherData = await response.json();
-      if (weatherData && indoorTemp.val()) {
-        return {
-          result: true,
-          message: 'Lấy dữ liệu thời tiết thành công',
-          data: {
-            indoorTemp: Math.floor(indoorTemp.val()),
-            temp: weatherData.main.temp,
-            main: weatherData.weather[0].main,
-            desc: weatherData.weather[0].description,
-          },
-        };
-      }
-    } else {
-      return {result: false, message: 'Lỗi khi lấy dữ liệu thời tiết'};
+    const response = await fetch(URL);
+    const indoorTemp = await database()
+      .ref(`/${homeID}/DHT22/Temperature`)
+      .once('value');
+    const weatherData = await response.json();
+    if (weatherData && indoorTemp.val()) {
+      return {
+        result: true,
+        message: 'Lấy dữ liệu thời tiết thành công',
+        data: {
+          indoorTemp: Math.floor(indoorTemp.val()),
+          temp: weatherData.main.temp,
+          main: weatherData.weather[0].main,
+          desc: weatherData.weather[0].description,
+        },
+      };
     }
   } catch (error) {
     console.log(error);

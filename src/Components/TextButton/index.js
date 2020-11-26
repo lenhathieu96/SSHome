@@ -1,8 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
-import styles from './styles/index.css';
-
 import PropTypes from 'prop-types';
+import {TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+
+import {bigger} from '../../Utils/FontSize';
+import styles from './styles/index.css';
 
 TextButton.propTypes = {
   text: PropTypes.string.isRequired,
@@ -10,17 +11,22 @@ TextButton.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   textStyle: PropTypes.object,
   disabled: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 function TextButton(props) {
-  const {style, textStyle, onPress, text, disabled} = props;
+  const {style, textStyle, onPress, text, disabled, isLoading} = props;
 
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
       style={[styles.TextButton, style]}>
-      <Text style={[styles.text, textStyle]}>{text}</Text>
+      {isLoading ? (
+        <ActivityIndicator color="white" size={bigger} />
+      ) : (
+        <Text style={[styles.text, textStyle]}>{text}</Text>
+      )}
     </TouchableOpacity>
   );
 }

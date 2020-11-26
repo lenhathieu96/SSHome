@@ -59,9 +59,9 @@ export default function HomeScreen({navigation}) {
   useEffect(() => {
     if (hardware.WFEnabled) {
       getRoleStorage();
-      getWeather();
       if (userRole === 'Master' && homeID) {
         getMasterData();
+        getWeather();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,8 +173,10 @@ export default function HomeScreen({navigation}) {
   };
 
   const getWeather = () => {
+    console.log('alo')
     Geolocation.getCurrentPosition(async (position) => {
       const response = await getCurrentWeather(
+        homeID,
         position.coords.latitude,
         position.coords.longitude,
       );

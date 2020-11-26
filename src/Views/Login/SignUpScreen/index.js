@@ -55,8 +55,7 @@ export default function SignUpScreen({navigation, route}) {
   }, [route.params?.qrcode]);
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1, backgroundColor: 'white', paddingTop: 10}}>
+    <KeyboardAvoidingView style={styles.root}>
       <Formik
         validationSchema={validateSchema}
         initialValues={initialValues}

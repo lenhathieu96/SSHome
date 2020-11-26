@@ -2,6 +2,18 @@ import {StyleSheet} from 'react-native';
 import Color from '../../../../Utils/Color';
 
 const styles = StyleSheet.create({
+  root: {
+    backgroundColor: 'white',
+  },
+  imgContainer: {
+    flex: 0.25,
+  },
+  img: {
+    alignSelf: 'center',
+    flex: 1,
+    width: null,
+    height: null,
+  },
   input: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -20,6 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  btnOption: {alignSelf: 'center', color: 'black'},
 });
 
 export default styles;

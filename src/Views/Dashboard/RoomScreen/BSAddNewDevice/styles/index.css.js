@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     flex: 0.3,
     justifyContent: 'center',
   },
+  txtDesc: {
+    fontStyle: 'italic',
+  },
 });
 
 export default styles;
