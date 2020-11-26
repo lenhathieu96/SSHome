@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     borderColor: Color.primary,
     backgroundColor: 'white',
     margin: 10,
-    flex: 0.4,
+    flex: 0.5,
   },
   btnDeny__Text: {
     color: Color.primary,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   btnAccept: {
     backgroundColor: Color.primary,
     margin: 10,
-    flex: 0.4,
+    flex: 0.5,
   },
   btnAccept__Text: {
     color: 'white',

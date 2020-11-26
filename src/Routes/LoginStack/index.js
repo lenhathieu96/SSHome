@@ -128,7 +128,6 @@ export default function LoginStacks() {
           headerStyle: {
             elevation: 0,
             shadowOpacity: 0,
-            backgroundColor: 'transparent',
           },
           headerLeft: () => (
             <Icon.Button

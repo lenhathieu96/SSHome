@@ -8,7 +8,7 @@ const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 export const getCurrentWeather = async (lat, long) => {
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APPID}`;
   try {
-    const storageID = await AsyncStorage.getItem('@homeID');
+    const storageID = await AsyncStorage.getItem('@masterID');
     const home = await firestore()
       .collection('Home')
       .where('id', '==', storageID)
@@ -43,35 +43,39 @@ export const getCurrentWeather = async (lat, long) => {
 //Auth Management===================================================================================
 export const handleMasterSignUp = async (signupForm) => {
   const userDBRef = firestore().collection('Home');
-  const homeID = await userDBRef.doc(signupForm.homeID).get();
-  if (homeID.data()) {
-    try {
-      await AsyncStorage.setItem('@userRole', 'Master');
-      await auth().createUserWithEmailAndPassword(
-        signupForm.email,
-        signupForm.password,
-      );
-      let userData = {
-        id: auth().currentUser.uid,
-        name: signupForm.name,
-        email: signupForm.email,
-        phone: signupForm.phone,
-        password: signupForm.password,
-      };
-      await userDBRef.doc(signupForm.homeID).set(userData);
-    } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        return 'Email đã tồn tại';
-      }
+  const home = await userDBRef.doc(signupForm.homeID).get();
+  if (home.data()) {
+    if (!home.data().id) {
+      try {
+        await AsyncStorage.setItem('@userRole', 'Master');
+        await auth().createUserWithEmailAndPassword(
+          signupForm.email,
+          signupForm.password,
+        );
+        let userData = {
+          id: auth().currentUser.uid,
+          name: signupForm.name,
+          email: signupForm.email,
+          phone: signupForm.phone,
+          password: signupForm.password,
+        };
+        await userDBRef.doc(signupForm.homeID).set(userData);
+      } catch (error) {
+        if (error.code === 'auth/email-already-in-use') {
+          return {result: false, message: 'Email đã tồn tại'};
+        }
 
-      if (error.code === 'auth/invalid-email') {
-        return 'Email không hợp lệ';
+        if (error.code === 'auth/invalid-email') {
+          return {result: false, message: 'Email không hợp lệ'};
+        }
+        console.log(error);
+        return {result: false, message: 'Không thể tạo tài khoản'};
       }
-      console.log(error);
-      return 'Không thể tạo tài khoản';
+    } else {
+      return {result: false, message: 'Mã căn hộ đã được đăng ký'};
     }
   } else {
-    return 'Mã khách hàng không tồn tại';
+    return {result: false, message: 'Mã Căn Hộ không tồn tại'};
   }
 };
 
@@ -120,7 +124,7 @@ export const handleMemberLogin = async (phoneNumber, masterID) => {
     if (User.docs.length > 0) {
       try {
         await AsyncStorage.setItem('@userRole', 'Member');
-        await AsyncStorage.setItem('@homeID', home.docs[0].id);
+        await AsyncStorage.setItem('@masterID', masterID);
         const confirmation = await auth().signInWithPhoneNumber(`+84${phone}`);
         return {
           result: true,
@@ -156,9 +160,13 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   }
 };
 
-export const handleLogout = () => {
-  AsyncStorage.clear();
-  auth().signOut();
+export const handleLogout = async () => {
+  try {
+    await AsyncStorage.clear();
+    auth().signOut();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getMasterProfile = async (userID) => {
@@ -169,7 +177,7 @@ export const getMasterProfile = async (userID) => {
       .get();
     if (User.docs.length > 0) {
       const UserData = User.docs[0];
-      await AsyncStorage.setItem('@homeID', UserData.data().id);
+      await AsyncStorage.setItem('@masterID', UserData.data().id);
       const homeData = await database().ref(UserData.id).once('value');
       const rooms = homeData.val();
       delete rooms.DHT22;
@@ -177,6 +185,7 @@ export const getMasterProfile = async (userID) => {
         result: true,
         message: 'Lấy dữ liệu chủ căn hộ thành công',
         data: {
+          id: userID,
           name: UserData.data().name,
           phone: UserData.data().phone,
           email: UserData.data().email,
@@ -199,8 +208,7 @@ export const getMasterProfile = async (userID) => {
   }
 };
 
-export const getMemberProfile = async (phone) => {
-  const homeID = await AsyncStorage.getItem('@homeID');
+export const getMemberID = async (homeID, phone) => {
   const User = await firestore()
     .collection('Home')
     .doc(homeID)
@@ -208,39 +216,23 @@ export const getMemberProfile = async (phone) => {
     .where('phone', '==', phone)
     .get();
   if (User.docs.length > 0) {
-    const result = [];
-    const UserData = User.docs[0];
-    const userAvailableRooms = UserData.data().availableRooms;
-    const roomlist = await database().ref(homeID).once('value');
-
-    userAvailableRooms.forEach((roomID) => {
-      for (const room in roomlist.val()) {
-        if (room === roomID) {
-          result.push(roomlist.val()[room]);
-        }
-      }
-    });
-
     return {
       result: true,
       message: 'Lấy dữ liệu thành viên thành công',
-      data: {
-        name: UserData.data().name,
-        phone: UserData.data().phone,
-        email: UserData.data().email,
-        availableRooms: result,
-      },
+      data: User.docs[0].id,
     };
+  } else {
+    return {result: false, message: 'Lấy dữ liệu thành viên thất bại'};
   }
 };
 
 export const uploadMasterAvatar = async (imageURI) => {
-  const storageID = await AsyncStorage.getItem('@homeID');
+  const storageID = await AsyncStorage.getItem('@masterID');
   const home = await firestore()
     .collection('Home')
     .where('id', '==', storageID)
     .get();
-  if (home.docs[0]) {
+  if (home.docs.length > 0) {
     const reference = storage().ref(`/${home.docs[0].id}/Master`);
     try {
       await reference.putFile(imageURI);
@@ -259,19 +251,56 @@ export const uploadMasterAvatar = async (imageURI) => {
       return {result: false, mesage: 'Cập Nhập thất bại'};
     }
   } else {
-    return {result: false, mesage: 'Cập Nhập thất bại'};
+    return {
+      result: false,
+      message: 'Không tồn tại tài khoản chủ căn hộ',
+    };
+  }
+};
+
+export const uploadMemberAvatar = async (memberID, imageURI) => {
+  const storageID = await AsyncStorage.getItem('@masterID');
+  const home = await firestore()
+    .collection('Home')
+    .where('id', '==', storageID)
+    .get();
+  if (home.docs.length > 0) {
+    const reference = storage().ref(`/${home.docs[0].id}/Members/${memberID}`);
+    try {
+      await reference.putFile(imageURI);
+      const URL = await reference.getDownloadURL();
+      await firestore()
+        .collection('Home')
+        .doc(home.docs[0].id)
+        .collection('Member')
+        .doc(memberID)
+        .update({avatar: URL});
+      return {
+        result: true,
+        message: 'Cập nhập thành công',
+        uri: URL,
+      };
+    } catch (error) {
+      console.log(error);
+      return {result: false, mesage: 'Cập Nhập thất bại'};
+    }
+  } else {
+    return {
+      result: false,
+      message: 'Không tồn tại tài khoản chủ căn hộ',
+    };
   }
 };
 
 //Member Management===================================================================================
 
 export const configMember = async (member, isUpdate) => {
-  const storageID = await AsyncStorage.getItem('@homeID');
+  const storageID = await AsyncStorage.getItem('@masterID');
   const home = await firestore()
     .collection('Home')
     .where('id', '==', storageID)
     .get();
-  if (home.docs[0]) {
+  if (home.docs.length > 0) {
     const Member = await firestore()
       .collection('Home')
       .doc(home.docs[0].id)
@@ -321,12 +350,12 @@ export const configMember = async (member, isUpdate) => {
 };
 
 export const deleteMember = async (memberID) => {
-  const storageID = await AsyncStorage.getItem('@homeID');
+  const storageID = await AsyncStorage.getItem('@masterID');
   const home = await firestore()
     .collection('Home')
     .where('id', '==', storageID)
     .get();
-  if (home.docs[0]) {
+  if (home.docs.length > 0) {
     try {
       await firestore()
         .collection('Home')

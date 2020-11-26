@@ -42,6 +42,7 @@ const BottomSheet = forwardRef((props, ref) => {
         setVisible(false);
         Keyboard.dismiss();
       }}
+      onBackdropPress={() => setVisible(false)}
       style={styles.bsContainer}>
       <KeyboardAvoidingView
         enabled

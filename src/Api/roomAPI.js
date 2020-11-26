@@ -20,40 +20,59 @@ export const findRealRoomID = async (storageID) => {
 
 export const addRoom = async (homeID, name, imageURI, isCustomImage) => {
   const roomID = `R${homeID.slice(2, 5)}${createID()}`;
-  try {
-    const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
-    let URL;
-    if (isCustomImage) {
-      await reference.putFile(imageURI);
-      URL = await reference.getDownloadURL();
-    } else {
-      URL = imageURI;
-    }
-    let roomData = {
-      [roomID]: {
-        name,
-        id: roomID,
-        background: URL,
-      },
-    };
-    await database().ref(homeID).update(roomData);
-    return {
-      result: true,
-      message: 'Tạo phòng thành công',
-      data: roomData[roomID],
-    };
-  } catch (error) {
-    console.log(error);
-    return {result: false, message: 'Tạo phòng thất bại'};
-  }
+  console.log(homeID)
+  const room = await database().ref(homeID).once('value')
+  console.log(room.val());
+  // try {
+  //   const reference = storage().ref(`/${homeID}/Rooms/${roomID}`);
+  //   let URL;
+  //   if (isCustomImage) {
+  //     await reference.putFile(imageURI);
+  //     URL = await reference.getDownloadURL();
+  //   } else {
+  //     URL = imageURI;
+  //   }
+  //   let roomData = {
+  //     [roomID]: {
+  //       name,
+  //       id: roomID,
+  //       background: URL,
+  //     },
+  //   };
+  //   await database().ref(homeID).update(roomData);
+  //   return {
+  //     result: true,
+  //     message: 'Tạo phòng thành công',
+  //     data: roomData[roomID],
+  //   };
+  // } catch (error) {
+  //   console.log(error);
+  //   return {result: false, message: 'Tạo phòng thất bại'};
+  // }
 };
 
 export const deleteRoom = async (homeID, roomID) => {
   try {
     await database().ref(`${homeID}/${roomID}`).remove();
+    const user = await firestore()
+      .collection('Home')
+      .doc(homeID)
+      .collection('Member')
+      .get();
+    for (let i = 0; i < user.size; i++) {
+      await firestore()
+        .collection('Home')
+        .doc(homeID)
+        .collection('Member')
+        .doc(user.docs[i].id)
+        .update({
+          availableRooms: firestore.FieldValue.arrayRemove(roomID),
+        });
+    }
+    return {result: true, message: 'Xóa phòng thành công'};
   } catch (error) {
     console.log(error);
-    return {result: false, message: 'Tạo phòng thất bại'};
+    return {result: false, message: 'Xóa phòng Thất bại'};
   }
 };
 

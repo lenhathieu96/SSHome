@@ -10,7 +10,7 @@ import BottomSheet from '../../../../Components/Modal/BottomSheet';
 import styles from './styles/index.css';
 
 const BSVoice = React.forwardRef((props, ref) => {
-  const {isListening, handleResult, availableRooms} = props;
+  const {isListening, voiceControl, availableRooms} = props;
   const {height} = Dimensions.get('window');
 
   const [message, setMessage] = useState('');
@@ -43,13 +43,13 @@ const BSVoice = React.forwardRef((props, ref) => {
 
   const _onSpeechEnd = () => {
     console.log('_onSpeechEnd');
-    handleResult(message, []);
+    voiceControl(message, []);
   };
 
   const _onSpeechResults = (e) => {
     console.log('_onSpeechResults');
     setMessage(e.value[0]);
-    handleResult(e.value[0].toLowerCase(), availableRooms);
+    voiceControl(e.value[0].toLowerCase(), availableRooms);
   };
 
   return (

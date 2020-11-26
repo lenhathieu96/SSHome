@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {BoldText} from '../../../../Components/Text';
 
-import User from '../../../../Assets/Images/profile.png';
+import blankAvatar from '../../../../Assets/Images/profile.png';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 import styles from './styles/index.css';
@@ -57,7 +57,10 @@ export default function MemberList(props) {
             </View>
           ) : (
             <View style={styles.itemContainer}>
-              <Image source={User} style={styles.memberAvatar} />
+              <Image
+                source={item.avatar ? {uri: item.avatar} : blankAvatar}
+                style={styles.memberAvatar}
+              />
               <View style={styles.memberNameContainer}>
                 <BoldText style={styles.memberName}>{item.name}</BoldText>
               </View>

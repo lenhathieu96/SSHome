@@ -4,7 +4,7 @@ import Color from '../../../Utils/Color';
 const styles = StyleSheet.create({
   TextButton: {
     borderRadius: 50,
-    padding: 15,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color.primary,

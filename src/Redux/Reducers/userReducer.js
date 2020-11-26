@@ -1,5 +1,6 @@
 const initialState = {
   isLogin: false,
+  id: '',
   name: '',
   phone: '',
   email: '',
@@ -9,12 +10,13 @@ const initialState = {
 
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET LOGIN STATUS':
+    case 'SET_LOGIN_STATUS':
       return {...state, isLogin: action.payload};
 
-    case 'SET USER PROFILE':
+    case 'SET_USER_PROFILE':
       return {
         ...state,
+        id: action.payload.id,
         name: action.payload.name,
         phone: action.payload.phone.slice(3),
         email: action.payload.email,
@@ -22,10 +24,10 @@ const UserReducer = (state = initialState, action) => {
         availableRooms: action.payload.availableRooms,
       };
 
-    case 'SET AVAILABLE ROOM':
+    case 'SET_AVAILABLE_ROOM':
       return {...state, availableRooms: action.payload};
 
-    case 'SET AVATAR':
+    case 'SET_AVATAR':
       return {...state, avatar: action.payload};
 
     case 'UPDATE_AVAILABLE_ROOM':
@@ -33,7 +35,14 @@ const UserReducer = (state = initialState, action) => {
       rooms.push(action.payload);
       return {...state, availableRooms: rooms};
 
-    case 'SET ROOM AVATAR':
+    case 'REMOVE_ROOM':
+      let currentRoomList = [...state.availableRooms];
+      let newRoomList = currentRoomList.filter(
+        (room) => room.id !== action.payload,
+      );
+      return {...state, availableRooms: newRoomList};
+
+    case 'SET_ROOM_AVATAR':
       let availableRooms = [...state.availableRooms];
       let index = availableRooms.findIndex(
         (room) => room.id === action.payload.roomID,
@@ -44,6 +53,9 @@ const UserReducer = (state = initialState, action) => {
       } else {
         return {...state};
       }
+
+    case 'CLEAR_USER_DATA':
+      return {...initialState};
 
     default:
       return state;

@@ -20,9 +20,11 @@ import BSPersonal from './BSPersonal';
 import {useNotify, useAlert} from '../../../Hooks/useModal';
 import {
   uploadMasterAvatar,
+  uploadMemberAvatar,
   configMember,
   deleteMember,
 } from '../../../Api/userAPI';
+import {findRealRoomID} from '../../../Api/roomAPI';
 import {updateAvatar} from '../../../Redux/ActionCreators/userActions';
 
 import profileAvatar from '../../../Assets/Images/profile.png';
@@ -38,7 +40,7 @@ export default function Personal() {
   const dispatch = useDispatch();
   const notify = useNotify();
   const alert = useAlert();
-  const masterInfo = useSelector((state) => state.user);
+  const userInfo = useSelector((state) => state.user);
   const hardware = useSelector((state) => state.hardware);
 
   const [homeID, setHomeID] = useState();
@@ -67,23 +69,20 @@ export default function Personal() {
             });
           });
           setMemberList(users);
-          setLoading(false);
         });
       return () => subscriber();
     }
+    setLoading(false);
   }, [homeID, userRole, hardware.WFEnabled]);
 
   const getStorage = async () => {
     try {
-      const storage = await AsyncStorage.multiGet(['@homeID', '@userRole']);
-      const home = await firestore()
-        .collection('Home')
-        .where('id', '==', storage[0][1])
-        .get();
-      if (home.docs[0]) {
-        setHomeID(home.docs[0].id);
+      const storage = await AsyncStorage.multiGet(['@masterID', '@userRole']);
+      const response = await findRealRoomID(storage[0][1]);
+      if (response && response.result) {
+        setHomeID(response.data);
+        setUserRole(storage[1][1]);
       }
-      setUserRole(storage[1][1]);
     } catch (e) {
       console.log(e);
     }
@@ -122,7 +121,11 @@ export default function Personal() {
 
   const uploadImage = async (imageURI) => {
     setLoading(true);
-    const res = await uploadMasterAvatar(imageURI);
+
+    const res =
+      userRole === 'Master'
+        ? await uploadMasterAvatar(imageURI)
+        : await uploadMemberAvatar(userInfo.id, imageURI);
     if (res.result) {
       setLoading(false);
       dispatch(updateAvatar(res.uri));
@@ -132,15 +135,15 @@ export default function Personal() {
   };
 
   return (
-    <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
-      {/* Master Info */}
-      <View style={styles.userInfoContainer}>
+    <RootContainer
+      safeArea={false}
+      style={userRole === 'Master' ? styles.masterRoot : styles.memberRoot}>
+      {/* User Info */}
+      <View style={[styles.userInfoContainer]}>
         <View style={styles.avatarContainer}>
           <ImageBackground
             source={
-              masterInfo.avatar !== ''
-                ? {uri: masterInfo.avatar}
-                : profileAvatar
+              userInfo.avatar !== '' ? {uri: userInfo.avatar} : profileAvatar
             }
             resizeMode="cover"
             style={styles.avatar}>
@@ -184,16 +187,26 @@ export default function Personal() {
           <View style={styles.infoContainer}>
             <View style={styles.txtInfoContainer}>
               <BoldText>Tên: </BoldText>
-              <Text>{masterInfo.name}</Text>
+              <Text>{userInfo.name}</Text>
             </View>
-            <View style={styles.txtInfoContainer}>
-              <BoldText>Số thành viên: </BoldText>
-              <Text>{memberList.length}</Text>
-            </View>
-            <View style={styles.txtInfoContainer}>
-              <BoldText>Email: </BoldText>
-              <Text>{masterInfo.email}</Text>
-            </View>
+            {userRole !== 'Master' ? (
+              <View style={styles.txtInfoContainer}>
+                <BoldText>Số điện thoại: </BoldText>
+                <Text>{userInfo.phone}</Text>
+              </View>
+            ) : (
+              <View style={styles.txtInfoContainer}>
+                <BoldText>Số thành viên: </BoldText>
+                <Text>{memberList.length}</Text>
+              </View>
+            )}
+
+            {userRole !== 'Master' ? null : (
+              <View style={styles.txtInfoContainer}>
+                <BoldText>Email: </BoldText>
+                <Text>{userInfo.email}</Text>
+              </View>
+            )}
           </View>
         )}
       </View>
@@ -230,7 +243,7 @@ export default function Personal() {
         <BSPersonal
           ref={BSPersonalRef}
           onConfigMember={onConfigMember}
-          roomList={masterInfo.availableRooms}
+          roomList={userInfo.availableRooms}
           memberProfile={chosenUser}
         />
       ) : null}

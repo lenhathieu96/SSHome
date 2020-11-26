@@ -6,7 +6,7 @@ import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
   headerContainer: {
     flex: 0.4,
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-end',
   },
   btnContainer: {
     justifyContent: 'flex-end',

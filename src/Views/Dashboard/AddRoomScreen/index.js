@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -15,6 +15,8 @@ import TextInput from '../../../Components/TextInput';
 import TextButton from '../../../Components/TextButton';
 import IconButton from '../../../Components/IconButton';
 import BSUploadImage from '../../../Components/Modal/BSUploadImage';
+
+import {findRealRoomID} from '../../../Api/roomAPI';
 
 import {useNotify} from '../../../Hooks/useModal';
 import {addRoom} from '../../../Api/roomAPI';
@@ -39,6 +41,7 @@ export default function AddRoomScreen() {
   const [chosenImg, chooseImg] = useState(0);
   const [customImg, setCustomImg] = useState();
   const [txtError, setTxtError] = useState('');
+  const [homeID, setHomeID] = useState('');
 
   const uploadImage = (imageURI) => {
     setCustomImg(imageURI);
@@ -46,8 +49,25 @@ export default function AddRoomScreen() {
     BSChangeImageRef.current.close();
   };
 
+  useEffect(() => {
+    getStorage();
+  }, []);
+
+  const getStorage = async () => {
+    try {
+      const storage = await AsyncStorage.getItem('@masterID');
+      if (storage) {
+        const response = await findRealRoomID(storage);
+        if (response && response.result) {
+          setHomeID(response.data);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const onAddRoom = async () => {
-    const homeID = await AsyncStorage.getItem('@homeID');
     if (homeID) {
       if (!roomName) {
         setTxtError('Tên phòng không đưọc để trống');

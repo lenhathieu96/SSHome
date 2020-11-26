@@ -1,20 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Vibration, Animated} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Icon from 'react-native-vector-icons/Feather';
+import {useFocusEffect} from '@react-navigation/native';
 
 import * as fontSize from '../../../Utils/FontSize';
-import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
 
 export default function QRCodeScreen({navigation, route}) {
   const {isFromMasterSignUp} = route.params;
 
-  const [opacity, setOpacity] = useState(new Animated.Value(0));
+  const opacity = new Animated.Value(0);
+  const [shouldReadBarcode, setReadBarcode] = useState(true);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     fadeIcon();
-  }, []);
+    setReadBarcode(true);
+  });
 
   const fadeIcon = () => {
     Animated.timing(opacity, {
@@ -36,11 +38,15 @@ export default function QRCodeScreen({navigation, route}) {
         style={styles.camera}
         type={RNCamera.Constants.Type.back}
         flashMode={RNCamera.Constants.FlashMode.on}
+        captureAudio={false}
         onBarCodeRead={(qrcode) => {
-          Vibration.vibrate();
-          navigation.navigate(isFromMasterSignUp ? 'signup' : 'member', {
-            qrcode: qrcode.data,
-          });
+          if (shouldReadBarcode) {
+            Vibration.vibrate();
+            navigation.navigate(isFromMasterSignUp ? 'signup' : 'member', {
+              qrcode: qrcode.data,
+            });
+            setReadBarcode(false);
+          }
         }}>
         <View style={styles.QRMask}>
           <View style={styles.QRMask_CornerTopRight} />

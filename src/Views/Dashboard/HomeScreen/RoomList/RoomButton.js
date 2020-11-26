@@ -13,7 +13,7 @@ export default function RoomButton(props) {
   const {onPress, onLongPress, roomData, opacity, translateY} = props;
   return (
     <TouchableWithoutFeedback
-      onLongPress={() => onLongPress(roomData.id)}
+      onLongPress={() => onLongPress(roomData)}
       onPress={() => onPress(roomData)}>
       <Animated.View
         style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>

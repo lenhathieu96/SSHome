@@ -5,6 +5,14 @@ import Color from '../../../../Utils/Color';
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
+  masterRoot: {
+    justifyContent: 'space-between',
+  },
+
+  memberRoot: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   userInfoContainer: {
     flex: 0.4,
     padding: 5,

@@ -42,9 +42,9 @@ export default function SignUpScreen({navigation, route}) {
   });
 
   const onSignup = async (values) => {
-    const result = await handleMasterSignUp(values);
-    if (result) {
-      setSignupError(`Đăng ký không thành công, ${result} !`);
+    const response = await handleMasterSignUp(values);
+    if (response && !response.result) {
+      setSignupError(`Đăng ký không thành công, ${response.message} !`);
     }
   };
 

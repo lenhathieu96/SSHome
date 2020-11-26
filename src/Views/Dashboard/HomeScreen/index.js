@@ -1,24 +1,35 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-import {useAlert, useNotify} from '../../../Hooks/useModal';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 
-import {setUserProfile} from '../../../Redux/ActionCreators/userActions';
+import {useAlert, useNotify} from '../../../Hooks/useModal';
+import {
+  setUserProfile,
+  removeRoom,
+  clearUserData,
+} from '../../../Redux/ActionCreators/userActions';
 import {
   getMasterProfile,
-  getMemberProfile,
+  getMemberID,
   getCurrentWeather,
+  handleLogout,
 } from '../../../Api/userAPI';
-import {updateStatusDevice, findRealRoomID} from '../../../Api/roomAPI';
+import {
+  updateStatusDevice,
+  findRealRoomID,
+  deleteRoom,
+} from '../../../Api/roomAPI';
 
 import RootContainer from '../../../Components/RootContainer';
 import {BoldText} from '../../../Components/Text';
 import IconButton from '../../../Components/IconButton';
 import {PlaceholderMedia} from '../../../Components/PlaceHolder';
+import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
 
 import Header from './Header';
 import Weather from './Weather';
@@ -40,50 +51,117 @@ export default function HomeScreen({navigation}) {
   const [weather, setWeather] = useState({});
   const [isListening, setListening] = useState(false);
   const [homeID, setHomeID] = useState();
+  const [userRole, setUserRole] = useState();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [chosenRoom, setChosenRoom] = useState({});
+  const [memberID, setMemberID] = useState('');
 
   useEffect(() => {
     if (hardware.WFEnabled) {
-      getHomeID();
-      getUserProflie();
+      getRoleStorage();
       getWeather();
+      if (userRole === 'Master' && homeID) {
+        getMasterData();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hardware.WFEnabled]);
+  }, [hardware.WFEnabled, userRole, homeID]);
 
-  const getHomeID = async () => {
-    const storageID = await AsyncStorage.getItem('@homeID');
-    if (storageID) {
-      const response = await findRealRoomID(storageID);
+  //get realtime member data
+  useEffect(() => {
+    if (hardware.WFEnabled && userRole !== 'Master') {
+      getMemberData();
+      if (homeID && memberID) {
+        const subscriber = firestore()
+          .collection('Home')
+          .doc(homeID)
+          .collection('Member')
+          .doc(memberID)
+          .onSnapshot((UserData) => {
+            if (UserData.data()) {
+              const result = [];
+              const userAvailableRooms = UserData.data().availableRooms;
+              database()
+                .ref(homeID)
+                .once('value')
+                .then((roomList) => {
+                  userAvailableRooms.forEach((roomID) => {
+                    for (const room in roomList.val()) {
+                      if (room === roomID) {
+                        result.push(roomList.val()[room]);
+                      }
+                    }
+                  });
+                  let data = {
+                    id: UserData.id,
+                    name: UserData.data().name,
+                    phone: UserData.data().phone,
+                    email: UserData.data().email,
+                    avatar: UserData.data().avatar,
+                    availableRooms: result,
+                  };
+                  dispatch(setUserProfile(data));
+                });
+            } else {
+              if (auth().currentUser) {
+                handleLogout();
+                dispatch(clearUserData());
+              }
+            }
+          });
+        return () => subscriber();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hardware.WFEnabled, userRole, homeID, memberID]);
+
+  const getRoleStorage = async () => {
+    try {
+      const roleStorage = await AsyncStorage.getItem('@userRole');
+      const response = await findRealRoomID(auth().currentUser.uid);
       if (response && response.result) {
         setHomeID(response.data);
-      } else {
-        alert('Không xác minh được mã căn hộ');
+        setUserRole(roleStorage);
       }
-    } else {
-      alert('Không tồn tại mã căn hộ');
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  const getUserProflie = async () => {
-    const currentUser = auth().currentUser;
-    const userRole = await AsyncStorage.getItem('@userRole');
-    if (userRole) {
-      const response =
-        userRole === 'Master'
-          ? await getMasterProfile(currentUser.uid)
-          : await getMemberProfile(currentUser.phoneNumber);
-      if (response && response.result) {
-        dispatch(setUserProfile(response.data));
-      }
+  const getMemberData = async () => {
+    const response = await getMemberID(homeID, auth().currentUser.phoneNumber);
+    if (response && response.result) {
+      setMemberID(response.data);
+    }
+  };
+
+  const getMasterData = async () => {
+    const response = await getMasterProfile(auth().currentUser.uid);
+    if (response && response.result) {
+      dispatch(setUserProfile(response.data));
     }
   };
 
   const onRoomLongPress = async (roomID) => {
-    // const homeID = await AsyncStorage.getItem('homeID');
-    // const userRole = await AsyncStorage.getItem('userRole');
-    // if(userRole==='Master'){
-    //   const response = await deleteRoom(homeID, roomID);
-    // }
+    setChosenRoom(roomID);
+    toogleConfirmModal(true);
+  };
+
+  const onDeleteRoom = async () => {
+    if (userRole === 'Master') {
+      try {
+        const response = await deleteRoom(homeID, chosenRoom.id);
+        if (response && response.result) {
+          dispatch(removeRoom(chosenRoom.id));
+          notify('Xóa phòng thành công', true);
+        } else {
+          alert('Xóa phòng thất bại', false);
+        }
+      } catch (error) {
+        notify('Xóa phòng thất bại', false);
+      }
+      toogleConfirmModal(false);
+    }
   };
 
   const onRoomPress = (roomData) => {
@@ -125,7 +203,7 @@ export default function HomeScreen({navigation}) {
     }
   };
 
-  const handleResult = (result, rooms) => {
+  const voiceControl = (result, rooms) => {
     if (result === '') {
       BSVoiceRef.current.close();
       setListening(false);
@@ -185,6 +263,10 @@ export default function HomeScreen({navigation}) {
     BSVoiceRef.current.close();
   };
 
+  const toogleConfirmModal = (isShowConfirmModal) => {
+    setShowConfirm(isShowConfirmModal);
+  };
+
   return (
     <RootContainer safeArea={false} style={{justifyContent: 'space-between'}}>
       <Header navigation={navigation} />
@@ -217,13 +299,23 @@ export default function HomeScreen({navigation}) {
           }}
         />
       </SafeAreaView>
-      {/* BSBlueTooth */}
+      {/* BSVoice */}
       {userProfile.availableRooms && userProfile.availableRooms.length > 0 ? (
         <BSVoice
           ref={BSVoiceRef}
           isListening={isListening}
-          handleResult={handleResult}
+          voiceControl={voiceControl}
           availableRooms={userProfile.availableRooms}
+        />
+      ) : null}
+      {userRole === 'Master' ? (
+        <ConfirmDelModal
+          isVisible={showConfirm}
+          toggleModal={toogleConfirmModal}
+          title={`${
+            chosenRoom ? chosenRoom.name : ''
+          } sẽ bị xoá khỏi danh sách phòng`}
+          onAccept={onDeleteRoom}
         />
       ) : null}
     </RootContainer>
