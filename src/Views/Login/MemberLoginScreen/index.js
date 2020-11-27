@@ -20,6 +20,19 @@ export default function MemberLoginScreen({navigation, route}) {
   const [phoneNumber, setPhoneNUmber] = useState('0707366517');
   const [homeID, setHomeID] = useState();
   const [loginError, setloginError] = useState('');
+  const [isLoading, setLoading] = useState(false);
+
+  const onLogin = async () => {
+    setLoading(true);
+    const response = await handleMemberLogin(phoneNumber, homeID);
+    console.log(response.message);
+    if (!response.result) {
+      setloginError(`Đăng nhập không thành công, ${response.message} !`);
+    } else {
+      navigation.navigate('otp', {confirmation: response.data});
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     inputRef.current.focus();
@@ -69,6 +82,7 @@ export default function MemberLoginScreen({navigation, route}) {
       <View style={{padding: 10}}>
         <ErrorText style={styles.txtError}>{loginError}</ErrorText>
         <TextButton
+          isLoading={isLoading}
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
@@ -77,15 +91,7 @@ export default function MemberLoginScreen({navigation, route}) {
             } else if (!homeID) {
               setloginError('Mã xác nhận không tồn tại');
             } else {
-              const response = await handleMemberLogin(phoneNumber, homeID);
-              console.log(response.message);
-              if (!response.result) {
-                setloginError(
-                  `Đăng nhập không thành công, ${response.message} !`,
-                );
-              } else {
-                navigation.navigate('otp', {confirmation: response.data});
-              }
+              onLogin();
             }
           }}
         />

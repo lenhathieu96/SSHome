@@ -16,6 +16,16 @@ export default function MemberLoginScreen({navigation, route}) {
 
   const [OTP, setOTP] = useState('');
   const [loginError, setloginError] = useState('');
+  const [isLoading, setLoading] = useState(false);
+
+  const onConfirm = async () => {
+    setLoading(true);
+    const response = await confirmOTP(confirmation, OTP);
+    if (response && !response.result) {
+      setloginError(response.message);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     inputRef.current.focus();
@@ -40,10 +50,11 @@ export default function MemberLoginScreen({navigation, route}) {
       <View style={{padding: 10}}>
         <ErrorText style={styles.txtError}>{loginError}</ErrorText>
         <TextButton
+          isLoading={isLoading}
           style={styles.btnLogin}
           text="Đăng Nhập"
           onPress={async () => {
-            const response = await confirmOTP(confirmation, OTP);
+            onConfirm();
           }}
         />
       </View>

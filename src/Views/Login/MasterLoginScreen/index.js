@@ -10,6 +10,8 @@ import {
   handleMasterForgotPassword,
 } from '../../../Api/userAPI';
 
+import RecoveryModal from './RecoveryModal';
+
 import logoImg from '../../../Assets/Images/logo.jpg';
 import styles from './styles/index.css';
 
@@ -17,13 +19,30 @@ export default function MasterLoginScreen({navigation}) {
   const [email, setEmail] = useState('lenhathieu96@gmail.com');
   const [password, setPassword] = useState('Nhathieu96');
   const [loginError, setloginError] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const onLogin = async () => {
+    setLoading(true);
     const response = await handleMasterLogin(email, password);
     if (!response.result) {
       setloginError(`Đăng nhập không thành công, ${response.message} !`);
     } else {
       setloginError('');
+    }
+    setLoading(false);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const onConfirmRecovery = (email) => {
+    if (email) {
+      handleMasterForgotPassword('lenhathieu96@gmail.com');
+    } else {
+      setloginError('Email Không được để trống');
+      setModalVisible(false);
     }
   };
 
@@ -48,6 +67,7 @@ export default function MasterLoginScreen({navigation}) {
       </View>
       <ErrorText>{loginError}</ErrorText>
       <TextButton
+        isLoading={isLoading}
         style={styles.btnLogin}
         text="Đăng Nhập"
         onPress={() => {
@@ -59,11 +79,15 @@ export default function MasterLoginScreen({navigation}) {
           <Text style={styles.btnOption}>Đăng Ký Chủ Hộ</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => handleMasterForgotPassword('lenhathieu96@gmail.com')}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Text style={styles.btnOption}>Quên Mật Khẩu ?</Text>
         </TouchableOpacity>
       </View>
+      <RecoveryModal
+        isVisible={isModalVisible}
+        onCloseModal={closeModal}
+        onConfirmRecovery={onConfirmRecovery}
+      />
     </RootContainer>
   );
 }

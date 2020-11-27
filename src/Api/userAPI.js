@@ -144,10 +144,13 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   try {
     const res = await confirmation.confirm(OTPCode);
     if (res) {
-      console.log('login success', res);
+      return {result: true, message: 'Đăng nhập thành công'};
+    } else {
+      return {result: false, message: 'Đăng nhập thất bại'};
     }
   } catch (error) {
     console.log('OTP Auth Err', error);
+    return {result: false, message: 'Đăng nhập thất bại'};
   }
 };
 
