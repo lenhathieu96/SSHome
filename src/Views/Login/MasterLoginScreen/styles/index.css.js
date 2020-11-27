@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     flex: 0.25,
   },
   img: {
-    alignSelf: 'center',
     flex: 1,
     width: null,
     height: null,

@@ -3,6 +3,14 @@ import {StyleSheet} from 'react-native';
 import * as fontSize from '../../../../Utils/FontSize';
 import Color from '../../../../Utils/Color';
 const styles = StyleSheet.create({
+  imgContainer: {
+    flex: 0.25,
+  },
+  img: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
   body: {
     marginHorizontal: 10,
     flex: 0.3,

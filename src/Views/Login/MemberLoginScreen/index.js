@@ -1,6 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, TextInput} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import {View, TextInput, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Text, {ErrorText} from '../../../Components/Text';
@@ -11,6 +10,8 @@ import {handleMemberLogin} from '../../../Api/userAPI';
 
 import {bigger} from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
+
+import logoImg from '../../../Assets/Images/logo.jpg';
 import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
@@ -30,8 +31,8 @@ export default function MemberLoginScreen({navigation, route}) {
 
   return (
     <RootContainer safeArea={true}>
-      <View style={{flex: 0.25}}>
-        <Text>Chỗ này để logo</Text>
+      <View style={styles.imgContainer}>
+        <Image style={styles.img} source={logoImg} resizeMode="contain" />
       </View>
       <View style={styles.body}>
         <Text style={{marginHorizontal: 5, marginVertical: 10}}>

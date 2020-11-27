@@ -28,7 +28,7 @@ export default function MasterLoginScreen({navigation}) {
   };
 
   return (
-    <RootContainer safeArea={true} style={styles.root}>
+    <RootContainer safeArea={true}>
       <View style={styles.imgContainer}>
         <Image style={styles.img} source={logoImg} resizeMode="contain" />
       </View>

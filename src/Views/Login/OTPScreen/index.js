@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, TextInput} from 'react-native';
+import {View, TextInput, Image} from 'react-native';
 
 import Text, {ErrorText} from '../../../Components/Text';
 import TextButton from '../../../Components/TextButton';
@@ -7,6 +7,7 @@ import RootContainer from '../../../Components/RootContainer';
 
 import {confirmOTP} from '../../../Api/userAPI';
 
+import logoImg from '../../../Assets/Images/logo.jpg';
 import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
@@ -22,8 +23,8 @@ export default function MemberLoginScreen({navigation, route}) {
 
   return (
     <RootContainer safeArea={true}>
-      <View style={{flex: 0.25}}>
-        <Text>Chỗ này để logo</Text>
+      <View style={styles.imgContainer}>
+        <Image style={styles.img} source={logoImg} resizeMode="contain" />
       </View>
       <View style={styles.body}>
         <Text style={styles.txtInfo}>Nhập mã OTP gồm 6 chữ số</Text>
