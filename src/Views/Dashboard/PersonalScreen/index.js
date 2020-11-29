@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
+import auth from '@react-native-firebase/auth';
 
 import Text, {BoldText} from '../../../Components/Text';
 import ConfirmDelModal from '../../../Components/Modal/ConfirmDelModal';
@@ -45,6 +46,7 @@ export default function Personal() {
 
   const [homeID, setHomeID] = useState();
   const [userRole, setUserRole] = useState();
+  const [masterID, setMasterID] = useState('');
   const [memberList, setMemberList] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [chosenUser, setChosenUser] = useState({});
@@ -81,6 +83,7 @@ export default function Personal() {
       const response = await findRealRoomID(storage[0][1]);
       if (response && response.result) {
         setHomeID(response.data);
+        setMasterID(storage[0][1]);
         setUserRole(storage[1][1]);
       }
     } catch (e) {
@@ -232,10 +235,10 @@ export default function Personal() {
       ) : null}
 
       {/* Home ID */}
-      {userRole === 'Master' ? (
+      {userRole === 'Master' && masterID  ? (
         <SafeAreaView style={styles.QRCodeContainer}>
           <BoldText style={styles.title}>Mã Khách Hàng</BoldText>
-          <QRCode value={homeID} size={4 * fontSize.biggest} />
+          <QRCode value={masterID} size={4 * fontSize.biggest} />
         </SafeAreaView>
       ) : null}
 
