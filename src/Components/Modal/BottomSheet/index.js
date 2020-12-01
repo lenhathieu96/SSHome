@@ -44,31 +44,53 @@ const BottomSheet = forwardRef((props, ref) => {
       }}
       onBackdropPress={() => setVisible(false)}
       style={styles.bsContainer}>
-      <KeyboardAvoidingView
-        enabled
-        behavior={Platform.OS === 'android' ? undefined : 'position'}>
-        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
-          <View
-            style={[
-              styles.container,
-              {height: modalHeight ? modalHeight : 0.8 * height},
-            ]}>
-            <View style={styles.header}>
-              <IconButton
-                iconName={swipeable ? 'chevron-down' : 'x'}
-                iconSize={1.2 * fontSize.biggest}
-                iconColor={Color.secondary}
-                style={{alignSelf: swipeable ? 'center' : 'flex-end'}}
-                onPress={() => {
-                  setVisible(false);
-                  Keyboard.dismiss();
-                }}
-              />
-            </View>
-            <SafeAreaView style={styles.body}>{renderContent()}</SafeAreaView>
+      {Platform.OS === 'ios' ? (
+        <View
+          style={[
+            styles.container,
+            {height: modalHeight ? modalHeight : 0.8 * height},
+          ]}>
+          <View style={styles.header}>
+            <IconButton
+              iconName={swipeable ? 'chevron-down' : 'x'}
+              iconSize={1.2 * fontSize.biggest}
+              iconColor={Color.secondary}
+              style={{alignSelf: swipeable ? 'center' : 'flex-end'}}
+              onPress={() => {
+                setVisible(false);
+                Keyboard.dismiss();
+              }}
+            />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <SafeAreaView style={styles.body}>{renderContent()}</SafeAreaView>
+        </View>
+      ) : (
+        <KeyboardAvoidingView
+          enabled
+          behavior={Platform.OS === 'android' ? undefined : 'position'}>
+          <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
+            <View
+              style={[
+                styles.container,
+                {height: modalHeight ? modalHeight : 0.8 * height},
+              ]}>
+              <View style={styles.header}>
+                <IconButton
+                  iconName={swipeable ? 'chevron-down' : 'x'}
+                  iconSize={1.2 * fontSize.biggest}
+                  iconColor={Color.secondary}
+                  style={{alignSelf: swipeable ? 'center' : 'flex-end'}}
+                  onPress={() => {
+                    setVisible(false);
+                    Keyboard.dismiss();
+                  }}
+                />
+              </View>
+              <SafeAreaView style={styles.body}>{renderContent()}</SafeAreaView>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
     </Modal>
   );
 });

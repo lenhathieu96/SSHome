@@ -2,8 +2,8 @@ import React from 'react';
 
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-import HomeScreen from '../../../Views/Dashboard/HomeScreen';
-import RoomScreen from '../../../Views/Dashboard/RoomScreen';
+import HomeScreen from '../../../Views/HomeScreen';
+import RoomScreen from '../../../Views/RoomScreen';
 
 const HomeStacks = createSharedElementStackNavigator();
 

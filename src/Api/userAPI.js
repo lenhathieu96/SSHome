@@ -179,12 +179,15 @@ export const getMasterProfile = async (userID) => {
         result: true,
         message: 'Lấy dữ liệu chủ căn hộ thành công',
         data: {
-          id: userID,
-          name: UserData.data().name,
-          phone: UserData.data().phone,
-          email: UserData.data().email,
-          avatar: UserData.data().avatar,
-          availableRooms: Object.values(rooms),
+          userInfo: {
+            id: userID,
+            name: UserData.data().name,
+            phone: UserData.data().phone,
+            email: UserData.data().email,
+            avatar: UserData.data().avatar,
+          },
+          homeID: UserData.data().id,
+          // availableRooms: Object.values(rooms),
         },
       };
     } else {
@@ -288,58 +291,49 @@ export const uploadMemberAvatar = async (memberID, imageURI) => {
 
 //Member Management===================================================================================
 
-export const configMember = async (member, isUpdate) => {
-  const storageID = await AsyncStorage.getItem('@masterID');
-  const home = await firestore()
+export const configMember = async (member, isUpdate, homeID) => {
+  const Member = await firestore()
     .collection('Home')
-    .where('id', '==', storageID)
+    .doc(homeID)
+    .collection('Member')
+    .doc(member.id)
     .get();
-  if (home.docs.length > 0) {
-    const Member = await firestore()
-      .collection('Home')
-      .doc(home.docs[0].id)
-      .collection('Member')
-      .doc(member.id)
-      .get();
-    if (isUpdate) {
-      if (Member.data()) {
-        try {
-          await firestore()
-            .collection('Home')
-            .doc(home.docs[0].id)
-            .collection('Member')
-            .doc(member.id)
-            .update(member);
-          return {result: true, message: 'Cập Nhập thành viên thành công'};
-        } catch (error) {
-          console.log(error);
-          return {result: false, message: 'Cập Nhập thành viên thất bại'};
-        }
-      }
-    } else {
-      //add new member
-      if (Member.data()) {
-        return {result: false, message: 'Số điện thoại đã tồn tại'};
-      } else {
-        let newMember = {
-          ...member,
-          phone: `+84${member.phone.slice(1)}`,
-        };
-        try {
-          await firestore()
-            .collection('Home')
-            .doc(home.docs[0].id)
-            .collection('Member')
-            .add(newMember);
-          return {result: true, message: 'Tạo thành viên thành công'};
-        } catch (error) {
-          console.log(error);
-          return {result: false, message: 'Tạo thành viên thất bại'};
-        }
+  if (isUpdate) {
+    if (Member.data()) {
+      try {
+        await firestore()
+          .collection('Home')
+          .doc(homeID)
+          .collection('Member')
+          .doc(member.id)
+          .update(member);
+        return {result: true, message: 'Cập Nhập thành viên thành công'};
+      } catch (error) {
+        console.log(error);
+        return {result: false, message: 'Cập Nhập thành viên thất bại'};
       }
     }
   } else {
-    return {result: false, message: 'Mã chủ căn hộ không tồn tại'};
+    //add new member
+    if (Member.data()) {
+      return {result: false, message: 'Số điện thoại đã tồn tại'};
+    } else {
+      let newMember = {
+        ...member,
+        phone: `+84${member.phone.slice(1)}`,
+      };
+      try {
+        await firestore()
+          .collection('Home')
+          .doc(homeID)
+          .collection('Member')
+          .add(newMember);
+        return {result: true, message: 'Tạo thành viên thành công'};
+      } catch (error) {
+        console.log(error);
+        return {result: false, message: 'Tạo thành viên thất bại'};
+      }
+    }
   }
 };
 

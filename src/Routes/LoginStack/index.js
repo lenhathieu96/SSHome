@@ -3,12 +3,12 @@ import {Platform} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import IntroScreen from '../../Views/Login/IntroScreen';
-import MasterLoginScreen from '../../Views/Login/MasterLoginScreen';
-import MemberLoginScreen from '../../Views/Login/MemberLoginScreen';
-import OTPScreen from '../../Views/Login/OTPScreen';
-import SignUpScreen from '../../Views/Login/SignUpScreen';
-import QRCodeScreen from '../../Views/Login/QRCodeScreen';
+import IntroScreen from '../../Views/IntroScreen';
+import MasterLoginScreen from '../../Views/MasterLoginScreen';
+import MemberLoginScreen from '../../Views/MemberLoginScreen';
+import OTPScreen from '../../Views/OTPScreen';
+import SignUpScreen from '../../Views/SignUpScreen';
+import QRCodeScreen from '../../Views/QRCodeScreen';
 
 import Color from '../../Utils/Color';
 import * as fontSize from '../../Utils/FontSize';

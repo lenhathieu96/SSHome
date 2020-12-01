@@ -21,7 +21,6 @@ const UserReducer = (state = initialState, action) => {
         phone: action.payload.phone.slice(3),
         email: action.payload.email,
         avatar: action.payload.avatar,
-        availableRooms: action.payload.availableRooms,
       };
 
     case 'SET_AVAILABLE_ROOM':

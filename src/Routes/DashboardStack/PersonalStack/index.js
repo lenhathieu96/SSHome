@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 
-import PersonalScreen from '../../../Views/Dashboard/PersonalScreen';
+import PersonalScreen from '../../../Views/PersonalScreen';
 
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
