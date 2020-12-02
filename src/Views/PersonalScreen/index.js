@@ -106,6 +106,7 @@ export default function Personal() {
     setLoading(true);
     const response = await deleteMember(chosenUser.id);
     notify(response.message, response.result);
+    setLoading(false);
   };
 
   const onConfigMember = async (member, isUpdate) => {

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   userInfoContainer: {
-    flex: 0.4,
+    flex: 0.45,
     padding: 5,
     alignItems: 'center',
   },
