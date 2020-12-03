@@ -1,7 +1,6 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-const {height} = Dimensions.get('window');
-
+import Color from '../../../../Utils/Color';
 import * as fontSize from '../../../../Utils/FontSize';
 
 const styles = StyleSheet.create({
@@ -10,6 +9,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
+    color: Color.blue,
     fontSize: fontSize.larger,
     alignSelf: 'center',
     marginVertical: 10,
@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  listenContainer: {
+    flex: 1,
   },
 });
 

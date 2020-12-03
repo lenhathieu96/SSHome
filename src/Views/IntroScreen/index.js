@@ -1,15 +1,24 @@
 import React from 'react';
-import {ImageBackground, View} from 'react-native';
+import {View} from 'react-native';
+import LottieView from 'lottie-react-native';
 
 import TextButton from '../../Components/TextButton';
 
-import IntroBackground from '../../Assets/Images/introBackground.jpg';
 import styles from './styles/index.css';
 import Color from '../../Utils/Color';
+import RootContainer from '../../Components/RootContainer';
+import {BoldText} from '../../Components/Text';
 
 export default function IntroScreen({navigation}) {
   return (
-    <ImageBackground source={IntroBackground} style={styles.root}>
+    <RootContainer safeArea={false} style={styles.root}>
+      <View style={styles.lottie}>
+        <LottieView
+          source={require('../../Assets/Images/Lottie/introLottie.json')}
+          autoPlay
+          loop
+        />
+      </View>
       <View style={styles.btnContainer}>
         <TextButton
           style={styles.btn}
@@ -23,6 +32,6 @@ export default function IntroScreen({navigation}) {
           onPress={async () => navigation.navigate('member')}
         />
       </View>
-    </ImageBackground>
+    </RootContainer>
   );
 }

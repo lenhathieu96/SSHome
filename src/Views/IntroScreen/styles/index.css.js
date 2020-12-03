@@ -1,13 +1,20 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import Color from '../../../Utils/Color';
+import * as fontSize from '../../../Utils/FontSize';
 
 const styles = StyleSheet.create({
-  root: {
+  lottie: {
     flex: 1,
-    justifyContent: 'flex-end',
+  },
+  title: {
+    fontSize: fontSize.biggest,
+    alignSelf: 'center',
+    color: Color.secondary,
   },
   btnContainer: {
+    flex: 0.3,
+    marginBottom: 10,
     justifyContent: 'flex-end',
   },
   btnMember: {

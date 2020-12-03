@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   body: {
     marginHorizontal: 10,
-    flex: 0.3,
+    flex: 0.25,
     justifyContent: 'space-evenly',
   },
   btnLogin: {

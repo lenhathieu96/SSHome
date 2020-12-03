@@ -70,8 +70,7 @@ export default function HomeScreen({navigation}) {
             delete rooms.DHT22;
             dispatch(setAvailableRoom(Object.values(rooms)));
           });
-        return () =>
-          database().ref(auth().currentUser.uid).off('value', roomsSubcribe);
+        return () => database().ref(homeID).off('value', roomsSubcribe);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

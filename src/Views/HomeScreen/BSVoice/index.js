@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import {View, Dimensions} from 'react-native';
+import LottieView from 'lottie-react-native';
 
 import Voice from '@react-native-community/voice';
 
@@ -59,15 +60,21 @@ const BSVoice = React.forwardRef((props, ref) => {
       ref={ref}
       renderContent={() => (
         <View style={styles.Body}>
-          <BoldText style={styles.title}>
-            {isListening ? 'Đang Lắng Nghe' : ''}
-          </BoldText>
-          {message !== '' ? (
+          {message !== '' && !isListening ? (
             <View style={styles.voiceContainer}>
               <Text>Bạn vừa nói: </Text>
               <BoldText style={styles.title}>{message}</BoldText>
             </View>
-          ) : null}
+          ) : (
+            <View style={styles.listenContainer}>
+              <BoldText style={styles.title}>Đang Lắng Nghe</BoldText>
+              <LottieView
+                source={require('../../../Assets/Images/Lottie/voiceLottie.json')}
+                autoPlay
+                loop
+              />
+            </View>
+          )}
         </View>
       )}
     />

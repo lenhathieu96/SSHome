@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 
 import Text, {ErrorText} from '../../Components/Text';
@@ -9,15 +9,21 @@ import {handleMasterLogin, handleMasterForgotPassword} from '../../Api/userAPI';
 
 import RecoveryModal from './RecoveryModal';
 
-import logoImg from '../../Assets/Images/logo.jpg';
+import logoImg from '../../Assets/Images/logo.png';
 import styles from './styles/index.css';
 
 export default function MasterLoginScreen({navigation}) {
+  const inputRef = useRef();
+
   const [email, setEmail] = useState('lenhathieu96@gmail.com');
   const [password, setPassword] = useState('Nhathieu96');
   const [loginError, setloginError] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const onLogin = async () => {
     setLoading(true);
@@ -50,6 +56,7 @@ export default function MasterLoginScreen({navigation}) {
       </View>
       <View style={styles.body}>
         <TextInput
+          ref={inputRef}
           value={email}
           onChangeText={(text) => setEmail(text)}
           label="Email"

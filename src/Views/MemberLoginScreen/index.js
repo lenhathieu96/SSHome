@@ -11,7 +11,7 @@ import {handleMemberLogin} from '../../Api/userAPI';
 import {bigger} from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
 
-import logoImg from '../../Assets/Images/logo.jpg';
+import logoImg from '../../Assets/Images/logo.png';
 import styles from './styles/index.css';
 
 export default function MemberLoginScreen({navigation, route}) {
