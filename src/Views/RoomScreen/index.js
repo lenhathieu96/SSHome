@@ -151,6 +151,7 @@ export default function RoomDetailScreen({navigation, route}) {
           <BoldText style={styles.roomTitle}>{room.name}</BoldText>
           <IconButton
             iconName="camera"
+            iconColor={Color.primary}
             onPress={() => BSChangeImageRef.current.open()}
           />
         </SafeAreaView>

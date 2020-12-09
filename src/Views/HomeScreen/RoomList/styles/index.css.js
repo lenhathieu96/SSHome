@@ -1,12 +1,13 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 import * as fontSize from '../../../../Utils/FontSize';
+import Color from '../../../../Utils/Color';
 
 const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   roomlist: {
-    marginBottom: -35,
+    marginBottom: -25,
   },
   BtnContainer: {
     height: 0.6 * height,
@@ -20,14 +21,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     position: 'relative',
     zIndex: 0,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderWidth: 0.5,
+    borderColor: Color.unactive,
   },
 
   imgBg: {

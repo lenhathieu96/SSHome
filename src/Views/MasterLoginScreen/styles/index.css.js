@@ -21,14 +21,16 @@ const styles = StyleSheet.create({
   body: {
     marginHorizontal: 10,
     flex: 0.25,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   btnLogin: {
     marginHorizontal: 10,
   },
   optionContainer: {
+    marginBottom: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
   },
   btnOption: {alignSelf: 'center', color: 'black'},
 });

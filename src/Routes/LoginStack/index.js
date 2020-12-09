@@ -32,7 +32,7 @@ export default function LoginStacks() {
             color: Color.primary,
             fontSize: fontSize.huge,
             fontFamily: 'MavenPro-Bold',
-            marginRight: 10,
+            marginLeft: Platform.OS === 'android' ? 10 : 0,
           },
           headerStyle: {
             elevation: 0,
@@ -62,7 +62,6 @@ export default function LoginStacks() {
             color: Color.primary,
             fontSize: fontSize.huge,
             fontFamily: 'MavenPro-Bold',
-            marginRight: 20,
           },
           headerStyle: {
             elevation: 0,
