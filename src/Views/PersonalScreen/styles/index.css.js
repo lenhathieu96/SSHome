@@ -14,15 +14,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   userInfoContainer: {
-    flex: 0.45,
+    flex: 0.4,
     padding: 5,
     alignItems: 'center',
   },
 
   avatarContainer: {
-    height: 0.5 * width,
-    width: 0.5 * width,
-    borderRadius: (0.5 * width) / 2,
+    height: 0.4 * width,
+    width: 0.4 * width,
+    borderRadius: (0.4 * width) / 2,
     overflow: 'hidden',
     borderWidth: 5,
     borderColor: Color.secondary,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
 
   memberListContainer: {
-    flex: 0.25,
+    flex: 0.3,
     justifyContent: 'space-between',
   },
 

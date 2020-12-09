@@ -6,13 +6,20 @@ const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   roomlist: {
-    marginBottom: -15,
+    marginBottom: -35,
   },
   BtnContainer: {
     height: 0.6 * height,
     width: 0.75 * width,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  imgContainer: {
+    width: 0.7 * width,
+    height: 0.58 * height,
+    borderRadius: 20,
+    position: 'relative',
+    zIndex: 0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -22,12 +29,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   imgBg: {
-    width: 0.7 * width,
-    height: 0.58 * height,
+    flex: 1,
+    alignSelf: 'stretch',
+    width: null,
     borderRadius: 20,
-    position: 'relative',
-    zIndex: 0,
   },
   roomTitle: {
     fontSize: fontSize.huge,

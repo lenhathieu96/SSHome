@@ -1,13 +1,22 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
+
 import * as fontSize from '../../../Utils/FontSize';
+import Color from '../../../Utils/Color';
+
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  imgBg: {
+  imgContainer: {
     width: '100%',
     height: '100%',
-    position: 'relative',
+    position: 'absolute',
     zIndex: 0,
+    opacity: 0.6,
+  },
+  imgBg: {
+    flex: 1,
+    alignSelf: 'stretch',
+    width: null,
   },
 
   contentContainer: {
@@ -26,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   roomTitle: {
-    color: 'white',
+    color: Color.primary,
     fontSize: fontSize.bigger,
   },
   bodyContainer: {

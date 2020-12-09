@@ -17,8 +17,8 @@ const BSUploadImage = React.forwardRef((props, ref) => {
   const option = {
     mediaType: 'photo',
     quality: 1.0,
-    maxWidth: width,
-    maxHeight: height,
+    maxWidth: 1600,
+    maxHeight: 900,
   };
 
   return (

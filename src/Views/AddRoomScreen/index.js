@@ -6,7 +6,6 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import FastImage from 'react-native-fast-image';
 
@@ -20,7 +19,6 @@ import {findRealRoomID} from '../../Api/roomAPI';
 
 import {useNotify} from '../../Hooks/useModal';
 import {addRoom} from '../../Api/roomAPI';
-import {updateNewRoom} from '../../Redux/ActionCreators/userActions';
 
 import * as fontSize from '../../Utils/FontSize';
 import Color from '../../Utils/Color';
@@ -32,8 +30,6 @@ const BACKGROUND_2 =
   'https://firebasestorage.googleapis.com/v0/b/sshome-6d962.appspot.com/o/EjAcqoniSmyL2Iu4wkjR%2FRooms%2FBg2.jpg?alt=media&token=b23dd9e7-26bf-4351-b49b-0ac174ba5df1';
 
 export default function AddRoomScreen() {
-  const dispatch = useDispatch();
-
   const notify = useNotify();
   const BSChangeImageRef = useRef();
 
@@ -84,9 +80,6 @@ export default function AddRoomScreen() {
               BACKGROUND_1,
               false,
             );
-            if (response_1.result) {
-              dispatch(updateNewRoom(response_1.data));
-            }
             notify(response_1.message, response_1.result);
             break;
           case 2:
@@ -96,16 +89,10 @@ export default function AddRoomScreen() {
               BACKGROUND_2,
               false,
             );
-            if (response_2.result) {
-              dispatch(updateNewRoom(response_2.data));
-            }
             notify(response_2.message, response_2.result);
             break;
           case 3:
             const response_3 = await addRoom(homeID, roomName, customImg, true);
-            if (response_3.result) {
-              dispatch(updateNewRoom(response_3.data));
-            }
             notify(response_3.message, response_3.result);
             break;
         }

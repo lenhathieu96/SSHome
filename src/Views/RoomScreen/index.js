@@ -35,6 +35,7 @@ import {updateRoomAvatar} from '../../Redux/ActionCreators/userActions';
 import * as fontSize from '../../Utils/FontSize';
 import styles from './styles/index.css';
 import AsyncStorage from '@react-native-community/async-storage';
+import Color from '../../Utils/Color';
 
 export default function RoomDetailScreen({navigation, route}) {
   const {room} = route.params;
@@ -136,17 +137,15 @@ export default function RoomDetailScreen({navigation, route}) {
 
   return (
     <RootContainer safeArea={false}>
-      <SharedElement id={`item.${room.id}.photo`}>
-        <FastImage
-          source={{uri: room.background}}
-          resizeMode={FastImage.resizeMode.cover}
-          style={styles.imgBg}
-        />
+      <SharedElement id={`item.${room.id}.photo`} style={styles.imgContainer}>
+        <FastImage source={{uri: room.background}} style={styles.imgBg} />
       </SharedElement>
+
       <View style={styles.contentContainer}>
         <SafeAreaView style={styles.headerContainer}>
           <IconButton
             iconName="chevron-left"
+            iconColor={Color.primary}
             onPress={() => navigation.goBack()}
           />
           <BoldText style={styles.roomTitle}>{room.name}</BoldText>

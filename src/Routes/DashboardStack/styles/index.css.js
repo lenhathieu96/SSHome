@@ -3,21 +3,22 @@ import {StyleSheet, Dimensions} from 'react-native';
 import Color from '../../../Utils/Color';
 import * as fontSize from '../../../Utils/FontSize';
 
-const {height} = Dimensions.get('window')
+const {height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   drawerHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: Color.background,
   },
   avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 50,
-    backgroundColor: 'blue',
+    width: 2 * fontSize.biggest,
+    height: 2 * fontSize.biggest,
+    borderRadius: (2 * fontSize.biggest) / 2,
+    backgroundColor: Color.unactive,
+    marginRight: 15,
   },
   userInfoContainer: {
     marginLeft: 10,

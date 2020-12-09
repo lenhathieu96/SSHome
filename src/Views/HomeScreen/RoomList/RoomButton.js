@@ -17,12 +17,11 @@ export default function RoomButton(props) {
       onPress={() => onPress(roomData)}>
       <Animated.View
         style={[styles.BtnContainer, {transform: [{translateY}], opacity}]}>
-        <SharedElement id={`item.${roomData.id}.photo`}>
-          <FastImage
-            source={{uri: roomData.background}}
-            resizeMode={FastImage.resizeMode.cover}
-            style={styles.imgBg}
-          />
+        <SharedElement
+          id={`item.${roomData.id}.photo`}
+          shouldRasterizeIOS={true}
+          style={styles.imgContainer}>
+          <FastImage source={{uri: roomData.background}} style={styles.imgBg} />
         </SharedElement>
         <LinearGradient
           colors={['white', Color.background]}
