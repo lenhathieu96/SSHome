@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {BoldText} from '../../../Components/Text';
 
-import blankAvatar from '../../../Assets/Images/profile.png';
+import profileAvatar from '../../../Assets/Images/profile.png';
 import * as fontSize from '../../../Utils/FontSize';
 import Color from '../../../Utils/Color';
 import styles from './styles/index.css';
@@ -48,7 +48,7 @@ export default function MemberList(props) {
               <Icon
                 name="user-plus"
                 style={styles.memberAvatar}
-                size={1.7 * fontSize.biggest}
+                size={1.6 * fontSize.biggest}
                 color={Color.secondary}
               />
               <View style={[styles.memberNameContainer, {width: 0.4 * width}]}>
@@ -58,8 +58,10 @@ export default function MemberList(props) {
           ) : (
             <View style={styles.itemContainer}>
               <Image
-                source={item.avatar ? {uri: item.avatar} : blankAvatar}
+                source={item.avatar ? {uri: item.avatar} : profileAvatar}
                 style={styles.memberAvatar}
+                resizeMode="cover"
+                borderRadius={50}
               />
               <View style={styles.memberNameContainer}>
                 <BoldText style={styles.memberName}>{item.name}</BoldText>

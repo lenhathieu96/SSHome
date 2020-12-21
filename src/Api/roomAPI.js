@@ -102,31 +102,6 @@ export const updateRoomBackground = async (homeID, imageURI, roomID) => {
   }
 };
 
-export const getUsedPorts = async (homeID) => {
-  try {
-    if (homeID) {
-      const homeData = await database().ref(`/${homeID}`).once('value');
-      const ports = [];
-      const rooms = homeData.val();
-      delete rooms.DHT22;
-      for (let roomID in rooms) {
-        let deviceList = rooms[roomID].devices;
-        for (let device in deviceList) {
-          ports.push(deviceList[device].port);
-        }
-      }
-      return {
-        result: true,
-        message: 'Lấy danh sách cổng thành công',
-        data: ports,
-      };
-    }
-  } catch (error) {
-    console.log(error);
-    return {result: false, message: 'Lấy danh sách cổng thất bại'};
-  }
-};
-
 export const addNewDevice = async (homeID, roomID, deviceData) => {
   try {
     let deviceID = `DV${homeID.slice(2, 5)}${createID()}`;
@@ -134,7 +109,6 @@ export const addNewDevice = async (homeID, roomID, deviceData) => {
       .ref(`/${homeID}/${roomID}/devices`)
       .once('value');
     const listDevice = roomData.val();
-    console.log(listDevice);
     let isDuplicateName = false;
     for (const device in listDevice) {
       if (

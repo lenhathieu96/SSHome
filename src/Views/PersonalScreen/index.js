@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import QRCode from 'react-native-qrcode-svg';
+import LinearGradient from 'react-native-linear-gradient';
 
 import Text, {BoldText} from '../../Components/Text';
 import ConfirmDelModal from '../../Components/Modal/ConfirmDelModal';
@@ -140,10 +141,16 @@ export default function Personal() {
       style={userRole === 'Master' ? styles.masterRoot : styles.memberRoot}>
       {/* User Info */}
       <View style={[styles.userInfoContainer]}>
-        <View style={styles.avatarContainer}>
+        <LinearGradient
+          start={{x: 0.0, y: 0.25}}
+          end={{x: 0.5, y: 1.0}}
+          colors={[Color.secondary, Color.primary]}
+          style={styles.avatarContainer}>
           <ImageBackground
             source={
-              userInfo.avatar !== '' ? {uri: userInfo.avatar} : profileAvatar
+              userInfo.avatar && userInfo.avatar !== ''
+                ? {uri: userInfo.avatar}
+                : profileAvatar
             }
             resizeMode="cover"
             style={styles.avatar}>
@@ -158,10 +165,10 @@ export default function Personal() {
               }}
               style={styles.btnCamera}
               iconSize={fontSize.biggest}
-              iconColor={Color.primary}
+              iconColor={Color.secondary}
             />
           </ImageBackground>
-        </View>
+        </LinearGradient>
         {isLoading ? (
           <View style={styles.infoContainer}>
             <PlaceholderLine

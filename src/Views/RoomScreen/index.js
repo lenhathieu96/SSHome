@@ -26,7 +26,6 @@ import {
   findRealRoomID,
   updateRoomBackground,
   updateStatusDevice,
-  getUsedPorts,
   addNewDevice,
   deleteDevice,
 } from '../../Api/roomAPI';
@@ -61,8 +60,7 @@ export default function RoomDetailScreen({navigation, route}) {
 
   useEffect(() => {
     if (homeID) {
-      getPorts();
-      const onValueChange = database()
+      const onDeviceListChange = database()
         .ref(`${homeID}/${room.id}`)
         .on('value', (snapshot) => {
           let result = [{}];
@@ -72,8 +70,25 @@ export default function RoomDetailScreen({navigation, route}) {
           }
           setDevices(result);
         });
-      return () =>
-        database().ref(`${homeID}/${room.id}`).off('value', onValueChange);
+
+      const onUsedPortListChange = database()
+        .ref(`/${homeID}`)
+        .on('value', (snapshot) => {
+          let ports = [];
+          let rooms = snapshot.val();
+          delete rooms.DHT22;
+          for (let roomID in rooms) {
+            let deviceList = rooms[roomID].devices;
+            for (let device in deviceList) {
+              ports.push(deviceList[device].port);
+            }
+          }
+          setUsedPort(ports);
+        });
+      return () => {
+        database().ref(`${homeID}/${room.id}`).off('value', onDeviceListChange);
+        database().ref(`/${homeID}`).off('value', onUsedPortListChange);
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [homeID]);
@@ -88,12 +103,6 @@ export default function RoomDetailScreen({navigation, route}) {
     }
   };
 
-  const getPorts = async () => {
-    let response = await getUsedPorts(homeID);
-    if (response.data) {
-      setUsedPort(response.data);
-    }
-  };
   //Change room background
   const uploadImage = async (imageURI) => {
     setLoading(true);
@@ -112,7 +121,6 @@ export default function RoomDetailScreen({navigation, route}) {
       device.id,
       status,
     );
-    console.log(response.message);
   };
 
   const onDeleteDevice = async () => {

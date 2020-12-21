@@ -9,6 +9,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-community/async-storage';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {handleLogout} from '../../Api/userAPI';
 import {clearUserData} from '../../Redux/ActionCreators/userActions';
@@ -47,14 +48,23 @@ export default function DashboardStack() {
           <DrawerContentScrollView {...props}>
             {/* Header */}
             <View style={styles.drawerHeaderContainer}>
-              <Image
-                source={
-                  UserProfile.avatar !== ''
-                    ? {uri: UserProfile.avatar}
-                    : profileAvatar
-                }
-                style={styles.avatar}
-              />
+              <LinearGradient
+                start={{x: 0.0, y: 0.25}}
+                end={{x: 0.5, y: 1.0}}
+                colors={[Color.secondary, Color.primary]}
+                style={styles.avatarContainer}>
+                <Image
+                  source={
+                    UserProfile.avatar && UserProfile.avatar !== ''
+                      ? {uri: UserProfile.avatar}
+                      : profileAvatar
+                  }
+                  style={styles.avatar}
+                  resizeMode="cover"
+                  borderRadius={50}
+                />
+              </LinearGradient>
+
               <View style={styles.userInfoContainer}>
                 <BoldText style={styles.userName}>{UserProfile.name}</BoldText>
                 <Text style={styles.userInfo}>(+84) {UserProfile.phone}</Text>
@@ -110,7 +120,7 @@ export default function DashboardStack() {
                 )}
                 onPress={() => {
                   dispatch(clearUserData());
-                  handleLogout();
+                  handleLogout(userRole, UserProfile.id);
                 }}
               />
               <Text style={styles.txtVersion}>SSHome v1.0.1</Text>
@@ -118,15 +128,23 @@ export default function DashboardStack() {
           </DrawerContentScrollView>
         );
       }}
-      drawerContentOptions={{activeTintColor: Color.primary}}>
+      drawerContentOptions={{activeTintColor: Color.unactive}}>
       {/* Screens */}
       <DashboardDrawer.Screen
         name="home"
         component={HomeStack}
         options={{
-          drawerLabel: () => <BoldText>Trang Chủ</BoldText>,
+          drawerLabel: ({focused}) => (
+            <BoldText style={{color: focused ? Color.primary : 'black'}}>
+              Trang Chủ
+            </BoldText>
+          ),
           drawerIcon: ({focused}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="home" />
+            <Icon
+              color={focused ? Color.primary : 'black'}
+              size={fontSize.bigger}
+              name="home"
+            />
           ),
         }}
       />
@@ -135,9 +153,17 @@ export default function DashboardStack() {
           name="addRoom"
           component={AddRoomStack}
           options={{
-            drawerLabel: () => <BoldText>Thêm Phòng</BoldText>,
+            drawerLabel: ({focused}) => (
+              <BoldText style={{color: focused ? Color.primary : 'black'}}>
+                Thêm Phòng
+              </BoldText>
+            ),
             drawerIcon: ({focused, color, size}) => (
-              <Icon color={'black'} size={fontSize.bigger} name="plus" />
+              <Icon
+                color={focused ? Color.primary : 'black'}
+                size={fontSize.bigger}
+                name="plus"
+              />
             ),
           }}
         />
@@ -147,9 +173,17 @@ export default function DashboardStack() {
         name="personal"
         component={PersonalStack}
         options={{
-          drawerLabel: () => <BoldText>Cá Nhân</BoldText>,
+          drawerLabel: ({focused}) => (
+            <BoldText style={{color: focused ? Color.primary : 'black'}}>
+              Cá Nhân
+            </BoldText>
+          ),
           drawerIcon: ({focused}) => (
-            <Icon color={'black'} size={fontSize.bigger} name="user" />
+            <Icon
+              color={focused ? Color.primary : 'black'}
+              size={fontSize.bigger}
+              name="user"
+            />
           ),
         }}
       />

@@ -97,7 +97,6 @@ export default function HomeScreen({navigation}) {
                 email: UserData.data().email,
                 avatar: UserData.data().avatar,
               };
-              console.log(data);
               dispatch(setUserProfile(data));
             } else {
               if (auth().currentUser) {
@@ -111,7 +110,6 @@ export default function HomeScreen({navigation}) {
           .on('value', (snapshot) => {
             const result = [];
             const userAvailableRooms = userRooms;
-            console.log(userAvailableRooms, 'user rooms');
             userAvailableRooms.forEach((roomID) => {
               for (const room in snapshot.val()) {
                 if (room === roomID) {

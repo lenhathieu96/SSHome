@@ -13,12 +13,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Color.background,
   },
-  avatar: {
-    width: 2 * fontSize.biggest,
-    height: 2 * fontSize.biggest,
-    borderRadius: (2 * fontSize.biggest) / 2,
+  avatarContainer: {
+    width: 2.3 * fontSize.biggest,
+    height: 2.3 * fontSize.biggest,
+    borderRadius: (2.3 * fontSize.biggest) / 2,
     backgroundColor: Color.unactive,
     marginRight: 15,
+  },
+  avatar: {
+    flex: 1,
+    width: null,
+    height: null,
   },
   userInfoContainer: {
     marginLeft: 10,

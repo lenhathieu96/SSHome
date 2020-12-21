@@ -3,6 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-community/async-storage';
+
 const APPID = '0fb25e211281a90b0df6aef6ab6224c3';
 
 export const getCurrentWeather = async (homeID, lat, long) => {
@@ -49,6 +50,7 @@ export const handleMasterSignUp = async (signupForm) => {
           email: signupForm.email,
           phone: signupForm.phone,
           password: signupForm.password,
+          isLogin: false,
         };
         await userDBRef.doc(signupForm.homeID).set(userData);
       } catch (error) {
@@ -75,16 +77,20 @@ export const handleMasterLogin = async (email, password) => {
     .collection('Home')
     .where('email', '==', email)
     .get();
-  if (userData.docs.length > 0) {
+  if (userData.docs.length > 0 && !userData.docs[0].data().isLogin) {
     try {
       await AsyncStorage.setItem('@userRole', 'Master');
       await auth().signInWithEmailAndPassword(email, password);
+      await firestore()
+        .collection('Home')
+        .doc(userData.docs[0].id)
+        .update({isLogin: true});
       return {result: true, message: 'Đăng nhập thành công'};
     } catch (error) {
       if (error.code === 'auth/wrong-password') {
         return {result: false, message: 'Sai mật khẩu'};
       }
-      console.log(error);
+      console.log(error, 'Error on Login');
       return {result: false, message: ''};
     }
   } else {
@@ -112,8 +118,14 @@ export const handleMemberLogin = async (phoneNumber, masterID) => {
       .collection('Member')
       .where('phone', '==', `+84${phone}`)
       .get();
-    if (User.docs.length > 0) {
+    if (User.docs.length > 0 && !User.docs[0].data().isLogin) {
       try {
+        await firestore()
+          .collection('Home')
+          .doc(home.docs[0].id)
+          .collection('Member')
+          .doc(User.docs[0].id)
+          .update({isLogin: true});
         await AsyncStorage.setItem('@userRole', 'Member');
         await AsyncStorage.setItem('@masterID', masterID);
         const confirmation = await auth().signInWithPhoneNumber(`+84${phone}`);
@@ -154,8 +166,44 @@ export const confirmOTP = async (confirmation, OTPCode) => {
   }
 };
 
-export const handleLogout = async () => {
+export const handleLogout = async (userRole, userID) => {
   try {
+    if (userRole && userRole === 'Master') {
+      const home = await firestore()
+        .collection('Home')
+        .where('id', '==', userID)
+        .get();
+      if (home.docs.length > 0) {
+        await firestore()
+          .collection('Home')
+          .doc(home.docs[0].id)
+          .update({isLogin: false});
+      } else {
+        return {
+          result: false,
+          message: 'Không tồn tại tài khoản chủ căn hộ',
+        };
+      }
+    } else if (userRole) {
+      const storageID = await AsyncStorage.getItem('@masterID');
+      const home = await firestore()
+        .collection('Home')
+        .where('id', '==', storageID)
+        .get();
+      if (home.docs.length > 0) {
+        await firestore()
+          .collection('Home')
+          .doc(home.docs[0].id)
+          .collection('Member')
+          .doc(userID)
+          .update({isLogin: false});
+      } else {
+        return {
+          result: false,
+          message: 'Không tồn tại tài khoản chủ căn hộ',
+        };
+      }
+    }
     await AsyncStorage.clear();
     auth().signOut();
   } catch (error) {
@@ -321,6 +369,7 @@ export const configMember = async (member, isUpdate, homeID) => {
       let newMember = {
         ...member,
         phone: `+84${member.phone.slice(1)}`,
+        isLogin: false,
       };
       try {
         await firestore()
