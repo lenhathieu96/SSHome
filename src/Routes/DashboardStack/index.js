@@ -11,6 +11,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 
+import OneSignal from 'react-native-onesignal';
+
 import {handleLogout} from '../../Api/userAPI';
 import {clearUserData} from '../../Redux/ActionCreators/userActions';
 
@@ -33,6 +35,8 @@ export default function DashboardStack() {
   const [userRole, setUserRole] = useState();
 
   useEffect(() => {
+    OneSignal.setAppId('cfdd7d78-2f55-4452-9895-2664e8058b87');
+    OneSignal.setLogLevel(6, 0);
     getUserRole();
   }, []);
 
