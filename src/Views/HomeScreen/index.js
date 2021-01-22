@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, AppRegistry} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -58,19 +58,33 @@ export default function HomeScreen({navigation}) {
   const [memberID, setMemberID] = useState('');
 
   useEffect(() => {
+    AppRegistry.registerHeadlessTask(
+      'RNCallKeepBackgroundMessage',
+      () => ({name, callUUID, handle}) => {
+        // Make your call here
+
+        return Promise.resolve();
+      },
+    );
+  }, []);
+
+  useEffect(() => {
     getRoleStorage();
     if (hardware.WFEnabled && homeID) {
       getWeather();
+
       if (userRole === 'Master') {
         getMasterData();
-        const roomsSubcribe = database()
+        const onRoomChange = database()
           .ref(homeID)
           .on('value', (snapshot) => {
             const rooms = snapshot.val();
             delete rooms.DHT22;
             dispatch(setAvailableRoom(Object.values(rooms)));
           });
-        return () => database().ref(homeID).off('value', roomsSubcribe);
+        return () => {
+          database().ref(homeID).off('value', onRoomChange);
+        };
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,7 +218,6 @@ export default function HomeScreen({navigation}) {
   };
 
   const onChangeStatus = async (roomID, deviceID, status) => {
-    console.log(homeID);
     if (homeID) {
       const response = await updateStatusDevice(
         homeID,
